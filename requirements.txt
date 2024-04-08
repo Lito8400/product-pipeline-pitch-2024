@@ -1,0 +1,6 @@
+Flask
+Flask-SQLAlchemy
+Flask-Bootstrap
+pandas
+gunicorn
+psycopg2-binary 
