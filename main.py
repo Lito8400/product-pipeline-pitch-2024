@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Float, Boolean, ForeignKey, func
@@ -56,7 +56,7 @@ def generate_unique_user_id():
         if user_id not in session.values():  # kiểm tra xem mã ID đã tồn tại trong session hay chưa
             return user_id
 
-# Main ------------------------------------------------------
+# Main -----------------------------------------------------
 @app.route('/')
 def index():
     user_id = session.get('user_id')
@@ -149,19 +149,18 @@ def survey(survey_id):
 def thank_you():
     return render_template('thank_you.html')
 
-# Admin web ------------------------------------------
-@app.route('/admin')
-def admin():
+def measure_survey():
     surveys = db.session.execute(db.select(Survey)).scalars()
-
-    if len(surveys.all()) > 0:
+    check_count = len(surveys.all())
+    surveys = db.session.execute(db.select(Survey)).scalars()
+    if check_count > 0:
         df = pd.DataFrame([{
             'product_name': survey.product_name,
             'interested_lanched': survey.interested_lanched,
             'path_to_market': survey.path_to_market,
             'pull_sales': survey.pull_sales
         } for survey in surveys])
-
+        
         df_measure_survey = df.groupby('product_name').agg(
             Rating =('product_name', 'size'),
             Participation=('product_name', 'size'),
@@ -172,11 +171,17 @@ def admin():
 
         df_measure_survey['Rating'] = df_measure_survey[['Average_interested_lanched', 'Average_path_to_market', 'Average_pull_sales']].mean(axis=1)
         df_measure_survey['Rating'] = df_measure_survey['Rating'].round(2)
-        df_measure_survey = df_measure_survey.to_dict(orient='records')
+        df_measure_survey = df_measure_survey.sort_values(by='Rating', ascending=False)
+        return df_measure_survey.to_dict(orient='records')
     else:
-        df_measure_survey = pd.DataFrame()
+        return pd.DataFrame()
 
-    total_surveys = df_measure_survey.shape[0]
+# Admin web ------------------------------------------
+@app.route('/admin')
+def admin():
+    
+    df_measure_survey = measure_survey()
+    total_surveys = len(df_measure_survey)
 
     user_surveys = db.session.execute(db.select(UserCompletedSurvey)).scalars()
     total_user = len(user_surveys.all())
@@ -205,6 +210,35 @@ def user_completed_table():
     user_completed_all = db.session.execute(db.select(UserCompletedSurvey)).scalars()
     
     return render_template('user_completed_admin.html', user_completed = user_completed_all)
+
+# Product Bizarre 2024 Rank Chart ------------------------------------------
+@app.route('/admin/rank-chart')
+def rank_chart_data():
+    df_measure_survey = measure_survey()
+    if len(df_measure_survey) > 0:
+        # labels = df_measure_survey['product_name'].tolist()
+        labels = [product['product_name'] for product in df_measure_survey]
+        values = [product['Rating'] for product in df_measure_survey]
+
+        data = {'labels': labels, 'values': values}
+    else:
+        data = {'labels': [], 'values': []}
+    
+    return jsonify(data)
+
+@app.route('/admin/participation-chart')
+def participation_chart_data():
+    df_measure_survey = measure_survey()
+    if len(df_measure_survey) > 0:
+        df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Participation'], reverse=True)
+        labels = [product['product_name'] for product in df_measure_survey]
+        values = [product['Participation'] for product in df_measure_survey]
+
+        data = {'labels': labels, 'values': values}
+    else:
+        data = {'labels': [], 'values': []}
+    
+    return jsonify(data)
 
 # Main python ------------------------------------------------------
 if __name__ == '__main__':
