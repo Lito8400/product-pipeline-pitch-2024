@@ -11557,3 +11557,40 @@ textarea.form-control-lg {
   width: 4rem;
   font-size: 2rem;
 }
+.scroll-to-top {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  display: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  text-align: center;
+  color: #fff;
+  background: rgba(90,92,105,.5);
+  line-height: 46px
+}
+
+.scroll-to-top:focus,.scroll-to-top:hover {
+  color: #fff
+}
+
+.scroll-to-top:hover {
+  background: #5a5c69
+}
+
+.scroll-to-top i {
+  font-weight: 800
+}
+
+.fa, .far, .fas {
+  font-family: "Font Awesome 5 Free";
+}
+.fas {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}

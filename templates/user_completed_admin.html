@@ -12,20 +12,20 @@
                                     <thead>
                                         <tr>
                                             <th>User ID</th>
-                                            <th>Product ID</th>
+                                            <th>Product Name</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
                                             <th>User ID</th>
-                                            <th>Product ID</th>
+                                            <th>Product Name</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
                                         {% for user in user_completed %}
                                             <tr>
                                                 <td>{{ user.user_id }}</td>
-                                                <td>{{ user.product_id }}</td>
+                                                <td>{{ user.product_Name }}</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>

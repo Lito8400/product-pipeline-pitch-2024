@@ -1,18 +1,40 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash, g
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Float, Boolean, ForeignKey, func
+from werkzeug.security import generate_password_hash, check_password_hash
+# from openai import OpenAI
+
 import random
 import pandas as pd
 import os
-# from flask_wtf import FlaskForm
-# from wtforms import StringField, PasswordField, SubmitField
-# from wtforms.validators import DataRequired, Email, Length  # pip install email-validator
-# from flask_bootstrap import Bootstrap5  # pip install bootstrap-flask
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_KEY')
-test =  os.environ.get('FLASK_KEY')
+
+class User(UserMixin):
+    def __init__(self, username, password_hash):
+        self.username = username
+        self.password_hash = password_hash
+    def get_id(self):
+        return self.username
+
+app.config['USER'] = User('admin', os.environ.get('ADMIN_PASSWORD'))
+# app.config['USER'] = User(os.environ.get('USER_NAME'), os.environ.get('PASSWORD'))
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+# Thiết lập g.user trước mỗi request
+@app.before_request
+def before_request():
+    g.user = app.config['USER']
+
+@login_manager.user_loader
+def load_user(user_id):
+    return g.user
+
 # CREATE DATABASE
 class Base(DeclarativeBase):
     pass
@@ -25,25 +47,26 @@ db.init_app(app)
 
 # Create table product
 class Product(db.Model):
-    id: Mapped[str] = mapped_column(String(250), primary_key=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
     description: Mapped[str] = mapped_column(String, nullable=False)
 
 # Create table Survey
 class Survey(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    product_name: Mapped[str] = mapped_column(String, ForeignKey('product.name'),nullable=False)
-    user_id: Mapped[str] = mapped_column(String(6), ForeignKey('product.id'), nullable=False)
+    product_name: Mapped[str] = mapped_column(String,nullable=False)
+    user_id: Mapped[str] = mapped_column(String(6), nullable=False)
     interested_lanched: Mapped[int] = mapped_column(Integer, nullable=False)
     path_to_market: Mapped[int] = mapped_column(Integer, nullable=False)
     pull_sales: Mapped[int] = mapped_column(Integer, nullable=False)
-    comments: Mapped[str] = mapped_column(String, nullable=False)
+    comments: Mapped[str] = mapped_column(String, nullable=True)
 
 #Create table user
 class UserCompletedSurvey(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[str] = mapped_column(String(6), nullable=False)
-    product_id: Mapped[str] = mapped_column(String(250), ForeignKey('product.id'), nullable=False)
+    product_id: Mapped[str] = mapped_column(String(250), nullable=False)
+    product_Name: Mapped[str] = mapped_column(String(250), nullable=False)
 
 
 # Create table schema in the database. Requires application context.
@@ -53,7 +76,7 @@ with app.app_context():
 def generate_unique_user_id():
     while True:
         user_id = ''.join(random.choices(['0','1','2','3','4','5','6','7','8','9'], k=6))
-        if user_id not in session.values():  # kiểm tra xem mã ID đã tồn tại trong session hay chưa
+        if user_id not in session.values(): 
             return user_id
 
 # Main -----------------------------------------------------
@@ -66,28 +89,28 @@ def index():
 
     user_completed_survey = db.session.execute(db.select(UserCompletedSurvey).where(UserCompletedSurvey.user_id == user_id)).scalars()
 
-    user_completed_survey = [survey.product_id for survey in user_completed_survey]
+    user_completed_survey = [int(survey.product_id) for survey in user_completed_survey]
     surveyed_product = len(user_completed_survey)
     result = db.session.execute(db.select(Product))
 
     if len(result.all()) == 0:
-        new_product_a = Product(id="product_a", name="Product A", description="Description for Product A")
-        new_product_b = Product(id="product_b", name="Product B", description="Description for Product B")
-        new_product_c = Product(id="product_c", name="Product C", description="Description for Product C")
-        new_product_d = Product(id="product_d", name="Product D", description="Description for Product D")
-        new_product_e = Product(id="product_e", name="Product E", description="Description for Product E")
-        new_product_f = Product(id="product_f", name="Product F", description="Description for Product F")
-        new_product_g = Product(id="product_g", name="Product G", description="Description for Product G")
-        new_product_h = Product(id="product_h", name="Product H", description="Description for Product H")
-        new_product_i = Product(id="product_i", name="Product I", description="Description for Product I")
-        new_product_j = Product(id="product_j", name="Product J", description="Description for Product J")
-        new_product_k = Product(id="product_k", name="Product K", description="Description for Product K")
-        new_product_l = Product(id="product_l", name="Product L", description="Description for Product L")
-        new_product_m = Product(id="product_m", name="Product M", description="Description for Product M")
-        new_product_o = Product(id="product_o", name="Product O", description="Description for Product O")
-        new_product_p = Product(id="product_p", name="Product P", description="Description for Product P")
-        new_product_q = Product(id="product_q", name="Product Q", description="Description for Product Q")
-        new_product_z = Product(id="product_z", name="Product Z", description="Description for Product Z")
+        new_product_a = Product( name="Product A", description="Description for Product A")
+        new_product_b = Product( name="Product B", description="Description for Product B")
+        new_product_c = Product( name="Product C", description="Description for Product C")
+        new_product_d = Product( name="Product D", description="Description for Product D")
+        new_product_e = Product( name="Product E", description="Description for Product E")
+        new_product_f = Product( name="Product F", description="Description for Product F")
+        new_product_g = Product( name="Product G", description="Description for Product G")
+        new_product_h = Product( name="Product H", description="Description for Product H")
+        new_product_i = Product( name="Product I", description="Description for Product I")
+        new_product_j = Product( name="Product J", description="Description for Product J")
+        new_product_k = Product( name="Product K", description="Description for Product K")
+        new_product_l = Product( name="Product L", description="Description for Product L")
+        new_product_m = Product( name="Product M", description="Description for Product M")
+        new_product_o = Product( name="Product O", description="Description for Product O")
+        new_product_p = Product( name="Product P", description="Description for Product P")
+        new_product_q = Product( name="Product Q", description="Description for Product Q")
+        new_product_z = Product( name="Product Z", description="Description for Product Z")
 
         db.session.add(new_product_a)
         db.session.add(new_product_b)
@@ -111,7 +134,43 @@ def index():
     result = db.session.execute(db.select(Product))
     all_products = result.scalars()
 
-    return render_template('index.html', products=all_products, user_id=user_id, completed_surveys=user_completed_survey, surveyed=surveyed_product)
+    return render_template('index.html', products=all_products, user_id=user_id, completed_surveys=user_completed_survey, surveyed=surveyed_product, logged_in=current_user.is_authenticated)
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    query = request.args.get('query').lower()
+    filtered_products = Product.query.filter(Product.name.ilike(f'%{query}%')).all()
+
+    return render_template('search_results.html', products=filtered_products, query=query)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == "POST":
+        input_user = request.form.get('inputUser')
+        input_password = request.form.get('inputPassword')
+        user = g.user
+
+        # User name or password incorrect.
+        if user.username != input_user:
+            flash("That user name incorrect, please try again.")
+            return redirect(url_for('login'))
+        elif not check_password_hash(user.password_hash, input_password):
+            flash('Password incorrect, please try again.')
+            return redirect(url_for('login'))
+        else:
+            login_user(user)
+            return redirect(url_for('admin'))
+
+    if current_user.is_authenticated:
+        return redirect(url_for('admin'))
+
+    return render_template("login_admin.html", logged_in=current_user.is_authenticated)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 # Survey ------------------------------------------------------
 @app.route('/survey/<survey_id>', methods=['GET', 'POST'])
@@ -128,7 +187,8 @@ def survey(survey_id):
     surveyed_product = len(user_completed_survey)
 
     if request.method == 'POST':
-        new_completed_survey = UserCompletedSurvey(user_id=user_id, product_id=survey_id)
+        comment_ai = None
+        new_completed_survey = UserCompletedSurvey(user_id=user_id, product_Name=survey.name, product_id=survey_id)
         db.session.add(new_completed_survey)
         db.session.commit()
 
@@ -139,6 +199,16 @@ def survey(survey_id):
         new_survey = Survey(product_name=survey.name, user_id=user_id, interested_lanched=interested_lanch, path_to_market=path_to_mar, pull_sales=pull_sale, comments=comment)
         db.session.add(new_survey)
         db.session.commit()
+
+        # if comment == '':
+        #     prompt = f"Given the ratings: 'How interested are you in having this product launched?': {interested_lanch}, 'The path to market for this product concept established?': {path_to_mar}, 'Do you feel this product will “pull” sales of other products along?': {pull_sale}, generate a short comment."
+        #     response = client.chat.completions.create(
+        #         model="gpt-3.5-turbo",
+        #         messages=[
+        #             {"role": "user", "content": prompt},
+        #         ]
+        #     )
+        #     comment_ai = response.choices[0].text.strip()
 
         return redirect(url_for('thank_you'))
     
@@ -180,11 +250,18 @@ def measure_survey():
 @app.route('/admin')
 def admin():
     
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+
     df_measure_survey = measure_survey()
     total_surveys = len(df_measure_survey)
 
     user_surveys = db.session.execute(db.select(UserCompletedSurvey)).scalars()
-    total_user = len(user_surveys.all())
+    df = pd.DataFrame([{
+            'user_id': survey.user_id,
+        } for survey in user_surveys])
+    grouped_df = df.groupby('user_id').size().reset_index(name='num_surveys')
+    total_user = grouped_df['user_id'].nunique()
 
     # print(df_measure_survey)
     return render_template('index_admin.html', measure_survey = df_measure_survey, total_surveys=total_surveys, total_user=total_user)
@@ -196,6 +273,29 @@ def product_table():
     product_all = db.session.execute(db.select(Product)).scalars()
     
     return render_template('product_admin.html', products = product_all)
+
+# Add Product------------------------------------------
+@app.route('/admin/add', methods=['GET', 'POST'])
+def add_product():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+        new_product = Product(name=name, description=description)
+        db.session.add(new_product)
+        db.session.commit()
+
+    return redirect(url_for('product_table'))
+
+@app.route('/admin/edit/<int:product_id>', methods=['GET', 'POST'])
+def edit_product(product_id):
+    product = db.session.execute(db.select(Product).where(Product.id == product_id)).scalar()
+    if request.method == 'POST':
+        product.name = request.form.get('name')
+        product.description = request.form.get('description')
+        db.session.commit()
+        
+    return redirect(url_for('product_table'))
+
 
 # survey Table ------------------------------------------
 @app.route('/admin/survey')
@@ -220,12 +320,13 @@ def rank_chart_data():
         labels = [product['product_name'] for product in df_measure_survey]
         values = [product['Rating'] for product in df_measure_survey]
 
-        data = {'labels': labels, 'values': values}
+        data = {'labels': labels[:10], 'values': values[:10]}
     else:
         data = {'labels': [], 'values': []}
     
     return jsonify(data)
 
+# Product Bizarre 2024 Participation Chart ------------------------------------------
 @app.route('/admin/participation-chart')
 def participation_chart_data():
     df_measure_survey = measure_survey()
@@ -234,7 +335,52 @@ def participation_chart_data():
         labels = [product['product_name'] for product in df_measure_survey]
         values = [product['Participation'] for product in df_measure_survey]
 
-        data = {'labels': labels, 'values': values}
+        data = {'labels': labels[:10], 'values': values[:10]}
+    else:
+        data = {'labels': [], 'values': []}
+    
+    return jsonify(data)
+
+# Product Bizarre 2024 interested lanched Chart ------------------------------------------
+@app.route('/admin/interested-lanched-chart')
+def interested_chart_data():
+    df_measure_survey = measure_survey()
+    if len(df_measure_survey) > 0:
+        df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Average_interested_lanched'], reverse=True)
+        labels = [product['product_name'] for product in df_measure_survey]
+        values = [product['Average_interested_lanched'] for product in df_measure_survey]
+
+        data = {'labels': labels[:10], 'values': values[:10]}
+    else:
+        data = {'labels': [], 'values': []}
+    
+    return jsonify(data)
+
+# Product Bizarre 2024 path to market Chart ------------------------------------------
+@app.route('/admin/path-to-market-chart')
+def market_chart_data():
+    df_measure_survey = measure_survey()
+    if len(df_measure_survey) > 0:
+        df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Average_path_to_market'], reverse=True)
+        labels = [product['product_name'] for product in df_measure_survey]
+        values = [product['Average_path_to_market'] for product in df_measure_survey]
+
+        data = {'labels': labels[:10], 'values': values[:10]}
+    else:
+        data = {'labels': [], 'values': []}
+    
+    return jsonify(data)
+
+# Product Bizarre 2024 pull sale Chart ------------------------------------------
+@app.route('/admin/pull-sales-chart')
+def pull_chart_data():
+    df_measure_survey = measure_survey()
+    if len(df_measure_survey) > 0:
+        df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Average_pull_sales'], reverse=True)
+        labels = [product['product_name'] for product in df_measure_survey]
+        values = [product['Average_pull_sales'] for product in df_measure_survey]
+
+        data = {'labels': labels[:10], 'values': values[:10]}
     else:
         data = {'labels': [], 'values': []}
     
