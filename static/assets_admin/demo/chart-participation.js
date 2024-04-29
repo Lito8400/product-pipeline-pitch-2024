@@ -7,13 +7,14 @@ fetch('/admin/participation-chart')
     .then(response => response.json())
     .then(data => {
         var ctx = document.getElementById("ParticipationChart");
+        let maxValue = parseInt(Math.max(...data.values)) + 1;
         var myLineChart = new Chart(ctx, {
           type: 'bar',
           data: {
             labels: data.labels,
             datasets: [{
-              backgroundColor: "rgba(2,117,216,1)",
-              borderColor: "rgba(2,117,216,1)",
+              backgroundColor: "rgba(235, 199, 0, 1)",
+              borderColor: "rgba(235, 199, 0, 1)",
               data: data.values,
             }],
           },
@@ -23,14 +24,12 @@ fetch('/admin/participation-chart')
                 gridLines: {
                   display: false
                 },
-                ticks: {
-                  maxTicksLimit: 6
-                }
               }],
+              
               yAxes: [{
                 ticks: {
                   min: 0,
-                  maxTicksLimit: 6
+                  max: maxValue,
                 },
                 gridLines: {
                   display: true
@@ -40,7 +39,26 @@ fetch('/admin/participation-chart')
             },
             legend: {
               display: false
-            }
+            },
+            "animation": {
+              "duration": 1,
+              "onComplete": function() {
+                var chartInstance = this.chart
+                ctx = chartInstance.ctx;
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                ctx.fillStyle = this.chart.config.options.defaultFontColor;
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'bottom';
+
+                this.data.datasets.forEach(function(dataset, i) {
+                  var meta = chartInstance.controller.getDatasetMeta(i);
+                  meta.data.forEach(function(bar, index) {
+                        var data = dataset.data[index];
+                        ctx.fillText(data, bar._model.x -2, bar._model.y - 5);
+                  });
+                });
+              }
+            },
           }
         });
     });

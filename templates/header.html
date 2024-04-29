@@ -25,13 +25,15 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Admin</a></li>
+                        {% if user_id == 'admin' %}
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('admin') }}">Admin</a></li>
+                        {% endif %}
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
                     </ul>
                     
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <p class="navbar-nav ms-auto mb-2 mb-lg-0 nav-link">Your ID: {{ user_id }}</p>
+                            <p class="navbar-nav ms-auto mb-2 mb-lg-0 nav-link">User Name: {{ user_id }}</p>
                         </li>
                         <li class="nav-item">
                             <p class="navbar-nav me-auto mb-2 mb-lg-0 nav-link">Surveyed Product: {{ surveyed }}</p>

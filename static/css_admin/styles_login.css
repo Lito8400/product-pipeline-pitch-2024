@@ -2278,7 +2278,7 @@ textarea.form-control-lg {
 }
 
 .form-check-label{
-  color: #ee6f57;
+  color: #ff2a00;
   text-align: center;
 }
 
@@ -11461,4 +11461,7 @@ input[type="button"].btn-block {
   opacity: .3;
   z-index: -1;
   } */
-    
+.bg-custom {
+  --bs-bg-opacity: 1;
+  background-color: rgb(146 174 201 / 0%) !important;
+}
