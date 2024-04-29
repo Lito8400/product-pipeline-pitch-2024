@@ -179,7 +179,7 @@ def login_user_def():
                 return redirect(url_for('login_user_def'))
             
             login_user(user)
-            
+
         return redirect(url_for('index'))
 
     return render_template("login_user.html")
@@ -291,6 +291,9 @@ def measure_survey():
 
         df_measure_survey['Rating'] = df_measure_survey[['Average_interested_lanched', 'Average_path_to_market', 'Average_pull_sales']].mean(axis=1)
         df_measure_survey['Rating'] = df_measure_survey['Rating'].round(2)
+        df_measure_survey['Average_interested_lanched'] = df_measure_survey['Average_interested_lanched'].round(2)
+        df_measure_survey['Average_path_to_market'] = df_measure_survey['Average_path_to_market'].round(2)
+        df_measure_survey['Average_pull_sales'] = df_measure_survey['Average_pull_sales'].round(2)
         df_measure_survey = df_measure_survey.sort_values(by='Rating', ascending=False)
         return df_measure_survey.to_dict(orient='records')
     else:
@@ -459,4 +462,4 @@ def pull_chart_data():
 
 # Main python ------------------------------------------------------
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=False, port=5001)
