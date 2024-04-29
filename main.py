@@ -13,31 +13,11 @@ import os
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_KEY')
 
-# class User(UserMixin):
-#     def __init__(self, username, password_hash):
-#         self.username = username
-#         self.password_hash = password_hash
-#     def get_id(self):
-#         return self.username
-
-# app.config['USER'] = User('admin', os.environ.get('ADMIN_PASSWORD'))
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# Thiết lập g.user trước mỗi request
-# @app.before_request
-# def before_request():
-#     g.user = app.config['USER']
-
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return g.user
-
 @login_manager.user_loader
 def load_user(user_id):
-    if user_id == 'admin':
-        user_id = '0'
     return db.get_or_404(User, user_id)
 
 # CREATE DATABASE
@@ -83,26 +63,9 @@ class UserCompletedSurvey(db.Model):
 with app.app_context():
     db.create_all()
 
-# try:
-#     with app.app_context():
-#         new_user_admin = User(user_name='admin', password=os.environ.get('ADMIN_PASSWORD'))
-#         db.session.add(new_user_admin)
-#         db.session.commit()
-# except:
-#     pass
-# def generate_unique_user_id(user_name=''):
-#     while True:
-#         user_id = ''.join(random.choices(['0','1','2','3','4','5','6','7','8','9'], k=6))
-#         if user_id not in session.values(): 
-#             return user_id
-
 # Main -----------------------------------------------------
 @app.route('/')
 def index():
-    # user_id = session.get('user_id')
-    # if user_id:
-    #     session.pop('user_id', None)
-    #     # session['user_id'] = user_id
 
     user_acount = db.session.execute(db.select(User))
     if len(user_acount.all()) == 0:
@@ -202,15 +165,22 @@ def login_user_def():
         user = result.scalar()
         # Email doesn't exist or password incorrect.
         if not user:
-            flash("That User Name does not exist, please try again.")
-            return redirect(url_for('login_user_def'))
+            new_user = User(
+                user_name=l_user,
+            )
+            db.session.add(new_user)
+            db.session.commit()
+
+            login_user(new_user)
+            # return redirect(url_for("index"))
         else:
             if user.user_name.lower() == 'admin':
                 flash("That Username only for admin, please go to the admin page to log in if you are an admin.")
                 return redirect(url_for('login_user_def'))
             
             login_user(user)
-            return redirect(url_for('index'))
+            
+        return redirect(url_for('index'))
 
     return render_template("login_user.html")
 
@@ -489,4 +459,4 @@ def pull_chart_data():
 
 # Main python ------------------------------------------------------
 if __name__ == '__main__':
-    app.run(debug=False, port=5001)
+    app.run(debug=True, port=5001)
