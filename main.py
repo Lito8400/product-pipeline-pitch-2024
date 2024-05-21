@@ -94,7 +94,7 @@ def index():
         new_product_i = Product( name="Concept 9", description="Product Concept 9 name")
         new_product_j = Product( name="Concept 10", description="Product Concept 10 name")
         new_product_k = Product( name="Concept 11", description="Product Concept 11 name")
-        new_product_l = Product( name="Concept 12", description="Product Concept 12 nameL")
+        new_product_l = Product( name="Concept 12", description="Product Concept 12 name")
         new_product_m = Product( name="Concept 13", description="Product Concept 13 name")
         new_product_o = Product( name="Concept 14", description="Product Concept 14 name")
         new_product_p = Product( name="Concept 15", description="Product Concept 15 name")
