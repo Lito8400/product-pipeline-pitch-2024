@@ -15,6 +15,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="addProductModalLabel">Add Concept</h5>
+                                    <h5 class="modal-title" id="addProductModalLabel" >Delete All Concept</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -34,6 +35,32 @@
                             </div>
                         </div>
 
+                        <!-- Edit Concept Modal -->
+                        <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editProductModalLabel">Edit Concept</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="editProductForm" method="post" action="{{ url_for('edit_product') }}">
+                                            <input type="hidden" id="editProductId" name="id">
+                                            <div class="mb-3">
+                                                <label for="editProductName" class="form-label">Concept Name</label>
+                                                <input type="text" class="form-control" id="editProductName" name="name" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="editProductDescription" class="form-label">Description</label>
+                                                <textarea class="form-control" id="editProductDescription" name="description" rows="3" required></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-sm btn-primary shadow-sm float-end">Save changes</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="card mb-4 mt-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -45,12 +72,14 @@
                                         <tr>
                                             <th>Concept Name</th>
                                             <th>Description</th>
+                                            <!-- <th>Method</th> -->
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
                                             <th>Concept Name</th>
                                             <th>Description</th>
+                                            <!-- <th>Method</th> -->
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -58,6 +87,17 @@
                                             <tr>
                                                 <td>{{ product.name }}</td>
                                                 <td>{{ product.description }}</td>
+                                                <!-- <td>
+                                                    <button class="btn btn-sm btn-warning edit-btn" 
+                                                            data-id="{{ product.id }}" 
+                                                            data-name="{{ product.name }}" 
+                                                            data-description="{{ product.description }}" 
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#editProductModal">Edit</button>
+                                                    <form method="post" action="{{ url_for('delete_product', id=product.id) }}" style="display:inline;">
+                                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                    </form>
+                                                </td> -->
                                             </tr>
                                         {% endfor %}
                                     </tbody>
@@ -65,34 +105,39 @@
                             </div>
                         </div>
                     </div>
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function () {
-                            // Edit Product Modal
-                            const editProductModal = new bootstrap.Modal(document.getElementById('editProductModal'));
-                            const editProductForm = document.getElementById('editProductForm');
-                            const editProductName = document.getElementById('editProductName');
-                            const editProductDescription = document.getElementById('editProductDescription');
-                            const editProductId = document.getElementById('editProductId');
-                      
-                            // Open Edit Product Modal
-                            function openEditModal(id, name, description) {
-                                editProductId.value = id;
-                                editProductName.value = name;
-                                editProductDescription.value = description;
-                                editProductModal.show();
-                            }
-                      
-                            // Example: Open edit modal when edit button is clicked
-                            const editButtons = document.querySelectorAll('.edit-btn');
-                            editButtons.forEach(button => {
-                                button.addEventListener('click', function () {
+                </main>
+                <!-- <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        console.log('DOM fully loaded and parsed');
+                        const editProductModal = new bootstrap.Modal(document.getElementById('editProductModal'));
+                        console.log(`Found ${editProductModal.length} edit buttons`);
+                        const editProductForm = document.getElementById('editProductForm');
+                        const editProductName = document.getElementById('editProductName');
+                        const editProductDescription = document.getElementById('editProductDescription');
+                        const editProductId = document.getElementById('editProductId');
+                
+                        function openEditModal(id, name, description) {
+                            console.log(`Button clicked with ID: ${id}, Name: ${name}, Description: ${description}`);
+                            editProductId.value = id;
+                            editProductName.value = name;
+                            editProductDescription.value = description;
+                            editProductModal.show();
+                        }
+                
+                        const editButtons = document.querySelectorAll('.edit-btn');
+                        console.log(`Found ${editButtons.length} edit buttons`);
+                        editButtons.forEach(button => {
+                            button.addEventListener('click', function () {
                                 const id = this.dataset.id;
                                 const name = this.dataset.name;
                                 const description = this.dataset.description;
+                                console.log(`Button clicked with ID: ${id}, Name: ${name}, Description: ${description}`);
+                                if (!id || !name || !description) {
+                                    console.error("Data attributes are not correctly set.");
+                                }
                                 openEditModal(id, name, description);
-                                });
                             });
                         });
-                      </script>
-                </main>
+                    });
+                </script> -->
 {% include 'footer_admin.html' %}

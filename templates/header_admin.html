@@ -15,13 +15,18 @@
     </head>
     <body class="sb-nav-fixed" id="page-top">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <!-- Navbar Brand-->    
+            <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="{{ url_for('index') }}">2024 Product Bizarre</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
 
             <ul class="navbar-nav ms-auto me-0 me-md-3 my-2 my-md-0">
-
+                {% if check_lock %}
+                    <li class="nav-item no-arrow mx-1"><a class="nav-link active" aria-current="page" href="{{ url_for('lock_unlock') }}">UnLock Login User</a></li>
+                {% else %}
+                    <li class="nav-item no-arrow mx-1"><a class="nav-link active" aria-current="page" href="{{ url_for('lock_unlock') }}">Lock Login User</a></li>
+                {% endif %}
+                
                 <li class="nav-item no-arrow mx-1"><a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Home</a></li>
                 <li class="nav-item no-arrow mx-1"><a class="nav-link active" aria-current="page" href="{{ url_for('logout') }}">Logout</a></li>
                 <div class="topbar-divider d-none d-sm-block"></div>
@@ -40,7 +45,7 @@
                             <div class="sb-sidenav-menu-heading">Controls</div>
                             <a class="nav-link" href="{{ url_for('product_table') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Product
+                                Concepts
                             </a>
                             <a class="nav-link" href="{{ url_for('survey_table') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
@@ -50,9 +55,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 People Data
                             </a>
-                           
                         </div>
                     </div>
-                    
                 </nav>
             </div>

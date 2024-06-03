@@ -58,15 +58,15 @@ class UserCompletedSurvey(db.Model):
     product_id: Mapped[str] = mapped_column(String(250), nullable=False)
     product_Name: Mapped[str] = mapped_column(String(250), nullable=False)
 
-
 # Create table schema in the database. Requires application context.
 with app.app_context():
     db.create_all()
 
+check_lock_login_user = False
+
 # Main -----------------------------------------------------
 @app.route('/')
 def index():
-
     user_acount = db.session.execute(db.select(User))
     if len(user_acount.all()) == 0:
         new_user_admin = User(user_name='admin', password=os.environ.get('ADMIN_PASSWORD'))
@@ -75,6 +75,9 @@ def index():
 
     if not current_user.is_authenticated:
         return redirect(url_for('login_user_def'))
+    else:
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
 
     user_completed_survey = db.session.execute(db.select(UserCompletedSurvey).where(UserCompletedSurvey.user_id == current_user.user_name)).scalars()
 
@@ -129,7 +132,11 @@ def index():
 def search():
     if not current_user.is_authenticated:
         return redirect(url_for('login_user_def'))
-    
+    else:
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
+
+
     query = request.args.get('query').lower()
     filtered_products = Product.query.filter(Product.name.ilike(f'%{query}%')).all()
 
@@ -147,6 +154,9 @@ def login_admin():
         if not user:
             flash("That user name incorrect, please try again.")
             return redirect(url_for('login_admin'))
+        if user.user_name != 'admin':
+            flash("That user name incorrect, please try again.")
+            return redirect(url_for('login_admin'))
         elif not check_password_hash(user.password, input_password):
             flash('Password incorrect, please try again.')
             return redirect(url_for('login_admin'))
@@ -156,8 +166,20 @@ def login_admin():
 
     return render_template("login_admin.html", logged_in=current_user.is_authenticated)
 
+@app.route('/login-admin/lock-unlock')
+def lock_unlock():
+    global check_lock_login_user
+    if check_lock_login_user:
+        check_lock_login_user = False
+    else:
+        check_lock_login_user = True
+    return redirect(url_for('admin'))
+
 @app.route('/login-user', methods=["GET", "POST"])
 def login_user_def():
+    if check_lock_login_user:
+        return redirect(url_for('login_admin'))
+
     if request.method == "POST":
         l_user = request.form.get('inputUser')
         result = db.session.execute(db.select(User).where(func.lower(User.user_name) == l_user.lower()))
@@ -224,7 +246,10 @@ def logout():
 def survey(survey_id):
     if not current_user.is_authenticated:
         return redirect(url_for('login_user_def'))
-
+    else:
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
+        
     # user_id = session.get('user_id')
     survey = db.session.execute(db.select(Product).where(Product.id == survey_id)).scalar()
     # survey = surveys.get(survey_id)
@@ -302,10 +327,9 @@ def measure_survey():
 # Admin web ------------------------------------------
 @app.route('/admin')
 def admin():
-    
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin'))
-
+        
     df_measure_survey = measure_survey()
     total_surveys = len(df_measure_survey)
     total_user = 0
@@ -322,15 +346,14 @@ def admin():
         total_user = grouped_df['user_id'].nunique()
 
     # print(df_measure_survey)
-    return render_template('index_admin.html', measure_survey = df_measure_survey, total_surveys=total_surveys, total_user=total_user)
-
+    return render_template('index_admin.html', measure_survey = df_measure_survey, total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
 
 # Product Table ------------------------------------------
 @app.route('/admin/product')
 def product_table():
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin'))
-
+    
     product_all = db.session.execute(db.select(Product)).scalars()
     
     return render_template('product_admin.html', products = product_all)
@@ -338,10 +361,9 @@ def product_table():
 # Add Product------------------------------------------
 @app.route('/admin/add', methods=['GET', 'POST'])
 def add_product():
-
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin'))
-
+    
     if request.method == 'POST':
         name = request.form.get('name')
         description = request.form.get('description')
@@ -351,19 +373,26 @@ def add_product():
 
     return redirect(url_for('product_table'))
 
-@app.route('/admin/edit/<int:product_id>', methods=['GET', 'POST'])
-def edit_product(product_id):
+@app.route('/admin/edit_product', methods=['GET', 'POST'])
+def edit_product():
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin'))
-
-    product = db.session.execute(db.select(Product).where(Product.id == product_id)).scalar()
+    
     if request.method == 'POST':
-        product.name = request.form.get('name')
-        product.description = request.form.get('description')
+        product_id = request.form['id']
+        product = db.session.execute(db.select(Product).where(Product.id == product_id)).scalar()
+        product.name = request.form['name']
+        product.description = request.form['description']
         db.session.commit()
         
     return redirect(url_for('product_table'))
 
+@app.route('/admin/delete_product/<int:id>', methods=['POST'])
+def delete_product(id):
+    product = db.session.execute(db.select(Product).where(Product.id == id)).scalar()
+    db.session.delete(product)
+    db.session.commit()
+    return redirect(url_for('product_table'))
 
 # survey Table ------------------------------------------
 @app.route('/admin/survey')
