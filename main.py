@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash, g
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash, g, send_file
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -9,6 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import random
 import pandas as pd
 import os
+import io
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_KEY')
@@ -136,11 +137,15 @@ def search():
         if check_lock_login_user and current_user.user_name != 'admin':
             return redirect(url_for('logout'))
 
-
     query = request.args.get('query').lower()
     filtered_products = Product.query.filter(Product.name.ilike(f'%{query}%')).all()
 
-    return render_template('search_results.html', products=filtered_products, query=query)
+    user_completed_survey = db.session.execute(db.select(UserCompletedSurvey).where(UserCompletedSurvey.user_id == current_user.user_name)).scalars()
+
+    user_completed_survey = [int(survey.product_id) for survey in user_completed_survey]
+    surveyed_product = len(user_completed_survey)
+
+    return render_template('search_results.html', user_id=current_user.user_name, surveyed=surveyed_product, products=filtered_products, query=query)
 
 @app.route('/login-admin', methods=['GET', 'POST'])
 def login_admin():
@@ -292,7 +297,12 @@ def survey(survey_id):
 # ------------------------------------------------------
 @app.route('/thank-you')
 def thank_you():
-    return render_template('thank_you.html')
+    user_completed_survey = db.session.execute(db.select(UserCompletedSurvey).where(UserCompletedSurvey.user_id == current_user.user_name)).scalars()
+
+    user_completed_survey = [int(survey.product_id) for survey in user_completed_survey]
+    surveyed_product = len(user_completed_survey)
+
+    return render_template('thank_you.html', user_id=current_user.user_name, surveyed=surveyed_product)
 
 def measure_survey():
     surveys = db.session.execute(db.select(Survey)).scalars()
@@ -319,6 +329,13 @@ def measure_survey():
         df_measure_survey['Average_interested_lanched'] = df_measure_survey['Average_interested_lanched'].round(2)
         df_measure_survey['Average_path_to_market'] = df_measure_survey['Average_path_to_market'].round(2)
         df_measure_survey['Average_pull_sales'] = df_measure_survey['Average_pull_sales'].round(2)
+
+        # Calculate the Weighted Rating column
+        mean_rating = df_measure_survey['Rating'].mean()
+        base_line = 5
+        df_measure_survey['WRating'] = (df_measure_survey['Participation'] / (df_measure_survey['Participation'] + base_line)) * df_measure_survey['Rating'] + (base_line / (df_measure_survey['Participation'] + base_line)) * mean_rating
+        df_measure_survey['WRating'] = df_measure_survey['WRating'].round(2)
+
         df_measure_survey = df_measure_survey.sort_values(by='Rating', ascending=False)
         return df_measure_survey.to_dict(orient='records')
     else:
@@ -347,6 +364,34 @@ def admin():
 
     # print(df_measure_survey)
     return render_template('index_admin.html', measure_survey = df_measure_survey, total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
+
+@app.route('/admin/generate_report')
+def generate_report(): 
+# Query the database
+    product_all = db.session.execute(db.select(Product)).scalars()
+    survey_all = db.session.execute(db.select(Survey)).scalars()
+    user_completed_all = db.session.execute(db.select(UserCompletedSurvey)).scalars()
+    
+    # Convert the queries to pandas DataFrames
+    data1 = [{'ID': record.id, 'Name': record.name, 'Description': record.description} for record in product_all]
+    data2 = [{'ID': record.id, 'Concept Name': record.product_name, 'User ID': record.user_id, 'Interested Lanched': record.interested_lanched, 'Path to Market': record.path_to_market, 'Pull Sales': record.pull_sales, 'Comments': record.comments} for record in survey_all]
+    data3 = [{'ID': record.id, 'User ID': record.user_id, 'Concept ID': record.product_id, 'Concept Name' : record.product_Name} for record in user_completed_all]
+    
+    df1 = pd.DataFrame(data1)
+    df2 = pd.DataFrame(data2)
+    df3 = pd.DataFrame(data3)
+    
+    # Create an Excel file in memory with three sheets
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df1.to_excel(writer, index=False, sheet_name='Concepts')
+        df2.to_excel(writer, index=False, sheet_name='Surveys')
+        df3.to_excel(writer, index=False, sheet_name='User Completed')
+    
+    output.seek(0)
+    
+    # Send the file to the client
+    return send_file(output, download_name ='Survey_Report.xlsx', as_attachment=True)
 
 # Product Table ------------------------------------------
 @app.route('/admin/product')
@@ -419,9 +464,25 @@ def user_completed_table():
 def rank_chart_data():
     df_measure_survey = measure_survey()
     if len(df_measure_survey) > 0:
+        df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Rating'], reverse=True)
         # labels = df_measure_survey['product_name'].tolist()
         labels = [product['product_name'] for product in df_measure_survey]
         values = [product['Rating'] for product in df_measure_survey]
+
+        data = {'labels': labels[:10], 'values': values[:10]}
+    else:
+        data = {'labels': [], 'values': []}
+    
+    return jsonify(data)
+
+@app.route('/admin/weighted-rank-chart')
+def weighted_rank_chart_data():
+    df_measure_survey = measure_survey()
+    if len(df_measure_survey) > 0:
+        df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['WRating'], reverse=True)
+        # labels = df_measure_survey['product_name'].tolist()
+        labels = [product['product_name'] for product in df_measure_survey]
+        values = [product['WRating'] for product in df_measure_survey]
 
         data = {'labels': labels[:10], 'values': values[:10]}
     else:

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url("static/images/Product-Pipeline-Pitch_Background.jpg");
+            background-size: contain; 
+            display: flex;
+            padding: 50px;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            display: flex;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .login-container .left {
+            background: #4a81d370;
+            color: white;
+            background-image: url("static/images/Product-Pipeline-Pitch_Background-2.png");
+            background-size: contain; 
+            background-position: center; /* căn giữa hình ảnh */
+            background-repeat: no-repeat;
+            width: 200%;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-container .left p {
+            text-align: center;
+        }
+        .login-container .right {
+            background: white;
+            padding: 40px;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .login-container .right h2 {
+            margin-bottom: 20px;
+        }
+        .login-container .right input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-container .right button {
+            padding: 10px;
+            background: #8e2de2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .login-container .right button:hover {
+            background: #4a00e0;
+        }
+        .login-container .right a {
+            text-decoration: none;
+            color: #8e2de2;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .login-container .right a:hover {
+            color: #4a00e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="left">
+        </div>
+        <div class="right">
+            <h2>Welcome back</h2>
+            <form action="#" method="POST">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <a href="#">Create Account</a>
+            <a href="#">Forgot Password?</a>
+        </div>
+    </div>
+</body>
+</html>

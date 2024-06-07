@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body, h2, p, ul, li, form, input, button {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Background image for the body */
+        
+        /* Navigation bar styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(49, 34, 34, 0.226); /* Slightly transparent background */
+            padding: 10px 20px;
+            color: #fff;
+            height: 30px; /* Set a fixed height */
+            z-index: 1000; /* Ensure navbar stays on top */
+        }
+        .navbar-logo img {
+            height: 40px;
+        }
+
+        .navbar-logo span {
+            margin-left: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .navbar-menu {
+            list-style: none;
+            display: flex;
+        }
+
+        .navbar-menu li {
+            margin-left: 20px;
+        }
+
+        .navbar-menu li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        /* Login frame styles */
+        .login-frame {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            margin-top: 20px;
+        }
+
+        .login-left, .login-right {
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .login-left img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .login-right {
+            margin-left: 20px;
+        }
+
+        .login-right h2 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar-menu {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .navbar-menu li {
+                margin: 10px 0;
+            }
+
+            .login-frame {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .login-left, .login-right {
+                width: 90%;
+                margin: 10px 0;
+            }
+
+            .login-right {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-logo span {
+                font-size: 1.2rem;
+            }
+
+            .navbar-menu li a {
+                font-size: 0.9rem;
+            }
+
+            .login-right h2 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <img src="logo.png" alt="Logo">
+            <span>The Product</span>
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="#">Login User</a></li>
+            <li><a href="#">Login Admin</a></li>
+        </ul>
+    </nav>
+
+    <!-- Login Frame -->
+    <div class="login-frame">
+        <div class="login-left">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <div class="login-right">
+            <h2>Login</h2>
+            <form action="login" method="POST">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Log In</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
