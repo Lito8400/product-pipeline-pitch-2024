@@ -51,7 +51,7 @@ class Product(db.Model):
 class Survey(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     product_id: Mapped[int] = mapped_column(Integer, db.ForeignKey('product.id'), nullable=False)
-    user_id: Mapped[int] = mapped_column(Integer, db.ForeignKey('user.user_name'), nullable=False)
+    user_id: Mapped[str] = mapped_column(String, db.ForeignKey('user.user_name'), nullable=False)
     interested_lanched: Mapped[int] = mapped_column(Integer, nullable=False)
     path_to_market: Mapped[int] = mapped_column(Integer, nullable=False)
     pull_sales: Mapped[int] = mapped_column(Integer, nullable=False)
