@@ -7,6 +7,7 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Login User</title>
+        <link rel="icon" type="image/x-icon" href="/static/images/Product Pipeline Pitch_Icon P3-01.svg" />
         <link href="static/css_admin/styles_login.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
@@ -31,14 +32,14 @@
                 <div class="row justify-content-center">
                     <div class="col-md-12 col-lg-10">
                         <div class="wrap d-md-flex">
-                            <div class="img">
+                            <div class="img" style="max-width: 660px; align-content: center;">
                                 <img src="/static/images/Product-Pipeline-Pitch_Background-2.png"
                                       alt="login form" class="img-fluid" />
                             </div>
                             <div class="login-wrap p-4" style="background-color: #F2F2F2;">
                                 <form action="{{ url_for('login_user_def') }}" method="post">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6 text-center">
+                                    <div class="row justify-content-center mb-3">
+                                        <div class="col-md-6 text-center" style="min-width: 180px;">
                                             <h2 class="heading-section" style="color: #605858;">Login User</h2>
                                         </div>
                                     </div>
@@ -57,7 +58,7 @@
                                         {% endif %}
                                     {% endwith %}
                                     
-                                    <div class="form-check mb-3">
+                                    <div class="form-check mb-3" style="padding-left: 0;">
                                         <label class="form-check-label" >Please use this login name to log in other devices.</label>
                                     </div>
     

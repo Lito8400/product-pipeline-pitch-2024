@@ -18,8 +18,8 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 @login_manager.user_loader
-def load_user(user_id):
-    return db.get_or_404(User, user_id)
+def load_user(user_name):
+    return db.get_or_404(User, user_name)
 
 # CREATE DATABASE
 class Base(DeclarativeBase):
@@ -33,31 +33,36 @@ db.init_app(app)
 
 # Create table product
 class User(UserMixin, db.Model):
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    user_name: Mapped[str] = mapped_column(String,unique=True, nullable=False)
+    # id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_name: Mapped[str] = mapped_column(String, primary_key=True)
     password: Mapped[str] = mapped_column(String, nullable=True)
+    surveys = db.relationship('Survey', backref='user', lazy=True, cascade="all, delete-orphan")
+
+    def get_id(self):
+        return self.user_name
 
 class Product(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
     description: Mapped[str] = mapped_column(String, nullable=False)
+    surveys = db.relationship('Survey', backref='product', lazy=True, cascade="all, delete-orphan")
 
 # Create table Survey
 class Survey(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    product_name: Mapped[str] = mapped_column(String,nullable=False)
-    user_id: Mapped[str] = mapped_column(String(6), nullable=False)
+    product_id: Mapped[int] = mapped_column(Integer, db.ForeignKey('product.id'), nullable=False)
+    user_id: Mapped[int] = mapped_column(Integer, db.ForeignKey('user.user_name'), nullable=False)
     interested_lanched: Mapped[int] = mapped_column(Integer, nullable=False)
     path_to_market: Mapped[int] = mapped_column(Integer, nullable=False)
     pull_sales: Mapped[int] = mapped_column(Integer, nullable=False)
     comments: Mapped[str] = mapped_column(String, nullable=True)
 
 #Create table user
-class UserCompletedSurvey(db.Model):
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    user_id: Mapped[str] = mapped_column(String(6), nullable=False)
-    product_id: Mapped[str] = mapped_column(String(250), nullable=False)
-    product_Name: Mapped[str] = mapped_column(String(250), nullable=False)
+# class UserCompletedSurvey(db.Model):
+#     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+#     user_id: Mapped[str] = mapped_column(String, nullable=False)
+#     product_id: Mapped[str] = mapped_column(String, nullable=False)
+#     product_Name: Mapped[str] = mapped_column(String, nullable=False)
 
 # Create table schema in the database. Requires application context.
 with app.app_context():
@@ -80,54 +85,60 @@ def index():
         if check_lock_login_user and current_user.user_name != 'admin':
             return redirect(url_for('logout'))
 
-    user_completed_survey = db.session.execute(db.select(UserCompletedSurvey).where(UserCompletedSurvey.user_id == current_user.user_name)).scalars()
-
-    user_completed_survey = [int(survey.product_id) for survey in user_completed_survey]
-    surveyed_product = len(user_completed_survey)
+    # user_completed_survey = db.session.execute(db.select(UserCompletedSurvey).where(UserCompletedSurvey.user_id == current_user.user_name)).scalars()
+    user_get = db.session.execute(db.select(User).where(User.user_name == current_user.user_name)).scalar()
+    user_completed_survey = [survey.product_id for survey in user_get.surveys]
+    surveyed_count = len(user_completed_survey)
     
-    result = db.session.execute(db.select(Product))
-    if len(result.all()) == 0:
-        new_product_a = Product( name="Concept 1", description="Product Concept 1 name")
-        new_product_b = Product( name="Concept 2", description="Product Concept 2 name")
-        new_product_c = Product( name="Concept 3", description="Product Concept 3 name")
-        new_product_d = Product( name="Concept 4", description="Product Concept 4 name")
-        new_product_e = Product( name="Concept 5", description="Product Concept 5 name")
-        new_product_f = Product( name="Concept 6", description="Product Concept 6 name")
-        new_product_g = Product( name="Concept 7", description="Product Concept 7 name")
-        new_product_h = Product( name="Concept 8", description="Product Concept 8 name")
-        new_product_i = Product( name="Concept 9", description="Product Concept 9 name")
-        new_product_j = Product( name="Concept 10", description="Product Concept 10 name")
-        new_product_k = Product( name="Concept 11", description="Product Concept 11 name")
-        new_product_l = Product( name="Concept 12", description="Product Concept 12 name")
-        new_product_m = Product( name="Concept 13", description="Product Concept 13 name")
-        new_product_o = Product( name="Concept 14", description="Product Concept 14 name")
-        new_product_p = Product( name="Concept 15", description="Product Concept 15 name")
-        new_product_q = Product( name="Concept 16", description="Product Concept 16 name")
-        new_product_z = Product( name="Concept 17", description="Product Concept 17 name")
+    result = db.session.execute(db.select(Product)).all()
+    if len(result) == 0:
+        new_product_1 = Product( name="Concept 1", description="Concept 1 name")
+        new_product_2 = Product( name="Concept 2", description="Concept 2 name")
+        new_product_3 = Product( name="Concept 3", description="Concept 3 name")
+        new_product_4 = Product( name="Concept 4", description="Concept 4 name")
+        new_product_5 = Product( name="Concept 5", description="Concept 5 name")
+        new_product_6 = Product( name="Concept 6", description="Concept 6 name")
+        new_product_7 = Product( name="Concept 7", description="Concept 7 name")
+        new_product_8 = Product( name="Concept 8", description="Concept 8 name")
+        new_product_9 = Product( name="Concept 9", description="Concept 9 name")
+        new_product_10 = Product( name="Concept 10", description="Concept 10 name")
+        new_product_11 = Product( name="Concept 11", description="Concept 11 name")
+        new_product_12 = Product( name="Concept 12", description="Concept 12 name")
+        new_product_13 = Product( name="Concept 13", description="Concept 13 name")
+        new_product_14 = Product( name="Concept 14", description="Concept 14 name")
+        new_product_15 = Product( name="Concept 15", description="Concept 15 name")
+        new_product_16 = Product( name="Concept 16", description="Concept 16 name")
+        new_product_17 = Product( name="Concept 17", description="Concept 17 name")
+        new_product_18 = Product( name="Concept 18", description="Concept 18 name")
+        new_product_19 = Product( name="Concept 19", description="Concept 19 name")
+        new_product_20 = Product( name="Concept 20", description="Concept 20 name")
 
-        db.session.add(new_product_a)
-        db.session.add(new_product_b)
-        db.session.add(new_product_c)
-        db.session.add(new_product_d)
-        db.session.add(new_product_e)
-        db.session.add(new_product_f)
-        db.session.add(new_product_g)
-        db.session.add(new_product_h)
-        db.session.add(new_product_i)
-        db.session.add(new_product_j)
-        db.session.add(new_product_k)
-        db.session.add(new_product_l)
-        db.session.add(new_product_m)
-        db.session.add(new_product_o)
-        db.session.add(new_product_p)
-        db.session.add(new_product_q)
-        db.session.add(new_product_z)
+        db.session.add(new_product_1)
+        db.session.add(new_product_2)
+        db.session.add(new_product_3)
+        db.session.add(new_product_4)
+        db.session.add(new_product_5)
+        db.session.add(new_product_6)
+        db.session.add(new_product_7)
+        db.session.add(new_product_8)
+        db.session.add(new_product_9)
+        db.session.add(new_product_10)
+        db.session.add(new_product_11)
+        db.session.add(new_product_12)
+        db.session.add(new_product_13)
+        db.session.add(new_product_14)
+        db.session.add(new_product_15)
+        db.session.add(new_product_16)
+        db.session.add(new_product_17)
+        db.session.add(new_product_18)
+        db.session.add(new_product_19)
+        db.session.add(new_product_20)
         db.session.commit()
 
-    result = db.session.execute(db.select(Product))
-    all_products = result.scalars()
+    all_products = db.session.execute(db.select(Product)).scalars()
+    # all_products = result.scalars()
 
-    return render_template('index.html', products=all_products, user_id=current_user.user_name, completed_surveys=user_completed_survey, surveyed=surveyed_product, logged_in=current_user.is_authenticated)
+    return render_template('index.html', products=all_products, user_id=current_user.user_name, completed_surveys=user_completed_survey, surveyed=surveyed_count)
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
@@ -140,12 +151,11 @@ def search():
     query = request.args.get('query').lower()
     filtered_products = Product.query.filter(Product.name.ilike(f'%{query}%')).all()
 
-    user_completed_survey = db.session.execute(db.select(UserCompletedSurvey).where(UserCompletedSurvey.user_id == current_user.user_name)).scalars()
+    user_get = db.session.execute(db.select(User).where(User.user_name == current_user.user_name)).scalar()
+    user_completed_survey = [survey.product_id for survey in user_get.surveys]
+    surveyed_count = len(user_completed_survey)
 
-    user_completed_survey = [int(survey.product_id) for survey in user_completed_survey]
-    surveyed_product = len(user_completed_survey)
-
-    return render_template('search_results.html', user_id=current_user.user_name, surveyed=surveyed_product, products=filtered_products, query=query)
+    return render_template('search_results.html', user_id=current_user.user_name, surveyed=surveyed_count, products=filtered_products, query=query)
 
 @app.route('/login-admin', methods=['GET', 'POST'])
 def login_admin():
@@ -153,8 +163,8 @@ def login_admin():
         input_user = request.form.get('inputUser')
         input_password = request.form.get('inputPassword')
         
-        result = db.session.execute(db.select(User).where(func.lower(User.user_name) == input_user.lower()))
-        user = result.scalar()
+        # result = db.session.execute(db.select(User).where(func.lower(User.user_name) == input_user.lower()))
+        user = db.session.execute(db.select(User).where(func.lower(User.user_name) == input_user.lower())).scalar()
         # User name or password incorrect.
         if not user:
             flash("That user name incorrect, please try again.")
@@ -169,7 +179,7 @@ def login_admin():
             login_user(user)
             return redirect(url_for('admin'))
 
-    return render_template("login_admin.html", logged_in=current_user.is_authenticated)
+    return render_template("login_admin.html")
 
 @app.route('/login-admin/lock-unlock')
 def lock_unlock():
@@ -187,9 +197,9 @@ def login_user_def():
 
     if request.method == "POST":
         l_user = request.form.get('inputUser')
-        result = db.session.execute(db.select(User).where(func.lower(User.user_name) == l_user.lower()))
+        # result = db.session.execute(db.select(User).where(func.lower(User.user_name) == l_user.lower()))
 
-        user = result.scalar()
+        user = db.session.execute(db.select(User).where(func.lower(User.user_name) == l_user.lower())).scalar()
         # Email doesn't exist or password incorrect.
         if not user:
             new_user = User(
@@ -215,10 +225,10 @@ def login_user_def():
 def register_user():
     if request.method == "POST":
         r_user = request.form.get('inputUser')
-        result = db.session.execute(db.select(User).where(func.lower(User.user_name) == r_user.lower()))
+        # result = db.session.execute(db.select(User).where(func.lower(User.user_name) == r_user.lower()))
         
         # Note, email in db is unique so will only have one result.
-        user = result.scalar()
+        user = db.session.execute(db.select(User).where(func.lower(User.user_name) == r_user.lower())).scalar()
         if user:
             # User already exists
             flash("That Username already exist, Please register with another name!")
@@ -256,27 +266,24 @@ def survey(survey_id):
             return redirect(url_for('logout'))
         
     # user_id = session.get('user_id')
+    # survey = db.session.execute(db.select(Product).where(Product.id == survey_id)).scalar()
     survey = db.session.execute(db.select(Product).where(Product.id == survey_id)).scalar()
     # survey = surveys.get(survey_id)
     if not survey:
         return redirect(url_for('index'))
     
-    user_completed_survey = db.session.execute(db.select(UserCompletedSurvey).where(UserCompletedSurvey.user_id == current_user.user_name)).scalars()
-
-    user_completed_survey = [survey.product_id for survey in user_completed_survey]
-    surveyed_product = len(user_completed_survey)
+    user_get = db.session.execute(db.select(User).where(User.user_name == current_user.user_name)).scalar()
+    user_completed_survey = [survey.product_id for survey in user_get.surveys]
+    surveyed_count = len(user_completed_survey)
 
     if request.method == 'POST':
         comment_ai = None
-        new_completed_survey = UserCompletedSurvey(user_id=current_user.user_name, product_Name=survey.name, product_id=survey_id)
-        db.session.add(new_completed_survey)
-        db.session.commit()
-
         interested_lanch = int(request.form['launched'])
         path_to_mar = int(request.form['pathmarket'])
         pull_sale = int(request.form['pullsales'])
         comment = request.form['comment']
-        new_survey = Survey(product_name=survey.name, user_id=current_user.user_name, interested_lanched=interested_lanch, path_to_market=path_to_mar, pull_sales=pull_sale, comments=comment)
+
+        new_survey = Survey(product_id=survey_id, user_id=current_user.user_name, interested_lanched=interested_lanch, path_to_market=path_to_mar, pull_sales=pull_sale, comments=comment)
         db.session.add(new_survey)
         db.session.commit()
 
@@ -292,17 +299,16 @@ def survey(survey_id):
 
         return redirect(url_for('thank_you'))
     
-    return render_template('survey.html', survey=survey, user_id=current_user.user_name, surveyed=surveyed_product)
+    return render_template('survey.html', survey=survey, user_id=current_user.user_name, surveyed=surveyed_count)
 
 # ------------------------------------------------------
 @app.route('/thank-you')
 def thank_you():
-    user_completed_survey = db.session.execute(db.select(UserCompletedSurvey).where(UserCompletedSurvey.user_id == current_user.user_name)).scalars()
+    user_get = db.session.execute(db.select(User).where(User.user_name == current_user.user_name)).scalar()
+    user_completed_survey = [survey.product_id for survey in user_get.surveys]
+    surveyed_count = len(user_completed_survey)
 
-    user_completed_survey = [int(survey.product_id) for survey in user_completed_survey]
-    surveyed_product = len(user_completed_survey)
-
-    return render_template('thank_you.html', user_id=current_user.user_name, surveyed=surveyed_product)
+    return render_template('thank_you.html', user_id=current_user.user_name, surveyed=surveyed_count)
 
 def measure_survey():
     surveys = db.session.execute(db.select(Survey)).scalars()
@@ -310,7 +316,7 @@ def measure_survey():
     surveys = db.session.execute(db.select(Survey)).scalars()
     if check_count > 0:
         df = pd.DataFrame([{
-            'product_name': survey.product_name,
+            'product_name': survey.product.name,
             'interested_lanched': survey.interested_lanched,
             'path_to_market': survey.path_to_market,
             'pull_sales': survey.pull_sales
@@ -332,7 +338,7 @@ def measure_survey():
 
         # Calculate the Weighted Rating column
         mean_rating = df_measure_survey['Rating'].mean()
-        base_line = 5
+        base_line = int(df_measure_survey['Participation'].mean())
         df_measure_survey['WRating'] = (df_measure_survey['Participation'] / (df_measure_survey['Participation'] + base_line)) * df_measure_survey['Rating'] + (base_line / (df_measure_survey['Participation'] + base_line)) * mean_rating
         df_measure_survey['WRating'] = df_measure_survey['WRating'].round(2)
 
@@ -350,48 +356,53 @@ def admin():
     df_measure_survey = measure_survey()
     total_surveys = len(df_measure_survey)
     total_user = 0
-    user_surveys = db.session.execute(db.select(UserCompletedSurvey)).scalars()
-    check_count = len(user_surveys.all())
-    user_surveys = db.session.execute(db.select(UserCompletedSurvey)).scalars()
+    user_surveys = db.session.execute(db.select(User)).all()
+    total_user = len(user_surveys)
    
-    if check_count > 0:
-        df = pd.DataFrame([{
-                'user_id': survey.user_id,
-            } for survey in user_surveys])
-        print(df)
-        grouped_df = df.groupby('user_id').size().reset_index(name='num_surveys')
-        total_user = grouped_df['user_id'].nunique()
-
     # print(df_measure_survey)
     return render_template('index_admin.html', measure_survey = df_measure_survey, total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
 
 @app.route('/admin/generate_report')
 def generate_report(): 
-# Query the database
+    # Query the database
     product_all = db.session.execute(db.select(Product)).scalars()
     survey_all = db.session.execute(db.select(Survey)).scalars()
-    user_completed_all = db.session.execute(db.select(UserCompletedSurvey)).scalars()
-    
+    user_surveys = db.session.execute(db.select(User)).scalars()
+    df_measure_survey = measure_survey()
+
     # Convert the queries to pandas DataFrames
-    data1 = [{'ID': record.id, 'Name': record.name, 'Description': record.description} for record in product_all]
-    data2 = [{'ID': record.id, 'Concept Name': record.product_name, 'User ID': record.user_id, 'Interested Lanched': record.interested_lanched, 'Path to Market': record.path_to_market, 'Pull Sales': record.pull_sales, 'Comments': record.comments} for record in survey_all]
-    data3 = [{'ID': record.id, 'User ID': record.user_id, 'Concept ID': record.product_id, 'Concept Name' : record.product_Name} for record in user_completed_all]
-    
-    df1 = pd.DataFrame(data1)
-    df2 = pd.DataFrame(data2)
-    df3 = pd.DataFrame(data3)
+    products_df = pd.DataFrame([{
+        'ID': product.id, 
+        'Name': product.name, 
+        'Description': product.description
+    } for product in product_all])
+
+    surveys_df = pd.DataFrame([{
+        'ID': survey.id, 
+        'Concept Name': survey.product.name, 
+        'User ID': survey.user_id, 
+        'Interested Lanched': survey.interested_lanched, 
+        'Path to Market': survey.path_to_market, 
+        'Pull Sales': survey.pull_sales, 
+        'Comments': survey.comments
+    } for survey in survey_all])
+
+    users_df = pd.DataFrame([{
+        'User ID': user.user_name,
+    } for user in user_surveys])
     
     # Create an Excel file in memory with three sheets
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        df1.to_excel(writer, index=False, sheet_name='Concepts')
-        df2.to_excel(writer, index=False, sheet_name='Surveys')
-        df3.to_excel(writer, index=False, sheet_name='User Completed')
+        df_measure_survey.to_excel(writer, index=False, sheet_name='Measure Surveys')
+        products_df.to_excel(writer, index=False, sheet_name='Concepts')
+        surveys_df.to_excel(writer, index=False, sheet_name='Surveys')
+        users_df.to_excel(writer, index=False, sheet_name='User Completed')
     
     output.seek(0)
     
     # Send the file to the client
-    return send_file(output, download_name ='Survey_Report.xlsx', as_attachment=True)
+    return send_file(output, download_name ='Surveys Report.xlsx', as_attachment=True)
 
 # Product Table ------------------------------------------
 @app.route('/admin/product')
@@ -407,7 +418,7 @@ def product_table():
 @app.route('/admin/add', methods=['GET', 'POST'])
 def add_product():
     if not current_user.is_authenticated:
-        return redirect(url_for('login_admin'))
+        return redirect(url_for('login_admin')) 
     
     if request.method == 'POST':
         name = request.form.get('name')
@@ -455,7 +466,7 @@ def user_completed_table():
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin'))
 
-    user_completed_all = db.session.execute(db.select(UserCompletedSurvey)).scalars()
+    user_completed_all = db.session.execute(db.select(User)).scalars()
     
     return render_template('user_completed_admin.html', user_completed = user_completed_all)
 
