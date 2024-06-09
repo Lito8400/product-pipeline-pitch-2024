@@ -73,7 +73,7 @@ check_lock_login_user = False
 # Main -----------------------------------------------------
 @app.route('/')
 def index():
-    user_acount = db.session.execute(db.select(User))
+    user_acount = db.session.execute(db.select(User)).scalars()
     if len(user_acount.all()) == 0:
         new_user_admin = User(user_name='admin', password=os.environ.get('ADMIN_PASSWORD'))
         db.session.add(new_user_admin)
