@@ -93,6 +93,9 @@
 
 body {
   margin: 0;
+  background-image: url('/static/images/Product-Pipeline-Pitch_Background.jpg');
+  background-position: center top;
+  background-size: cover;
   font-family: var(--bs-body-font-family);
   font-size: var(--bs-body-font-size);
   font-weight: var(--bs-body-font-weight);
@@ -103,6 +106,29 @@ body {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+
+@media only screen and (max-width: 1280px) {
+  body {
+      background-image: url('/static/images/Phone-Product-Pipeline-Pitch-Background.jpg');
+      background-size: cover;
+      background-position: center top;
+  }
+  
+}
+
+@media only screen and (max-width: 480px) {
+  body {
+      background-image: url('/static/images/Phone-Product-Pipeline-Pitch-Background.jpg');
+      background-size: contain;
+      background-position: center top;
+  }
+  .ftco-section {
+    padding: 6em 0;
+  }
+  
+}
+
+
 
 hr {
   margin: 1rem 0;
@@ -126,6 +152,7 @@ h1, .h1 {
   h1, .h1 {
     font-size: 2.5rem;
   }
+  
 }
 
 h2, .h2 {
@@ -11255,13 +11282,37 @@ body {
 }
 
 .ftco-section {
-  padding: 7em 0; 
+  padding: 12em 0; 
+}
+
+@media (max-width: 480px) {
+  
+  .ftco-section {
+    padding: 6em 0;
+  }
+  
 }
 
 .login-wrap {
   position: relative;
   color: rgba(255, 255, 255, 0.9); 
+  min-width: 399px;
 }
+
+@media (max-width: 1280px) {
+  .login-wrap {
+    min-width: 250px;
+  }
+  
+}
+
+@media (max-width: 480px) {
+  .login-wrap {
+    min-width: auto;
+  }
+  
+}
+
 .login-wrap h3 {
   font-weight: 300;
   color: #fff; 
