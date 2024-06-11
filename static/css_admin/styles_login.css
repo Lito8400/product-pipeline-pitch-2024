@@ -96,6 +96,7 @@ body {
   background-image: url('/static/images/Product-Pipeline-Pitch_Background.jpg');
   background-position: center top;
   background-size: cover;
+  background-repeat: round;
   font-family: var(--bs-body-font-family);
   font-size: var(--bs-body-font-size);
   font-weight: var(--bs-body-font-weight);
@@ -112,6 +113,7 @@ body {
       background-image: url('/static/images/Phone-Product-Pipeline-Pitch-Background.jpg');
       background-size: cover;
       background-position: center top;
+      background-repeat: repeat;
   }
   
 }
@@ -121,6 +123,8 @@ body {
       background-image: url('/static/images/Phone-Product-Pipeline-Pitch-Background.jpg');
       background-size: contain;
       background-position: center top;
+      background-repeat: round;
+
   }
   .ftco-section {
     padding: 6em 0;
@@ -674,9 +678,9 @@ progress {
   }
 }
 @media (min-width: 768px) {
-  .container-md, .container-sm, .container {
+  /* .container-md, .container-sm, .container {
     max-width: 720px;
-  }
+  } */
 }
 @media (min-width: 992px) {
   .container-lg, .container-md, .container-sm, .container {
@@ -8875,9 +8879,9 @@ textarea.form-control-lg {
   .d-md-table-cell {
     display: table-cell !important;
   }
-  .d-md-flex {
+  /* .d-md-flex {
     display: flex !important;
-  }
+  } */
   .d-md-inline-flex {
     display: inline-flex !important;
   }
@@ -9379,6 +9383,9 @@ textarea.form-control-lg {
   }
   .d-lg-none {
     display: none !important;
+  }
+  .d-md-flex {
+    display: flex !important;
   }
   .flex-lg-fill {
     flex: 1 1 auto !important;

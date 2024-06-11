@@ -297,7 +297,7 @@ def survey(survey_id):
         #     )
         #     comment_ai = response.choices[0].text.strip()
 
-        return redirect(url_for('thank_you'))
+        return redirect(url_for('index'))
     
     return render_template('survey.html', survey=survey, user_id=current_user.user_name, surveyed=surveyed_count)
 

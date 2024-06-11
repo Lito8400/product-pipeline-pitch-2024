@@ -27,51 +27,53 @@
                 </div>
             </div>
         </nav>
-        <section class="ftco-section">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-12 col-lg-10">
-                        <div class="wrap d-md-flex">
-                            <div class="img" style="max-width: 660px; align-content: center; margin: auto; padding: 1rem">
-                                <img src="/static/images/Product-Pipeline-Pitch_Background-2.png"
-                                      alt="login form" class="img-fluid" />
-                            </div>
-                            <div class="login-wrap p-4" style="background-color: #F2F2F2;">
-                                <form action="{{ url_for('login_admin') }}" method="post">
-                                    <div class="row justify-content-center">
-                                        <div class="text-center mb-3">
-                                            <h2 class="heading-section" style="color: #605858;">Login Admin</h2>
+        <div style="width: 100%; height: 88%; display: flex; justify-content: center; align-items: center;">
+            <section class="ftco-section">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-12 col-lg-10">
+                            <div class="wrap d-md-flex">
+                                <div class="img" style="max-width: 660px; align-content: center; margin: auto; padding: 1rem">
+                                    <img src="/static/images/Product-Pipeline-Pitch_Background-2.png"
+                                        alt="login form" class="img-fluid" />
+                                </div>
+                                <div class="login-wrap p-4" style="background-color: #F2F2F2;">
+                                    <form action="{{ url_for('login_admin') }}" method="post">
+                                        <div class="row justify-content-center">
+                                            <div class="text-center mb-3">
+                                                <h2 class="heading-section" style="color: #605858;">Login Admin</h2>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" style="background: #CECECE;" name="inputUser" placeholder="Username" required="">
-                                    </div>
-                                    <div class="form-group">
-                                        <input id="password" type="password" style="background: #CECECE;" name="inputPassword" class="form-control" placeholder="Password" required="">
-                                        <button id="eye" onclick="if (password.type == 'text') {password.type = 'password'; this.classList.toggle('fa-eye')}
-                                        else {password.type = 'text'; this.classList.toggle('fa-eye-slash')}"  class="fa fa-fw fa-eye field-icon toggle-password"></button>
-                                    </div>
-                                    
-                                    {% with messages = get_flashed_messages() %}
-                                        {% if messages %}
-                                            {% for message in messages %}
-                                                <div class="form-check mb-3">
-                                                    <label class="form-check-label">{{ message }}</label>
-                                                </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    {% endwith %}
-    
-                                    <div class="form-group">
-                                        <button type="submit" style="background: #FF5308 !important;" class="form-control btn btn-primary submit px-3">Sign In</button>
-                                    </div>
-                                </form>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" style="background: #CECECE;" name="inputUser" placeholder="Username" required="">
+                                        </div>
+                                        <div class="form-group">
+                                            <input id="password" type="password" style="background: #CECECE;" name="inputPassword" class="form-control" placeholder="Password" required="">
+                                            <button id="eye" onclick="if (password.type == 'text') {password.type = 'password'; this.classList.toggle('fa-eye')}
+                                            else {password.type = 'text'; this.classList.toggle('fa-eye-slash')}"  class="fa fa-fw fa-eye field-icon toggle-password"></button>
+                                        </div>
+                                        
+                                        {% with messages = get_flashed_messages() %}
+                                            {% if messages %}
+                                                {% for message in messages %}
+                                                    <div class="form-check mb-3">
+                                                        <label class="form-check-label">{{ message }}</label>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endwith %}
+        
+                                        <div class="form-group">
+                                            <button type="submit" style="background: #FF5308 !important;" class="form-control btn btn-primary submit px-3">Sign In</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+    </div>
     </body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </html>
