@@ -2,7 +2,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <div class="card mb-4">
+                        <div class="card mb-4 mt-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
                                 Survey DataTable
@@ -33,7 +33,7 @@
                                         {% for survey in surveys %}
                                             <tr>
                                                 <td>{{ survey.product.name }}</td>
-                                                <td>{{ survey.user_id }}</td>
+                                                <td>{{ survey.user.user_name }}</td>
                                                 <td>{{ survey.interested_lanched }}</td>
                                                 <td>{{ survey.path_to_market }}</td>
                                                 <td>{{ survey.pull_sales }}</td>

@@ -7,6 +7,9 @@
                             <button type="button" class="btn btn-sm btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addProductModal">
                                 Add Concept
                             </button>
+                            <a href="#" id="confirmDeleteAllBtn" type="button" class="btn btn-sm btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" onclick="openDeleteAllModal()">
+                                Delete All Concepts
+                            </a>
                         </div>
                         
                         <!-- Add Concept Modal -->
@@ -15,7 +18,6 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="addProductModalLabel">Add Concept</h5>
-                                    <h5 class="modal-title" id="addProductModalLabel" >Delete All Concept</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -60,6 +62,26 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Delete Modal -->
+                        <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteConfirmModalLabel">Delete Concept</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete <span id="itemName"></span>?
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="card mb-4 mt-4">
                             <div class="card-header">
@@ -72,14 +94,16 @@
                                         <tr>
                                             <th>Concept Name</th>
                                             <th>Description</th>
-                                            <!-- <th>Method</th> -->
+                                            <th></th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
                                             <th>Concept Name</th>
                                             <th>Description</th>
-                                            <!-- <th>Method</th> -->
+                                            <th></th>
+                                            <th></th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -87,17 +111,13 @@
                                             <tr>
                                                 <td>{{ product.name }}</td>
                                                 <td>{{ product.description }}</td>
-                                                <!-- <td>
-                                                    <button class="btn btn-sm btn-warning edit-btn" 
-                                                            data-id="{{ product.id }}" 
-                                                            data-name="{{ product.name }}" 
-                                                            data-description="{{ product.description }}" 
-                                                            data-bs-toggle="modal" 
-                                                            data-bs-target="#editProductModal">Edit</button>
-                                                    <form method="post" action="{{ url_for('delete_product', id=product.id) }}" style="display:inline;">
-                                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                                    </form>
-                                                </td> -->
+                                                <td>
+                                                    <a href="#" class="shadow-sm" data-bs-toggle="modal" data-bs-target="#editProductModal" onclick="openEditModal('{{ product.id }}', '{{ product.name }}', '{{ product.description }}')">Edit</a>
+                                                </td>
+                                                <td>
+                                                    <!-- <a href="{{ url_for('delete_product', id=product.id) }}">Delete</a> -->
+                                                    <a href="#" class="shadow-sm" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" onclick="openDeleteModal('{{ product.id }}', '{{ product.name }}')">Delete</a>
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
@@ -106,38 +126,4 @@
                         </div>
                     </div>
                 </main>
-                <!-- <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        console.log('DOM fully loaded and parsed');
-                        const editProductModal = new bootstrap.Modal(document.getElementById('editProductModal'));
-                        console.log(`Found ${editProductModal.length} edit buttons`);
-                        const editProductForm = document.getElementById('editProductForm');
-                        const editProductName = document.getElementById('editProductName');
-                        const editProductDescription = document.getElementById('editProductDescription');
-                        const editProductId = document.getElementById('editProductId');
-                
-                        function openEditModal(id, name, description) {
-                            console.log(`Button clicked with ID: ${id}, Name: ${name}, Description: ${description}`);
-                            editProductId.value = id;
-                            editProductName.value = name;
-                            editProductDescription.value = description;
-                            editProductModal.show();
-                        }
-                
-                        const editButtons = document.querySelectorAll('.edit-btn');
-                        console.log(`Found ${editButtons.length} edit buttons`);
-                        editButtons.forEach(button => {
-                            button.addEventListener('click', function () {
-                                const id = this.dataset.id;
-                                const name = this.dataset.name;
-                                const description = this.dataset.description;
-                                console.log(`Button clicked with ID: ${id}, Name: ${name}, Description: ${description}`);
-                                if (!id || !name || !description) {
-                                    console.error("Data attributes are not correctly set.");
-                                }
-                                openEditModal(id, name, description);
-                            });
-                        });
-                    });
-                </script> -->
 {% include 'footer_admin.html' %}

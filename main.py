@@ -324,6 +324,7 @@ def measure_survey():
         
         df_measure_survey = df.groupby('product_name').agg(
             Rating =('product_name', 'size'),
+            WRating =('product_name', 'size'),
             Participation=('product_name', 'size'),
             Average_interested_lanched=('interested_lanched', 'mean'),
             Average_path_to_market=('path_to_market', 'mean'),
@@ -352,7 +353,7 @@ def measure_survey():
 def admin():
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin'))
-        
+    
     df_measure_survey = measure_survey()
     total_surveys = len(df_measure_survey)
     total_user = 0
@@ -371,6 +372,13 @@ def generate_report():
     df_measure_survey = measure_survey()
 
     # Convert the queries to pandas DataFrames
+    measure_df = pd.DataFrame(df_measure_survey)
+    measure_df = measure_df.rename(columns={'product_name': 'Concept Name', 
+                                            'WRating': 'Weighted Rating', 
+                                            'Average_interested_lanched':'Average interested lanched',
+                                            'Average_path_to_market': 'Average path to market',
+                                            'Average_pull_sales': 'Average pull sales'})
+
     products_df = pd.DataFrame([{
         'ID': product.id, 
         'Name': product.name, 
@@ -394,7 +402,7 @@ def generate_report():
     # Create an Excel file in memory with three sheets
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        df_measure_survey.to_excel(writer, index=False, sheet_name='Measure Surveys')
+        measure_df.to_excel(writer, index=False, sheet_name='Measure Surveys')
         products_df.to_excel(writer, index=False, sheet_name='Concepts')
         surveys_df.to_excel(writer, index=False, sheet_name='Surveys')
         users_df.to_excel(writer, index=False, sheet_name='User Completed')
@@ -415,7 +423,7 @@ def product_table():
     return render_template('product_admin.html', products = product_all)
 
 # Add Product------------------------------------------
-@app.route('/admin/add', methods=['GET', 'POST'])
+@app.route('/admin/add_product', methods=['GET', 'POST'])
 def add_product():
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin')) 
@@ -443,10 +451,18 @@ def edit_product():
         
     return redirect(url_for('product_table'))
 
-@app.route('/admin/delete_product/<int:id>', methods=['POST'])
+@app.route('/admin/delete_product/<int:id>')
 def delete_product(id):
     product = db.session.execute(db.select(Product).where(Product.id == id)).scalar()
     db.session.delete(product)
+    db.session.commit()
+    return redirect(url_for('product_table'))
+
+@app.route('/admin/delete_all_product')
+def delete_all_product():
+    # product = db.session.execute(db.select(Product)).scalars()
+    db.session.query(Product).delete()
+    # db.session.delete(product)
     db.session.commit()
     return redirect(url_for('product_table'))
 
@@ -469,6 +485,78 @@ def user_completed_table():
     user_completed_all = db.session.execute(db.select(User)).scalars()
     
     return render_template('user_completed_admin.html', user_completed = user_completed_all)
+
+@app.route('/admin/add_user', methods=['GET', 'POST'])
+def add_user():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login_admin')) 
+    
+    if request.method == "POST":
+        l_user = request.form.get('userName')
+        user = db.session.execute(db.select(User).where(func.lower(User.user_name) == l_user.lower())).scalar()
+        # Email doesn't exist or password incorrect.
+        if not user:
+            new_user = User(
+                user_name=l_user,
+            )
+            db.session.add(new_user)
+            db.session.commit()
+
+    return redirect(url_for('user_completed_table'))
+
+@app.route('/admin/edit_user', methods=['GET', 'POST'])
+def edit_user():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login_admin'))
+    
+    if request.method == 'POST':
+        user_id = request.form['id']
+        
+        if user_id == 'admin':
+            return redirect(url_for('user_completed_table'))
+
+        new_user_name = request.form['name']
+
+        new_user = db.session.execute(db.select(User).where(User.user_name == new_user_name)).scalar()
+        user = db.session.execute(db.select(User).where(User.user_name == user_id)).scalar()
+
+        if new_user:
+            survey_ids = [{sur.id for sur in new_user.surveys}]
+
+            for survey in user.surveys:
+                if survey.id in survey_ids:
+                    db.session.delete(survey)
+                else:
+                    survey.user_id = new_user_name
+            db.session.delete(user)
+        else:
+            for survey in user.surveys:
+                survey.user_id = new_user_name
+            user.user_name = new_user_name
+
+        db.session.commit()
+        
+    return redirect(url_for('user_completed_table'))
+
+@app.route('/admin/delete_user/<username>')
+def delete_user(username):
+    if username == 'admin':
+        return redirect(url_for('user_completed_table'))
+
+    user = db.session.execute(db.select(User).where(User.user_name == username)).scalar()
+    for survey in user.surveys:
+        db.session.delete(survey)
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('user_completed_table'))
+
+@app.route('/admin/delete_all_users')
+def delete_all_users():
+    users = db.session.execute(db.select(User).where(User.user_name != 'admin')).scalars()
+    for user in users:
+        db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('user_completed_table'))
 
 # Product Bizarre 2024 Rank Chart ------------------------------------------
 @app.route('/admin/rank-chart')
