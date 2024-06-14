@@ -11530,3 +11530,79 @@ input[type="button"].btn-block {
   -webkit-box-shadow: 0px 10px 34px -15px rgba(0, 0, 0, 0.24);
   -moz-box-shadow: 0px 10px 34px -15px rgba(0, 0, 0, 0.24);
   box-shadow: 0px 10px 34px -15px rgba(0, 0, 0, 0.24); }
+
+.logo-image {
+  height: 48px; 
+  vertical-align: middle;
+}
+
+.logo-background{
+  max-width: 660px; 
+  align-content: center; 
+  margin: auto; 
+  padding: 1rem
+}
+
+.img-background {
+  width: unset;
+}
+
+@media (min-width: 1920px) {
+
+  .logo-image {
+    height: 2.5vw; 
+  }
+
+  .btn {
+    --bs-btn-font-size: 1vw;
+  }
+
+  .form-control {
+    font-size: 0.8vw;
+    height: 2.1vw;
+  }
+
+  .navbar-brand {
+    font-size: 1.1vw
+  }
+
+  .nav-link {
+    font-size: 1vw;
+  }
+
+  body {
+    font-size: 0.9vw;
+  }
+
+  .ftco-section {
+    width: 64vw;
+  }
+ 
+  .login-wrap {
+    min-width: 20vw;
+  }
+
+  .container {
+    max-width: 70vw;
+  }
+
+  .heading-section {
+    font-size: 1.7vw;
+  }
+
+  .img-fluid {
+    width: 30vw;
+  }
+
+  .logo-background {
+    max-width: unset;
+  }
+
+  .img-background {
+    width: 28vw;
+  }
+
+  .col-md-6 {
+    width: 70%;
+  }
+}

@@ -5,8 +5,8 @@ window.addEventListener('DOMContentLoaded', event => {
     const datatablesSimple = document.getElementById('datatablesSimple');
     if (datatablesSimple) {
         new simpleDatatables.DataTable(datatablesSimple, {
-            perPage: 10,
-            perPageSelect: [10, 25, 50, 75, 100]
+            perPage: 150,
+            perPageSelect: [150, 200, 300, 500]
         });
     }
 });

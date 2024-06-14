@@ -58,7 +58,7 @@
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --bs-body-font-family: var(--bs-font-sans-serif);
-  --bs-body-font-size: 1rem;
+  --bs-body-font-size: 1.2rem;
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
   --bs-body-color: #212529;
@@ -102,6 +102,25 @@ body {
   background-color: var(--bs-body-bg);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/* @media (min-width: 600px) {
+  body {
+      font-size: calc(1rem + 1.5vw);
+  }
+} */
+
+@media (min-width: 1920px) {
+  body {
+      font-size: 0.9vw;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  body {
+    font-size: 1rem;
+  }
+  
 }
 
 hr {
@@ -543,6 +562,12 @@ progress {
 @media (min-width: 1200px) {
   .display-5 {
     font-size: 3rem;
+  }
+}
+
+@media (min-width: 1920px) {
+  .display-5 {
+    font-size: 2.5vw;
   }
 }
 
@@ -2805,6 +2830,7 @@ textarea.form-control-lg {
     transition: none;
   }
 }
+
 .btn:hover {
   color: var(--bs-btn-hover-color);
   background-color: var(--bs-btn-hover-bg);
@@ -3776,6 +3802,12 @@ textarea.form-control-lg {
 }
 .navbar-brand:hover, .navbar-brand:focus {
   color: var(--bs-navbar-brand-hover-color);
+}
+
+@media (min-width: 1920px) {
+  .navbar-brand {
+    font-size: 1.1vw
+  }
 }
 
 .navbar-nav {
@@ -11522,6 +11554,13 @@ textarea.form-control-lg {
     font-size: 1.5rem !important;
   }
 }
+
+@media (min-width: 1920px) {
+  .fs-4 {
+    font-size: 1.2vw !important;
+  }
+}
+
 @media print {
   .d-print-inline {
     display: inline !important;
@@ -11600,32 +11639,31 @@ textarea.form-control-lg {
   line-height: 1;
 }
 
-/* Option 1 */
-/* .stamp {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: scale(0);
-  opacity: 1;
-  transform: translate(-50%, -50%) rotate(-30deg) scale(1);
-} */
+.logo-image {
+  height: 48px; 
+  vertical-align: middle;
+}
 
-/* Option 2 */
-/* .stamp {
-  background-color: #ff5308b5;
-  background-color: #8e8989a3;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-45deg) scale(1);
-  width: 150px;
-  height: 150px;
-  border-radius: 47%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  opacity: 1;
-  transition: transform 0.5s ease, opacity 0.5s ease;
-} */
+@media (min-width: 1920px) {
+
+  .logo-image {
+    height: 2.5vw; 
+  }
+
+  input[type="radio"] {
+    height: 0.6vw;
+    width: 0.6vw;
+  }
+
+  .btn {
+    --bs-btn-font-size: 1vw;
+  }
+
+  .form-control {
+    font-size: 1vw;
+  }
+
+  body {
+    font-size: 0.9vw;
+  }
+}

@@ -570,7 +570,7 @@ def rank_chart_data():
         labels = [product['product_name'] for product in df_measure_survey]
         values = [product['Rating'] for product in df_measure_survey]
 
-        data = {'labels': labels[:10], 'values': values[:10]}
+        data = {'labels': labels[:25], 'values': values[:25]}
     else:
         data = {'labels': [], 'values': []}
     
@@ -585,7 +585,7 @@ def weighted_rank_chart_data():
         labels = [product['product_name'] for product in df_measure_survey]
         values = [product['WRating'] for product in df_measure_survey]
 
-        data = {'labels': labels[:10], 'values': values[:10]}
+        data = {'labels': labels[:25], 'values': values[:25]}
     else:
         data = {'labels': [], 'values': []}
     
@@ -600,7 +600,7 @@ def participation_chart_data():
         labels = [product['product_name'] for product in df_measure_survey]
         values = [product['Participation'] for product in df_measure_survey]
 
-        data = {'labels': labels[:10], 'values': values[:10]}
+        data = {'labels': labels[:25], 'values': values[:25]}
     else:
         data = {'labels': [], 'values': []}
     
@@ -615,7 +615,7 @@ def interested_chart_data():
         labels = [product['product_name'] for product in df_measure_survey]
         values = [product['Average_interested_lanched'] for product in df_measure_survey]
 
-        data = {'labels': labels[:10], 'values': values[:10]}
+        data = {'labels': labels[:25], 'values': values[:25]}
     else:
         data = {'labels': [], 'values': []}
     
@@ -630,7 +630,7 @@ def market_chart_data():
         labels = [product['product_name'] for product in df_measure_survey]
         values = [product['Average_path_to_market'] for product in df_measure_survey]
 
-        data = {'labels': labels[:10], 'values': values[:10]}
+        data = {'labels': labels[:25], 'values': values[:25]}
     else:
         data = {'labels': [], 'values': []}
     
@@ -645,7 +645,7 @@ def pull_chart_data():
         labels = [product['product_name'] for product in df_measure_survey]
         values = [product['Average_pull_sales'] for product in df_measure_survey]
 
-        data = {'labels': labels[:10], 'values': values[:10]}
+        data = {'labels': labels[:25], 'values': values[:25]}
     else:
         data = {'labels': [], 'values': []}
     
