@@ -138,8 +138,12 @@ def index():
 
     all_products = db.session.execute(db.select(Product)).scalars()
     # all_products = result.scalars()
+    product_list = list(all_products)
 
-    return render_template('index.html', products=all_products, user_id=current_user.user_name, completed_surveys=user_completed_survey, surveyed=surveyed_count)
+    product_list.sort(key=extract_number)
+
+
+    return render_template('index.html', products=product_list, user_id=current_user.user_name, completed_surveys=user_completed_survey, surveyed=surveyed_count)
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
@@ -152,11 +156,15 @@ def search():
     query = request.args.get('query').lower()
     filtered_products = Product.query.filter(Product.name.ilike(f'%{query}%')).all()
 
+    product_list = list(filtered_products)
+
+    product_list.sort(key=extract_number)
+
     user_get = db.session.execute(db.select(User).where(User.user_name == current_user.user_name)).scalar()
     user_completed_survey = [survey.product_id for survey in user_get.surveys]
     surveyed_count = len(user_completed_survey)
 
-    return render_template('search_results.html', user_id=current_user.user_name, surveyed=surveyed_count, products=filtered_products, query=query)
+    return render_template('search_results.html', user_id=current_user.user_name, surveyed=surveyed_count, products=product_list, query=query)
 
 @app.route('/login-admin', methods=['GET', 'POST'])
 def login_admin():
