@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Integer, String, Float, Boolean, ForeignKey, func
+from sqlalchemy import Integer, String, Float, Boolean, ForeignKey, func, asc
 from werkzeug.security import generate_password_hash, check_password_hash
 # from openai import OpenAI
 
@@ -10,6 +10,7 @@ import random
 import pandas as pd
 import os
 import io
+import re
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_KEY')
@@ -412,6 +413,10 @@ def generate_report():
     # Send the file to the client
     return send_file(output, download_name ='Surveys Report.xlsx', as_attachment=True)
 
+def extract_number(product):
+    match = re.search(r'\d+', product.name)
+    return int(match.group()) if match else 0
+
 # Product Table ------------------------------------------
 @app.route('/admin/product')
 def product_table():
@@ -420,7 +425,11 @@ def product_table():
     
     product_all = db.session.execute(db.select(Product)).scalars()
     
-    return render_template('product_admin.html', products = product_all)
+    product_list = list(product_all)
+
+    product_list.sort(key=extract_number)
+
+    return render_template('product_admin.html', products = product_list)
 
 # Add Product------------------------------------------
 @app.route('/admin/add_product', methods=['GET', 'POST'])
