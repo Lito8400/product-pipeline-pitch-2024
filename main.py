@@ -15,7 +15,7 @@ import re
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_KEY')
-socketio = SocketIO(app)
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -33,6 +33,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI", "sqlite:///serv
 db = SQLAlchemy(model_class=Base)
 # initialise the app with the extension
 db.init_app(app)
+socketio = SocketIO(app)
 
 # Create table product
 class User(UserMixin, db.Model):
