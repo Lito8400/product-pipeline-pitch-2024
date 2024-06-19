@@ -1,0 +1,57 @@
+{% include 'header_admin.html' %}
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <div class="mt-4">
+                            <a href="{{ url_for('generate_report') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                        </div>
+
+                        <div class="card mb-4 mt-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                P3 2024 Measure Concepts Data
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>Concept Name</th>
+                                            <th>Rating</th>
+                                            <th>Weighted Rating</th>
+                                            <th>Participation</th>
+                                            <th>Average Interested Lanched</th>
+                                            <th>Average Path to Market</th>
+                                            <th>Average Pull Sales</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Concept Name</th>
+                                            <th>Rating</th>
+                                            <th>Weighted Rating</th>
+                                            <th>Participation</th>
+                                            <th>Average Interested Lanched</th>
+                                            <th>Average Path to Market</th>
+                                            <th>Average Pull Sales</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {% for product in measure_survey %}
+                                            <tr>
+                                                <td>{{ product.product_name }}</td>
+                                                <td>{{ product.Rating }}</td>
+                                                <td>{{ product.WRating}}</td>
+                                                <td>{{ product.Participation }}</td>
+                                                <td>{{ product.Average_interested_lanched }}</td>
+                                                <td>{{ product.Average_path_to_market }}</td>
+                                                <td>{{ product.Average_pull_sales }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+{% include 'footer_admin.html' %}

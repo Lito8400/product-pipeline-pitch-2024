@@ -4,63 +4,149 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Product Pipeline Pitch</title>
-        <link rel="icon" type="image/x-icon" href="/static/images/Product Pipeline Pitch_Icon P3-01.svg" />
-        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-        
-        <link href="{{ url_for('static', filename='css_admin/styles.css') }}" rel="stylesheet" />
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <meta content="" name="description">
+        <meta content="" name="keywords">
+        <title>Dashboard - Product Pipeline Pitch</title>
+        <link rel="icon" type="image/x-icon" href="/static/images/Product Pipeline Pitch_Icon P3-01.svg"/>
+
+        <link href="https://fonts.gstatic.com" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+        <!-- Vendor CSS Files -->
+        <link href="{{ url_for('static', filename='assets_admin/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='assets_admin/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+        <!-- <link href="{{ url_for('static', filename='assets_admin/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet"> -->
+        <!-- <link href="{{ url_for('static', filename='assets_admin/vendor/quill/quill.snow.css') }}" rel="stylesheet"> -->
+        <!-- <link href="{{ url_for('static', filename='assets_admin/vendor/quill/quill.bubble.css') }}" rel="stylesheet"> -->
+        <!-- <link href="{{ url_for('static', filename='assets_admin/vendor/remixicon/remixicon.css') }}" rel="stylesheet"> -->
+        <link href="{{ url_for('static', filename='assets_admin/vendor/simple-datatables/style.css') }}" rel="stylesheet">
+
+        <!-- Template Main CSS File -->
+        <link href="{{ url_for('static', filename='assets_admin/css/style.css') }}" rel="stylesheet">
+        <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
     </head>
     <body class="sb-nav-fixed" id="page-top">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark" style="background-color: #605858b0 !important;">
-            <!-- Navbar Brand-->
-            <a class="navbar-brand" href="{{ url_for('index') }}">
-                <img class="logo-image" src="/static/images/Product Pipeline Pitch_Icon P3-01.svg" alt="logo">
-                Product Pipeline Pitch
-            </a>
-            <!-- Sidebar Toggle-->
-            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 ms-lg-6" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-            
-            <ul class="navbar-nav ms-auto me-0 me-md-3 my-2 my-md-0">
-                {% if check_lock %}
-                    <li class="nav-item no-arrow mx-1"><a class="nav-link active" aria-current="page" href="{{ url_for('lock_unlock') }}">UnLock Login User</a></li>
-                {% else %}
-                    <li class="nav-item no-arrow mx-1"><a class="nav-link active" aria-current="page" href="{{ url_for('lock_unlock') }}">Lock Login User</a></li>
-                {% endif %}
+        <!-- ======= Header ======= -->
+        <header id="header" class="header fixed-top d-flex align-items-center">
+
+            <div class="d-flex align-items-center justify-content-between">
+                <a href="{{ url_for('admin') }}" class="logo d-flex align-items-center">
+                    <img src="/static/images/Product Pipeline Pitch_Icon P3-01.svg" alt="">
+                    <span class="d-none d-lg-block">Product Pipeline Pitch</span>
+                </a>
+                <i class="bi bi-list toggle-sidebar-btn"></i>
+            </div><!-- End Logo -->
+
+            <nav class="header-nav ms-auto">
+                <ul class="d-flex align-items-center">
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-people"></i>
+                            <span id="totaluser" class="badge bg-primary badge-number">{{ total_user }}</span>
+                        </a><!-- End Notification Icon -->
+                    </li><!-- End Notification Nav -->
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-clipboard-check"></i>
+                            <span id="totalsurvey" class="badge bg-primary badge-number">{{ total_surveys }}</span>
+                        </a><!-- End Notification Icon -->
+                    </li><!-- End Notification Nav -->
+
+                    <li class="nav-item dropdown pe-3">
+
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                            <img src="/static/images/profile-img.jpg" alt="Profile" class="rounded-circle">
+                            <span class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
+                        </a><!-- End Profile Iamge Icon -->
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                            
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="{{ url_for('index') }}">
+                                    <i class="bi bi-house-door"></i>
+                                    <span>Survey Home</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                            {% if check_lock %}
+                                <a class="dropdown-item d-flex align-items-center" href="{{ url_for('lock_unlock') }}">
+                                    <i class="bi bi-unlock"></i>
+                                    <span>UnLock Login User</span>
+                                </a>
+                            {% else %}
+                                <a class="dropdown-item d-flex align-items-center" href="{{ url_for('lock_unlock') }}">
+                                    <i class="bi bi-lock"></i>
+                                    <span>Lock Login User</span>
+                                </a>
+                            {% endif %}
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="{{ url_for('logout') }}">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span>Sign Out</span>
+                                </a>
+                            </li>
+
+                        </ul><!-- End Profile Dropdown Items -->
+                    </li><!-- End Profile Nav -->
+
+                </ul>
+            </nav><!-- End Icons Navigation -->
+
+        </header><!-- End Header -->
+
+        <!-- ======= Sidebar ======= -->
+        <aside id="sidebar" class="sidebar">
+
+            <ul class="sidebar-nav" id="sidebar-nav">
+                <li class="nav-heading">Core</li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="{{ url_for('admin') }}">
+                        <i class="bi bi-grid"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li><!-- End Dashboard Nav -->
                 
-                <li class="nav-item no-arrow mx-1"><a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Home</a></li>
-                <li class="nav-item no-arrow mx-1"><a class="nav-link active" aria-current="page" href="{{ url_for('logout') }}">Logout</a></li>
-                <div class="topbar-divider d-none d-sm-block"></div>
+                <li class="nav-heading">Controls</li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="{{ url_for('measure_concepts_table') }}">
+                        <i class="bi bi-layout-text-window-reverse"></i>
+                        <span>Measure Concept Tables</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="{{ url_for('product_table') }}">
+                        <i class="bi bi-layout-text-window-reverse"></i>
+                        <span>Concept Tables</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="{{ url_for('survey_table') }}">
+                        <i class="bi bi-layout-text-window-reverse"></i>
+                        <span>Survey Tables</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="{{ url_for('user_completed_table') }}">
+                        <i class="bi bi-layout-text-window-reverse"></i>
+                        <span>User Tables</span>
+                    </a>
+                </li>
             </ul>
-                
-        </nav>
-        <div id="layoutSidenav" >
-            <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" style="background-color: #605858b0 !important;" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
-                        <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="{{ url_for('admin') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard
-                            </a>
-                            <div class="sb-sidenav-menu-heading">Controls</div>
-                            <a class="nav-link" href="{{ url_for('product_table') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Concepts
-                            </a>
-                            <a class="nav-link" href="{{ url_for('survey_table') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Form Survey
-                            </a>
-                            <a class="nav-link" href="{{ url_for('user_completed_table') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                People Data
-                            </a>
-                        </div>
-                    </div>
-                </nav>
-            </div>
+        
+        </aside><!-- End Sidebar-->
+        
+        

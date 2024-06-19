@@ -11547,7 +11547,7 @@ input[type="button"].btn-block {
   width: unset;
 }
 
-@media (min-width: 1920px) {
+/* @media (min-width: 1920px) {
 
   .logo-image {
     height: 2.5vw; 
@@ -11605,4 +11605,4 @@ input[type="button"].btn-block {
   .col-md-6 {
     width: 70%;
   }
-}
+} */

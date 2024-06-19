@@ -1,95 +1,107 @@
 {% include 'header_admin.html' %}
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <!-- Button trigger modal -->
-                        <div class="mt-4">
-                            <button type="button" class="btn btn-sm btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                                Add Concept
-                            </button>
-                            <a href="#" id="confirmDeleteAllBtn" type="button" class="btn btn-sm btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" onclick="openDeleteAllModal()">
-                                Delete All Concepts
-                            </a>
+        <main id="main" class="main">
+
+            <div class="pagetitle d-flex align-items-center justify-content-between">
+                <h1>Concept Tables</h1>
+                <div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                        <i class="bi bi-plus-circle"></i>
+                        Add Concept
+                    </button>
+                    <a href="#" id="confirmDeleteAllBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" onclick="openDeleteAllModal()">
+                        <i class="bi bi-trash"></i>
+                        Delete All Concepts
+                    </a>
+                </div>
+                
+            </div><!-- End Page Title -->
+
+            <!-- Add Concept Modal -->
+            <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addProductModalLabel">Add Concept</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="{{ url_for('add_product') }}">
+                                <div class="mb-3">
+                                    <label for="productName" class="col-sm-2 col-form-label">Concept Name</label>
+                                    <input type="text" class="form-control" id="productName" name="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="productDescription" class="col-sm-2 col-form-label">Description</label>
+                                    <textarea class="form-control" id="productDescription" name="description" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End Add Concept Modal-->
+
+            <!-- Edit Concept Modal -->
+            <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editProductModalLabel">Edit Concept</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div> 
+                        <div class="modal-body">
+                            <form id="editProductForm" method="post" action="{{ url_for('edit_product') }}">
+                                <input type="hidden" id="editProductId" name="id">
+                                <div class="mb-3">
+                                    <label for="editProductName" class="form-label">Concept Name</label>
+                                    <input type="text" class="form-control" id="editProductName" name="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editProductDescription" class="form-label">Description</label>
+                                    <textarea class="form-control" id="editProductDescription" name="description" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </form>
                         </div>
                         
-                        <!-- Add Concept Modal -->
-                        <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="addProductModalLabel">Add Concept</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form method="post" action="{{ url_for('add_product') }}">
-                                        <div class="mb-3">
-                                            <label for="productName" class="form-label">Concept Name</label>
-                                            <input type="text" class="form-control" id="productName" name="name" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="productDescription" class="form-label">Description</label>
-                                            <textarea class="form-control" id="productDescription" name="description" rows="3" required></textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-sm btn-primary shadow-sm float-end">Add</button>
-                                    </form>
-                                </div>
-                            </div>
-                            </div>
+                    </div>
+                </div>
+            </div><!-- End Edit Concept Modal-->
+
+            <!-- Delete Modal -->
+            <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteConfirmModalLabel">Delete Concept</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete <span id="itemName"></span>?
                         </div>
 
-                        <!-- Edit Concept Modal -->
-                        <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="editProductModalLabel">Edit Concept</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="editProductForm" method="post" action="{{ url_for('edit_product') }}">
-                                            <input type="hidden" id="editProductId" name="id">
-                                            <div class="mb-3">
-                                                <label for="editProductName" class="form-label">Concept Name</label>
-                                                <input type="text" class="form-control" id="editProductName" name="name" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="editProductDescription" class="form-label">Description</label>
-                                                <textarea class="form-control" id="editProductDescription" name="description" rows="3" required></textarea>
-                                            </div>
-                                            <button type="submit" class="btn btn-sm btn-primary shadow-sm float-end">Save changes</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <a href="#" id="confirmDeleteBtn" class="btn btn-primary">Delete</a>
                         </div>
-                        
-                        <!-- Delete Modal -->
-                        <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteConfirmModalLabel">Delete Concept</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Are you sure you want to delete <span id="itemName"></span>?
-                                    </div>
+                    </div>
+                </div>
+            </div><!-- End Delete Modal-->
 
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Delete</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <section class="section mt-4">
+                <div class="row">
+                    <div class="col-lg-12">
 
-                        <div class="card mb-4 mt-4">
+                        <div class="card overflow-auto">
                             <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                Concept DataTable
+                                <i class="bi bi-table"></i>
+                                P3 2024 Concept DataTables
                             </div>
                             <div class="card-body">
-                                <table id="datatablesSimple">
+
+                                <!-- Table with stripped rows -->
+                                
+                                <table class="table datatable" id="datatablesSimple">
                                     <thead>
                                         <tr>
                                             <th>Concept Name</th>
@@ -98,14 +110,6 @@
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Concept Name</th>
-                                            <th>Description</th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
                                         {% for product in products %}
                                             <tr>
@@ -122,8 +126,14 @@
                                         {% endfor %}
                                     </tbody>
                                 </table>
+                                <!-- End Table with stripped rows -->
+
                             </div>
                         </div>
+
                     </div>
-                </main>
+                </div>
+            </section>
+
+        </main><!-- End #main -->   
 {% include 'footer_admin.html' %}

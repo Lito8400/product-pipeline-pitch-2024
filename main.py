@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash, g, send_file
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
+from flask_socketio import SocketIO
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Float, Boolean, ForeignKey, func, asc
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -14,6 +15,7 @@ import re
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_KEY')
+socketio = SocketIO(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -57,13 +59,6 @@ class Survey(db.Model):
     path_to_market: Mapped[int] = mapped_column(Integer, nullable=False)
     pull_sales: Mapped[int] = mapped_column(Integer, nullable=False)
     comments: Mapped[str] = mapped_column(String, nullable=True)
-
-#Create table user
-# class UserCompletedSurvey(db.Model):
-#     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-#     user_id: Mapped[str] = mapped_column(String, nullable=False)
-#     product_id: Mapped[str] = mapped_column(String, nullable=False)
-#     product_Name: Mapped[str] = mapped_column(String, nullable=False)
 
 # Create table schema in the database. Requires application context.
 with app.app_context():
@@ -142,7 +137,6 @@ def index():
 
     product_list.sort(key=extract_number)
 
-
     return render_template('index.html', products=product_list, user_id=current_user.user_name, completed_surveys=user_completed_survey, surveyed=surveyed_count)
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -201,8 +195,17 @@ def lock_unlock():
 
 @app.route('/login-user', methods=["GET", "POST"])
 def login_user_def():
-    if check_lock_login_user:
-        return redirect(url_for('login_admin'))
+    if current_user.is_authenticated:
+        if check_lock_login_user:
+            if current_user.user_name == 'admin':
+                return redirect(url_for('index'))
+            else:
+                return redirect(url_for('logout'))
+        else:
+            return redirect(url_for('index'))
+    else:
+        if check_lock_login_user:
+            return redirect(url_for('login_admin'))
 
     if request.method == "POST":
         l_user = request.form.get('inputUser')
@@ -296,6 +299,26 @@ def survey(survey_id):
         db.session.add(new_survey)
         db.session.commit()
 
+        socketio.emit('update_interested_lanched_chart')
+        socketio.emit('update_participation_chart')
+        socketio.emit('update_path_to_market_chart')
+        socketio.emit('update_pull_sales_chart')
+        socketio.emit('update_rank_chart')
+        socketio.emit('update_weighted_rank_chart')
+        
+        df_measure_survey = measure_survey()
+
+        socketio.emit('update_measure_concepts', df_measure_survey)
+
+        df_measure_survey = db.session.execute(db.select(Survey)).all()
+        total_surveys = len(df_measure_survey)
+        total_user = 0
+        user_surveys = db.session.execute(db.select(User)).all()
+        total_user = len(user_surveys)
+
+        socketio.emit('update_total_user', total_user)
+        socketio.emit('update_total_survey', total_surveys)
+
         # if comment == '':
         #     prompt = f"Given the ratings: 'How interested are you in having this product launched?': {interested_lanch}, 'The path to market for this product concept established?': {path_to_mar}, 'Do you feel this product will “pull” sales of other products along?': {pull_sale}, generate a short comment."
         #     response = client.chat.completions.create(
@@ -363,17 +386,17 @@ def admin():
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin'))
     
-    df_measure_survey = measure_survey()
+    df_measure_survey = db.session.execute(db.select(Survey)).all()
     total_surveys = len(df_measure_survey)
     total_user = 0
     user_surveys = db.session.execute(db.select(User)).all()
     total_user = len(user_surveys)
-   
+    
     # print(df_measure_survey)
-    return render_template('index_admin.html', measure_survey = df_measure_survey, total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
+    return render_template('index_admin.html', total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
 
 @app.route('/admin/generate_report')
-def generate_report(): 
+def generate_report():
     # Query the database
     product_all = db.session.execute(db.select(Product)).scalars()
     survey_all = db.session.execute(db.select(Survey)).scalars()
@@ -425,6 +448,21 @@ def extract_number(product):
     match = re.search(r'\d+', product.name)
     return int(match.group()) if match else 0
 
+@app.route('/admin/measure_concepts')
+def measure_concepts_table():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login_admin'))
+    
+    df_measure_survey = measure_survey()
+
+    df_measure = db.session.execute(db.select(Survey)).all()
+    total_surveys = len(df_measure)
+    total_user = 0
+    user_surveys = db.session.execute(db.select(User)).all()
+    total_user = len(user_surveys)
+
+    return render_template('measure_concepts_admin.html', measure_survey = df_measure_survey, total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
+
 # Product Table ------------------------------------------
 @app.route('/admin/product')
 def product_table():
@@ -437,7 +475,13 @@ def product_table():
 
     product_list.sort(key=extract_number)
 
-    return render_template('product_admin.html', products = product_list)
+    df_measure_survey = db.session.execute(db.select(Survey)).all()
+    total_surveys = len(df_measure_survey)
+    total_user = 0
+    user_surveys = db.session.execute(db.select(User)).all()
+    total_user = len(user_surveys)
+
+    return render_template('product_admin.html', products = product_list, total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
 
 # Add Product------------------------------------------
 @app.route('/admin/add_product', methods=['GET', 'POST'])
@@ -491,7 +535,13 @@ def survey_table():
 
     survey_all = db.session.execute(db.select(Survey)).scalars()
     
-    return render_template('survey_admin.html', surveys = survey_all)
+    df_measure_survey = db.session.execute(db.select(Survey)).all()
+    total_surveys = len(df_measure_survey)
+    total_user = 0
+    user_surveys = db.session.execute(db.select(User)).all()
+    total_user = len(user_surveys)
+
+    return render_template('survey_admin.html', surveys = survey_all, total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
 
 # survey Table ------------------------------------------
 @app.route('/admin/user-completed-survey')
@@ -500,8 +550,14 @@ def user_completed_table():
         return redirect(url_for('login_admin'))
 
     user_completed_all = db.session.execute(db.select(User)).scalars()
-    
-    return render_template('user_completed_admin.html', user_completed = user_completed_all)
+
+    df_measure_survey = db.session.execute(db.select(Survey)).all()
+    total_surveys = len(df_measure_survey)
+    total_user = 0
+    user_surveys = db.session.execute(db.select(User)).all()
+    total_user = len(user_surveys)
+
+    return render_template('user_completed_admin.html', user_completed = user_completed_all,  total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
 
 @app.route('/admin/add_user', methods=['GET', 'POST'])
 def add_user():
@@ -585,7 +641,7 @@ def rank_chart_data():
         df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Rating'], reverse=True)
         # labels = df_measure_survey['product_name'].tolist()
         labels = [product['product_name'] for product in df_measure_survey]
-        values = [product['Rating'] for product in df_measure_survey]
+        values = [round(product['Rating'], 1)  for product in df_measure_survey]
 
         data = {'labels': labels[:25], 'values': values[:25]}
     else:
@@ -600,7 +656,7 @@ def weighted_rank_chart_data():
         df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['WRating'], reverse=True)
         # labels = df_measure_survey['product_name'].tolist()
         labels = [product['product_name'] for product in df_measure_survey]
-        values = [product['WRating'] for product in df_measure_survey]
+        values = [round(product['WRating'],1) for product in df_measure_survey]
 
         data = {'labels': labels[:25], 'values': values[:25]}
     else:
@@ -615,7 +671,7 @@ def participation_chart_data():
     if len(df_measure_survey) > 0:
         df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Participation'], reverse=True)
         labels = [product['product_name'] for product in df_measure_survey]
-        values = [product['Participation'] for product in df_measure_survey]
+        values = [round(product['Participation'],1) for product in df_measure_survey]
 
         data = {'labels': labels[:25], 'values': values[:25]}
     else:
@@ -630,7 +686,7 @@ def interested_chart_data():
     if len(df_measure_survey) > 0:
         df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Average_interested_lanched'], reverse=True)
         labels = [product['product_name'] for product in df_measure_survey]
-        values = [product['Average_interested_lanched'] for product in df_measure_survey]
+        values = [round(product['Average_interested_lanched'],1) for product in df_measure_survey]
 
         data = {'labels': labels[:25], 'values': values[:25]}
     else:
@@ -645,7 +701,7 @@ def market_chart_data():
     if len(df_measure_survey) > 0:
         df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Average_path_to_market'], reverse=True)
         labels = [product['product_name'] for product in df_measure_survey]
-        values = [product['Average_path_to_market'] for product in df_measure_survey]
+        values = [round(product['Average_path_to_market'],1) for product in df_measure_survey]
 
         data = {'labels': labels[:25], 'values': values[:25]}
     else:
@@ -660,7 +716,7 @@ def pull_chart_data():
     if len(df_measure_survey) > 0:
         df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Average_pull_sales'], reverse=True)
         labels = [product['product_name'] for product in df_measure_survey]
-        values = [product['Average_pull_sales'] for product in df_measure_survey]
+        values = [round(product['Average_pull_sales'],1) for product in df_measure_survey]
 
         data = {'labels': labels[:25], 'values': values[:25]}
     else:
@@ -670,4 +726,5 @@ def pull_chart_data():
 
 # Main python ------------------------------------------------------
 if __name__ == '__main__':
-    app.run(debug=False, port=5001)
+    # app.run(debug=False, port=5001)
+    socketio.run(app, debug=False, port=5001)
