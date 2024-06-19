@@ -24,6 +24,9 @@ login_manager.init_app(app)
 def load_user(user_name):
     return db.get_or_404(User, user_name)
 
+
+socketio = SocketIO(app)
+
 # CREATE DATABASE
 class Base(DeclarativeBase):
     pass
@@ -33,7 +36,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI", "sqlite:///serv
 db = SQLAlchemy(model_class=Base)
 # initialise the app with the extension
 db.init_app(app)
-socketio = SocketIO(app)
 
 # Create table product
 class User(UserMixin, db.Model):
