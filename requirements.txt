@@ -8,3 +8,4 @@ psycopg2-binary
 Werkzeug
 openpyxl
 flask-socketio
+gevent-websocket
