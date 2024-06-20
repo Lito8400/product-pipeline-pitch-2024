@@ -344,7 +344,7 @@ function openEditModal(id, name, description) {
   editProductId.value = id;
   editProductName.value = name;
   editProductDescription.value = description;
-}
+};
 
 function openDeleteModal(id, name) {
   document.getElementById('itemName').textContent = name;
@@ -356,7 +356,7 @@ function openDeleteModal(id, name) {
           document.getElementById('confirmDeleteBtn').click();
       }
   });
-}
+};
 function openDeleteAllModal() {
   document.getElementById('itemName').textContent = 'All Concepts';
   const deleteUrl = `/admin/delete_all_product`;
@@ -367,7 +367,7 @@ function openDeleteAllModal() {
           document.getElementById('confirmDeleteBtn').click();
       }
   });
-}
+};
 
 function openEditUserModal(id) {
   var editUserId = document.getElementById('editUserId');
@@ -375,7 +375,7 @@ function openEditUserModal(id) {
 
   editUserId.value = id;
   editUserName.value = id;
-}
+};
 
 function openDeleteUserModal(id) {
   document.getElementById('itemName').textContent = id;
@@ -387,7 +387,7 @@ function openDeleteUserModal(id) {
           document.getElementById('confirmDeleteBtn').click();
       }
   });
-}
+};
 
 function openDeleteAllUserModal() {
   document.getElementById('itemName').textContent = 'All Users';
@@ -399,7 +399,7 @@ function openDeleteAllUserModal() {
           document.getElementById('confirmDeleteBtn').click();
       }
   });
-}
+};
 
 var socket = io();
 socket.on('update_measure_concepts', function(data) {
@@ -429,6 +429,6 @@ socket.on('update_total_user', function(data) {
 });
 
 socket.on('update_total_survey', function(data) {
-  var tuser = document.getElementById("totalsurvey");
-  tuser.innerText = data;
+  var tsurvey = document.getElementById("totalsurvey");
+  tsurvey.innerText = data;
 });

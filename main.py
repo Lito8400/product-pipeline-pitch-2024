@@ -24,8 +24,6 @@ login_manager.init_app(app)
 def load_user(user_name):
     return db.get_or_404(User, user_name)
 
-
-
 # CREATE DATABASE
 class Base(DeclarativeBase):
     pass
@@ -163,7 +161,7 @@ def login_user_def():
     else:
         if check_lock_login_user:
             return redirect(url_for('login_admin'))
-
+    
     if request.method == "POST":
         l_user = request.form.get('inputUser')
         # result = db.session.execute(db.select(User).where(func.lower(User.user_name) == l_user.lower()))
@@ -176,7 +174,7 @@ def login_user_def():
             )
             db.session.add(new_user)
             db.session.commit()
-
+            
             login_user(new_user)
             # return redirect(url_for("index"))
         else:
@@ -275,16 +273,6 @@ def survey(survey_id):
 
         socketio.emit('update_total_user', total_user)
         socketio.emit('update_total_survey', total_surveys)
-
-        # if comment == '':
-        #     prompt = f"Given the ratings: 'How interested are you in having this product launched?': {interested_lanch}, 'The path to market for this product concept established?': {path_to_mar}, 'Do you feel this product will “pull” sales of other products along?': {pull_sale}, generate a short comment."
-        #     response = client.chat.completions.create(
-        #         model="gpt-3.5-turbo",
-        #         messages=[
-        #             {"role": "user", "content": prompt},
-        #         ]
-        #     )
-        #     comment_ai = response.choices[0].text.strip()
 
         return redirect(url_for('index'))
     
