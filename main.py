@@ -15,7 +15,7 @@ import re
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_KEY')
-
+socketio = SocketIO(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -25,7 +25,6 @@ def load_user(user_name):
     return db.get_or_404(User, user_name)
 
 
-socketio = SocketIO(app)
 
 # CREATE DATABASE
 class Base(DeclarativeBase):
@@ -89,51 +88,6 @@ def index():
     user_completed_survey = [survey.product_id for survey in user_get.surveys]
     surveyed_count = len(user_completed_survey)
     
-    # result = db.session.execute(db.select(Product)).all()
-    # if len(result) == 0:
-    #     new_product_1 = Product( name="Concept 1", description="Concept 1 name")
-    #     new_product_2 = Product( name="Concept 2", description="Concept 2 name")
-    #     new_product_3 = Product( name="Concept 3", description="Concept 3 name")
-    #     new_product_4 = Product( name="Concept 4", description="Concept 4 name")
-    #     new_product_5 = Product( name="Concept 5", description="Concept 5 name")
-    #     new_product_6 = Product( name="Concept 6", description="Concept 6 name")
-    #     new_product_7 = Product( name="Concept 7", description="Concept 7 name")
-    #     new_product_8 = Product( name="Concept 8", description="Concept 8 name")
-    #     new_product_9 = Product( name="Concept 9", description="Concept 9 name")
-    #     new_product_10 = Product( name="Concept 10", description="Concept 10 name")
-    #     new_product_11 = Product( name="Concept 11", description="Concept 11 name")
-    #     new_product_12 = Product( name="Concept 12", description="Concept 12 name")
-    #     new_product_13 = Product( name="Concept 13", description="Concept 13 name")
-    #     new_product_14 = Product( name="Concept 14", description="Concept 14 name")
-    #     new_product_15 = Product( name="Concept 15", description="Concept 15 name")
-    #     new_product_16 = Product( name="Concept 16", description="Concept 16 name")
-    #     new_product_17 = Product( name="Concept 17", description="Concept 17 name")
-    #     new_product_18 = Product( name="Concept 18", description="Concept 18 name")
-    #     new_product_19 = Product( name="Concept 19", description="Concept 19 name")
-    #     new_product_20 = Product( name="Concept 20", description="Concept 20 name")
-
-    #     db.session.add(new_product_1)
-    #     db.session.add(new_product_2)
-    #     db.session.add(new_product_3)
-    #     db.session.add(new_product_4)
-    #     db.session.add(new_product_5)
-    #     db.session.add(new_product_6)
-    #     db.session.add(new_product_7)
-    #     db.session.add(new_product_8)
-    #     db.session.add(new_product_9)
-    #     db.session.add(new_product_10)
-    #     db.session.add(new_product_11)
-    #     db.session.add(new_product_12)
-    #     db.session.add(new_product_13)
-    #     db.session.add(new_product_14)
-    #     db.session.add(new_product_15)
-    #     db.session.add(new_product_16)
-    #     db.session.add(new_product_17)
-    #     db.session.add(new_product_18)
-    #     db.session.add(new_product_19)
-    #     db.session.add(new_product_20)
-    #     db.session.commit()
-
     all_products = db.session.execute(db.select(Product)).scalars()
     # all_products = result.scalars()
     product_list = list(all_products)
