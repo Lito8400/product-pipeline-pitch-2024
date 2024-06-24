@@ -404,8 +404,11 @@ function openDeleteAllUserModal() {
 var socket = io();
 socket.on('update_measure_concepts', function(data) {
   var tableBody = document.getElementById("measureconceptstable");
+  var tableBodymodel = document.getElementById("measureconceptstablemodel");
   var tbody = tableBody.querySelector('tbody');
+  var tbodymodel = tableBodymodel.querySelector('tbody');
   tbody.innerHTML = '';
+  tbodymodel.innerHTML ='';
   data.forEach(function(product, index) {
     var row = `
                 <tr data-index="${index}">
@@ -419,8 +422,10 @@ socket.on('update_measure_concepts', function(data) {
                 </tr>
             `;
       tbody.innerHTML += row;
+      tbodymodel.innerHTML += row;
   });
   tableBody.ontimeupdate()
+  tableBodymodel.ontimeupdate()
 });
 
 socket.on('update_total_user', function(data) {

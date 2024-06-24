@@ -7,13 +7,35 @@ fetch('/admin/interested-lanched-chart')
         var canvases = document.querySelectorAll(".InterestedLanchedChart");
         canvases.forEach(canvas => {
           var ctx = canvas.getContext("2d");
+
           var myLineChart_Interested = new Chart(ctx, {
           type: 'bar',
           data: {
             labels: data.labels,
             datasets: [{
-              backgroundColor: "rgba(75, 192, 192, 0.2)",
-              borderColor: "rgb(75, 192, 192)",
+              backgroundColor: function(context){
+                const chart = context.chart;
+                const { ctx, chartArea } = chart;
+
+                var gradient = ctx.createLinearGradient(0, 0, 0, 188);
+                gradient.addColorStop(0, 'rgba(255, 255, 102, 1)');
+                gradient.addColorStop(1, 'rgba(255, 255, 102, 0)');
+
+                if (!chartArea){
+                  return gradient;
+                }
+                
+                gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom -65);
+                gradient.addColorStop(0, 'rgba(255, 255, 102, 1)');
+                gradient.addColorStop(1, 'rgba(255, 255, 102, 0)');
+                return gradient;
+              },
+              strokeColor : "#ff6c23",
+              pointColor : "#fff",
+              pointStrokeColor : "#ff6c23",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "#ff6c23",
+              borderColor: "rgb(255, 255, 102)",
               data: data.values,
               borderWidth: 1
             }],
@@ -22,23 +44,33 @@ fetch('/admin/interested-lanched-chart')
             scales: {
               xAxes: [{
                 gridLines: {
+                  // color: 'rgb(59,69,67)',
                   display: false
                 },
+                ticks: {
+                  fontColor: 'rgb(221, 221, 221)' 
+                }
               }],
               yAxes: [{
                 ticks: {
                   min: 0,
                   max: 6,
+                  fontColor: 'rgb(221, 221, 221)' 
                 },
                 gridLines: {
-                  display: true
-                }
+                  // color: 'rgb(59,69,67)',
+                  display: true,
+                },
               }],
               
             },
             legend: {
-              display: false
+              display: false,
+              labels: {
+                fontColor: 'rgb(221, 221, 221)' 
+              }
             },
+            "defaultFontColor": 'rgb(221, 221, 221)',
             "animation": {
               "duration": 1,
               "onComplete": function() {
@@ -80,8 +112,29 @@ fetch('/admin/interested-lanched-chart')
           data: {
             labels: data.labels,
             datasets: [{
-              backgroundColor: "rgba(75, 192, 192, 0.2)",
-              borderColor: "rgb(75, 192, 192)",
+              backgroundColor: function(context){
+                const chart = context.chart;
+                const { ctx, chartArea } = chart;
+
+                var gradient = ctx.createLinearGradient(0, 0, 0, 188);
+                gradient.addColorStop(0, 'rgba(255, 255, 102, 1)');
+                gradient.addColorStop(1, 'rgba(255, 255, 102, 0)');
+
+                if (!chartArea){
+                  return gradient;
+                }
+                
+                gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom -65);
+                gradient.addColorStop(0, 'rgba(255, 255, 102, 1)');
+                gradient.addColorStop(1, 'rgba(255, 255, 102, 0)');
+                return gradient;
+              },
+              strokeColor : "#ff6c23",
+              pointColor : "#fff",
+              pointStrokeColor : "#ff6c23",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "#ff6c23",
+              borderColor: "rgb(255, 255, 102)",
               data: data.values,
               borderWidth: 1
             }],
@@ -90,23 +143,33 @@ fetch('/admin/interested-lanched-chart')
             scales: {
               xAxes: [{
                 gridLines: {
+                  // color: 'rgb(59,69,67)',
                   display: false
                 },
+                ticks: {
+                  fontColor: 'rgb(221, 221, 221)' // Màu font của trục x
+                }
               }],
               yAxes: [{
                 ticks: {
                   min: 0,
                   max: 6,
+                  fontColor: 'rgb(221, 221, 221)' 
                 },
                 gridLines: {
+                  // color: 'rgb(59,69,67)',
                   display: true
-                }
+                },
               }],
               
             },
             legend: {
-              display: false
+              display: false,
+              labels: {
+                fontColor: 'rgb(221, 221, 221)' 
+              }
             },
+            "defaultFontColor": 'rgb(221, 221, 221)',
             "animation": {
               "duration": 1,
               "onComplete": function() {

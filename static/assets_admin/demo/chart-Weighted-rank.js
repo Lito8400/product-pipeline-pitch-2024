@@ -13,8 +13,29 @@ fetch('/admin/weighted-rank-chart')
           data: {
             labels: data.labels,
             datasets: [{
-              backgroundColor: "rgba(255, 159, 64, 0.2)",
-              borderColor: "rgb(255, 159, 64)",
+              backgroundColor: function(context){
+                const chart = context.chart;
+                const { ctx, chartArea } = chart;
+
+                var gradient = ctx.createLinearGradient(0, 0, 0, 188);
+                gradient.addColorStop(0, 'rgba(30, 144, 255, 1)');
+                gradient.addColorStop(1, 'rgba(30, 144, 255, 0)');
+
+                if (!chartArea){
+                  return gradient;
+                }
+                
+                gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom - 65);
+                gradient.addColorStop(0, 'rgba(30, 144, 255, 1)');
+                gradient.addColorStop(1, 'rgba(30, 144, 255, 0)');
+                return gradient;
+              },
+              strokeColor : "#ff6c23",
+              pointColor : "#fff",
+              pointStrokeColor : "#ff6c23",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "#ff6c23",
+              borderColor: "rgb(30, 144, 255)",
               data: data.values,
               borderWidth: 1
             }],
@@ -23,23 +44,33 @@ fetch('/admin/weighted-rank-chart')
             scales: {
               xAxes: [{
                 gridLines: {
+                  // color: 'rgb(134, 145, 148)',
                   display: false
                 },
+                ticks: {
+                  fontColor: 'rgb(221, 221, 221)' 
+                }
               }],
               
               yAxes: [{
                 ticks: {
                   min: 0,
                   max: 6,
+                  fontColor: 'rgb(221, 221, 221)'  
                 },
                 gridLines: {
+                  // color: 'rgb(134, 145, 148)',
                   display: true
                 },
               }],
             },
             legend: {
-              display: false
+              display: false,
+              labels: {
+                fontColor: 'rgb(221, 221, 221)' 
+              }
             },
+            "defaultFontColor": 'rgb(221, 221, 221)',
             "animation": {
               "duration": 1,
               "onComplete": function() {
@@ -81,8 +112,29 @@ fetch('/admin/weighted-rank-chart')
           data: {
             labels: data.labels,
             datasets: [{
-              backgroundColor: "rgba(255, 159, 64, 0.2)",
-              borderColor: "rgb(255, 159, 64)",
+              backgroundColor: function(context){
+                const chart = context.chart;
+                const { ctx, chartArea } = chart;
+
+                var gradient = ctx.createLinearGradient(0, 0, 0, 188);
+                gradient.addColorStop(0, 'rgba(30, 144, 255, 1)');
+                gradient.addColorStop(1, 'rgba(30, 144, 255, 0)');
+
+                if (!chartArea){
+                  return gradient;
+                }
+                
+                gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom - 65);
+                gradient.addColorStop(0, 'rgba(30, 144, 255, 1)');
+                gradient.addColorStop(1, 'rgba(30, 144, 255, 0)');
+                return gradient;
+              },
+              strokeColor : "#ff6c23",
+              pointColor : "#fff",
+              pointStrokeColor : "#ff6c23",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "#ff6c23",
+              borderColor: "rgb(30, 144, 255)",
               data: data.values,
               borderWidth: 1
             }],
@@ -91,23 +143,33 @@ fetch('/admin/weighted-rank-chart')
             scales: {
               xAxes: [{
                 gridLines: {
+                  // color: 'rgb(134, 145, 148)',
                   display: false
                 },
+                ticks: {
+                  fontColor: 'rgb(221, 221, 221)' 
+                }
               }],
               
               yAxes: [{
                 ticks: {
                   min: 0,
                   max: 6,
+                  fontColor: 'rgb(221, 221, 221)' 
                 },
                 gridLines: {
+                  // color: 'rgb(134, 145, 148)',
                   display: true
                 },
               }],
             },
             legend: {
-              display: false
+              display: false,
+              labels: {
+                fontColor: 'rgb(221, 221, 221)' 
+              }
             },
+            "defaultFontColor": 'rgb(221, 221, 221)',
             "animation": {
               "duration": 1,
               "onComplete": function() {

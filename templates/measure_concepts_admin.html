@@ -3,12 +3,70 @@
 
             <div class="pagetitle d-flex align-items-center justify-content-between">
                 <h1>Measure Concept Tables</h1>
-                <a href="{{ url_for('generate_report') }}" class="btn btn-primary">
-                    <i class="bi bi-download"></i>
-                    Generate Report
-                </a>
+                <div>
+                    <a href="{{ url_for('generate_report') }}" class="btn btn-primary">
+                        <i class="bi bi-download"></i>
+                        Generate Report
+                    </a>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#fullscreenModal">
+                        <i class="bi bi-arrows-fullscreen"></i>
+                        Full Screen
+                    </button>
+                </div>
             </div><!-- End Page Title -->
             
+            <div class="modal fade" id="fullscreenModal" tabindex="-1">
+                <div class="modal-dialog modal-fullscreen">
+                    <div class="modal-content" style="height: auto;">
+                        <div class="row">
+                            <div class="col-lg-12">
+        
+                                <div class="card overflow-auto">
+                                    <div class="card-header">
+                                        <i class="bi bi-table"></i>
+                                        P3 2024 Measure Concept DataTables
+                                    </div>
+                                    <div class="card-body">
+        
+                                        <!-- Table with stripped rows -->
+                                        
+                                        <table class="table datatable" id="measureconceptstablemodel">
+                                            <thead>
+                                                <tr>
+                                                    <th>Concept Name</th>
+                                                    <th>Rating</th>
+                                                    <th>Weighted Rating</th>
+                                                    <th>Participation</th>
+                                                    <th>Average Interested Lanched</th>
+                                                    <th>Average Path to Market</th>
+                                                    <th>Average Pull Sales</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for product in measure_survey %}
+                                                    <tr>
+                                                        <td>{{ product.product_name }}</td>
+                                                        <td>{{ product.Rating }}</td>
+                                                        <td>{{ product.WRating}}</td>
+                                                        <td>{{ product.Participation }}</td>
+                                                        <td>{{ product.Average_interested_lanched }}</td>
+                                                        <td>{{ product.Average_path_to_market }}</td>
+                                                        <td>{{ product.Average_pull_sales }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        <!-- End Table with stripped rows -->
+        
+                                    </div>
+                                </div>
+        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End Full Screen Modal-->
+
             <section class="section mt-4">
                 <div class="row">
                     <div class="col-lg-12">

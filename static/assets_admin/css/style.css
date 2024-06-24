@@ -15,12 +15,17 @@
 
 body {
   font-family: "Open Sans", sans-serif;
-  background: #f6f9ff;
-  color: #444444;
+  background-image: url(/static/images/Background-Admin.png);
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  /*background-size: cover; */
+  color: #ffffff;
 }
 
 a {
-  color: #4154f1;
+  color: #4cb9e9;
   text-decoration: none;
 }
 
@@ -64,7 +69,7 @@ h6 {
   font-size: 24px;
   margin-bottom: 0;
   font-weight: 600;
-  color: #012970;
+  color: #ffffff;
 }
 
 /*--------------------------------------------------------------
@@ -222,13 +227,14 @@ h6 {
   border: none;
   border-radius: 5px;
   box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+  background-color: rgba(0,0,0,.3);
 }
 
 .card-header,
 .card-footer {
   border-color: #ebeef4;
-  background-color: #fff;
-  color: #798eb3;
+  background-color: rgba(0,0,0,.2);
+  color: #ffffff;
   padding: 15px;
 }
 
@@ -236,7 +242,7 @@ h6 {
   padding: 20px 0 15px 0;
   font-size: 18px;
   font-weight: 500;
-  color: #012970;
+  color: #ffffff;
   font-family: "Poppins", sans-serif;
 }
 
@@ -282,7 +288,7 @@ h6 {
 }
 
 .accordion-button:not(.collapsed) {
-  color: #012970;
+  color: #ffffff;
   background-color: #f6f9ff;
 }
 
@@ -373,7 +379,7 @@ h6 {
 .logo span {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #012970;
+  color: #ffffff;
   font-family: "Nunito", sans-serif;
 }
 
@@ -382,7 +388,7 @@ h6 {
   z-index: 997;
   height: 60px;
   box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
-  background-color: #fff;
+  background-color: rgba(0,0,0,.2);
   padding-left: 20px;
   /* Toggle Sidebar Button */
   /* Search Bar */
@@ -392,7 +398,7 @@ h6 {
   font-size: 32px;
   padding-left: 10px;
   cursor: pointer;
-  color: #012970;
+  color: #ffffff;
 }
 
 .header .search-bar {
@@ -429,7 +435,7 @@ h6 {
 .header .search-form input {
   border: 0;
   font-size: 14px;
-  color: #012970;
+  color: #ffffff;
   border: 1px solid rgba(1, 41, 112, 0.2);
   padding: 7px 38px 7px 8px;
   border-radius: 3px;
@@ -452,7 +458,7 @@ h6 {
 }
 
 .header .search-form button i {
-  color: #012970;
+  color: #ffffff;
 }
 
 /*--------------------------------------------------------------
@@ -469,13 +475,13 @@ h6 {
 
 .header-nav .nav-icon {
   font-size: 22px;
-  color: #012970;
+  color: #ffffff;
   margin-right: 25px;
   position: relative;
 }
 
 .header-nav .nav-profile {
-  color: #012970;
+  color: #ffffff;
 }
 
 .header-nav .nav-profile img {
@@ -611,7 +617,7 @@ h6 {
   scrollbar-width: thin;
   scrollbar-color: #aab7cf transparent;
   box-shadow: 0px 0px 20px rgba(1, 41, 112, 0.1);
-  background-color: #fff;
+  background-color: rgba(0,0,0,.2);
 }
 
 @media (max-width: 1199px) {
@@ -699,8 +705,8 @@ h6 {
 }
 
 .sidebar-nav .nav-link.collapsed {
-  color: #012970;
-  background: #fff;
+  color: #ffffff;
+  background: rgba(0,0,0,.2);
 }
 
 .sidebar-nav .nav-link.collapsed i {
@@ -736,7 +742,7 @@ h6 {
   align-items: center;
   font-size: 14px;
   font-weight: 600;
-  color: #012970;
+  color: #ffffff;
   transition: 0.3;
   padding: 10px 0 10px 40px;
   transition: 0.3s;
@@ -806,7 +812,7 @@ h6 {
 
 .dashboard .info-card h6 {
   font-size: 28px;
-  color: #012970;
+  color: #ffffff;
   font-weight: 700;
   margin: 0;
   padding: 0;
@@ -902,7 +908,7 @@ h6 {
 }
 
 .dashboard .news h4 a {
-  color: #012970;
+  color: #ffffff;
   transition: 0.3s;
 }
 
@@ -922,7 +928,7 @@ h6 {
 }
 
 .dashboard .recent-sales .table thead {
-  background: #f6f6fe;
+  background: rgba(0,0,0,.2);
 }
 
 .dashboard .recent-sales .table thead th {
@@ -974,7 +980,7 @@ h6 {
   background-color: #fff;
   border-radius: 0.25rem;
   text-align: center;
-  color: #012970;
+  color: #ffffff;
   padding: 15px 0;
 }
 
@@ -1023,7 +1029,7 @@ h6 {
 }
 
 .profile .profile-card .social-links a:hover {
-  color: #012970;
+  color: #ffffff;
 }
 
 .profile .profile-overview .row {
@@ -1032,7 +1038,7 @@ h6 {
 }
 
 .profile .profile-overview .card-title {
-  color: #012970;
+  color: #ffffff;
 }
 
 .profile .profile-overview .label {
@@ -1077,7 +1083,7 @@ h6 {
 
 .contact .info-box h3 {
   font-size: 20px;
-  color: #012970;
+  color: #ffffff;
   font-weight: 700;
   margin: 20px 0 10px 0;
 }
@@ -1191,7 +1197,7 @@ h6 {
 .error-404 h2 {
   font-size: 24px;
   font-weight: 700;
-  color: #012970;
+  color: #ffffff;
   margin-bottom: 30px;
 }
 
@@ -1223,14 +1229,14 @@ h6 {
 
 .footer .copyright {
   text-align: center;
-  color: #012970;
+  color: #ffffff;
 }
 
 .footer .credits {
   padding-top: 5px;
   text-align: center;
   font-size: 13px;
-  color: #012970;
+  color: #ffffff;
 }
 
 @media (min-width: 768px) {
@@ -1267,7 +1273,7 @@ h6 {
 .fullscreen-all .card-header {
   flex: 0 1 auto;
   padding: 10px;
-  background: #f8f9fa;
+  background: rgba(0,0,0,.3);
   border-bottom: 1px solid #dee2e6;
 }
 
@@ -1282,4 +1288,55 @@ h6 {
 .fullscreen-all canvas {
   width: 100% !important;
   height: 100% !important;
+}
+
+.datatable-table > thead > tr > th {
+  background-color: rgba(0,0,0,.3);
+  color: #ffffff;
+}
+.datatable-table > tbody > tr > td {
+  background-color: rgba(0,0,0,.3);
+  color: #ffffff;
+}
+
+.datatable-table th button, .datatable-pagination-list button {
+  background-color: rgb(0 0 0 / 0%);
+}
+
+.datatable-selector {
+  background-color: rgba(0,0,0,.3);
+  color: #ffffff;
+}
+
+label {
+  color: #ffffff;
+}
+
+.datatable-top, .datatable-bottom {
+  color: #ffffff;
+}
+
+.modal-content {
+  background-image: url(/static/images/Background-Admin.png);
+  color: #ffffff;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.form-control {
+  background-color: #878881;
+  color: #fff !important;
+}
+
+.form-control:focus {
+  background-color: rgba(0,0,0,.4);
+  color: #fff !important;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: rgba(255, 255, 255, .125);
+  border-color: rgba(255, 255, 255, .125);
 }

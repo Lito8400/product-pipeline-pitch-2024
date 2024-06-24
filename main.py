@@ -22,6 +22,8 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_name):
+    # user_get = db.session.execute(db.select(User).where(User.user_name == user_name)).scalar()
+    # if not user_get
     return db.get_or_404(User, user_name)
 
 # CREATE DATABASE
@@ -74,12 +76,15 @@ def index():
         new_user_admin = User(user_name='admin', password=os.environ.get('ADMIN_PASSWORD'))
         db.session.add(new_user_admin)
         db.session.commit()
-
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_user_def'))
-    else:
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
+    
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_user_def'))
+        else:
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
 
     # user_completed_survey = db.session.execute(db.select(UserCompletedSurvey).where(UserCompletedSurvey.user_id == current_user.user_name)).scalars()
     user_get = db.session.execute(db.select(User).where(User.user_name == current_user.user_name)).scalar()
@@ -330,6 +335,11 @@ def measure_survey():
 def admin():
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin'))
+    else:
+        if current_user.user_name != 'admin':
+            return redirect(url_for('index'))
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
     
     df_measure_survey = db.session.execute(db.select(Survey)).all()
     total_surveys = len(df_measure_survey)
@@ -397,6 +407,11 @@ def extract_number(product):
 def measure_concepts_table():
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin'))
+    else:
+        if current_user.user_name != 'admin':
+            return redirect(url_for('index'))
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
     
     df_measure_survey = measure_survey()
 
@@ -413,6 +428,11 @@ def measure_concepts_table():
 def product_table():
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin'))
+    else:
+        if current_user.user_name != 'admin':
+            return redirect(url_for('index'))
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
     
     product_all = db.session.execute(db.select(Product)).scalars()
     
@@ -433,6 +453,11 @@ def product_table():
 def add_product():
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin')) 
+    else:
+        if current_user.user_name != 'admin':
+            redirect(url_for('index'))
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
     
     if request.method == 'POST':
         name = request.form.get('name')
@@ -447,6 +472,11 @@ def add_product():
 def edit_product():
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin'))
+    else:
+        if current_user.user_name != 'admin':
+            return redirect(url_for('index'))
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
     
     if request.method == 'POST':
         product_id = request.form['id']
@@ -459,6 +489,14 @@ def edit_product():
 
 @app.route('/admin/delete_product/<int:id>')
 def delete_product(id):
+    if not current_user.is_authenticated:
+        return redirect(url_for('login_admin'))
+    else:
+        if current_user.user_name != 'admin':
+            return redirect(url_for('index'))
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
+    
     product = db.session.execute(db.select(Product).where(Product.id == id)).scalar()
     db.session.delete(product)
     db.session.commit()
@@ -466,6 +504,14 @@ def delete_product(id):
 
 @app.route('/admin/delete_all_product')
 def delete_all_product():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login_admin'))
+    else:
+        if current_user.user_name != 'admin':
+            return redirect(url_for('index'))
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
+
     product = db.session.execute(db.select(Product)).scalars()
     for survey in product:
         db.session.delete(survey)
@@ -477,6 +523,11 @@ def delete_all_product():
 def survey_table():
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin'))
+    else:
+        if current_user.user_name != 'admin':
+            return redirect(url_for('index'))
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
 
     survey_all = db.session.execute(db.select(Survey)).scalars()
     
@@ -493,6 +544,11 @@ def survey_table():
 def user_completed_table():
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin'))
+    else:
+        if current_user.user_name != 'admin':
+            return redirect(url_for('index'))
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
 
     user_completed_all = db.session.execute(db.select(User)).scalars()
 
@@ -507,7 +563,12 @@ def user_completed_table():
 @app.route('/admin/add_user', methods=['GET', 'POST'])
 def add_user():
     if not current_user.is_authenticated:
-        return redirect(url_for('login_admin')) 
+        return redirect(url_for('login_admin'))
+    else:
+        if current_user.user_name != 'admin':
+            return redirect(url_for('index'))
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
     
     if request.method == "POST":
         l_user = request.form.get('userName')
@@ -526,6 +587,11 @@ def add_user():
 def edit_user():
     if not current_user.is_authenticated:
         return redirect(url_for('login_admin'))
+    else:
+        if current_user.user_name != 'admin':
+            return redirect(url_for('index'))
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
     
     if request.method == 'POST':
         user_id = request.form['id']
@@ -562,16 +628,36 @@ def edit_user():
 def delete_user(username):
     if username == 'admin':
         return redirect(url_for('user_completed_table'))
+    if not current_user.is_authenticated:
+        return redirect(url_for('login_admin'))
+    else:
+        if current_user.user_name != 'admin':
+            return redirect(url_for('index'))
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
 
     user = db.session.execute(db.select(User).where(User.user_name == username)).scalar()
+    
     for survey in user.surveys:
         db.session.delete(survey)
+
+    if user.is_authenticated:
+        logout_user()
+    
     db.session.delete(user)
     db.session.commit()
     return redirect(url_for('user_completed_table'))
 
 @app.route('/admin/delete_all_users')
 def delete_all_users():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login_admin'))
+    else:
+        if current_user.user_name != 'admin':
+            redirect(url_for('index'))
+        if check_lock_login_user and current_user.user_name != 'admin':
+            return redirect(url_for('logout'))
+
     users = db.session.execute(db.select(User).where(User.user_name != 'admin')).scalars()
     for user in users:
         db.session.delete(user)
