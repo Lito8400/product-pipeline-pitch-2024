@@ -1,5 +1,7 @@
-// Set new default font family and font color to mimic Bootstrap's default styling
-
+const w_colorstop1 = 'rgba(143, 162, 162, 1)';
+const w_colorstop2 = 'rgba(143, 162, 162, 0)';
+const w_colorborder = 'rgba(143, 162, 162, 1)';
+const w_colorfont = 'rgb(173, 187, 199)';
 
 // Bar Chart Example
 fetch('/admin/weighted-rank-chart')
@@ -18,16 +20,26 @@ fetch('/admin/weighted-rank-chart')
                 const { ctx, chartArea } = chart;
 
                 var gradient = ctx.createLinearGradient(0, 0, 0, 188);
-                gradient.addColorStop(0, 'rgba(30, 144, 255, 1)');
-                gradient.addColorStop(1, 'rgba(30, 144, 255, 0)');
+                // gradient.addColorStop(0, 'rgba(255, 165, 0, 1)');
+                // gradient.addColorStop(1, 'rgba(255, 165, 0, 0)');
+                // gradient.addColorStop(0, 'rgba(100, 149, 237, 1)');
+                // gradient.addColorStop(1, 'rgba(100, 149, 237, 0)');
+                
+                gradient.addColorStop(0, w_colorstop1);
+                gradient.addColorStop(1, w_colorstop2);
 
                 if (!chartArea){
                   return gradient;
                 }
                 
-                gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom - 65);
-                gradient.addColorStop(0, 'rgba(30, 144, 255, 1)');
-                gradient.addColorStop(1, 'rgba(30, 144, 255, 0)');
+                gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                // gradient.addColorStop(0, 'rgba(255, 165, 0, 1)');
+                // gradient.addColorStop(1, 'rgba(255, 165, 0, 0)');
+                // gradient.addColorStop(0, 'rgba(100, 149, 237, 1)');
+                // gradient.addColorStop(1, 'rgba(100, 149, 237, 0)');
+
+                gradient.addColorStop(0, w_colorstop1);
+                gradient.addColorStop(1, w_colorstop2);
                 return gradient;
               },
               strokeColor : "#ff6c23",
@@ -35,9 +47,9 @@ fetch('/admin/weighted-rank-chart')
               pointStrokeColor : "#ff6c23",
               pointHighlightFill: "#fff",
               pointHighlightStroke: "#ff6c23",
-              borderColor: "rgb(30, 144, 255)",
+              borderColor: w_colorborder,
               data: data.values,
-              borderWidth: 1
+              borderWidth: 1,
             }],
           },
           options: {
@@ -48,7 +60,7 @@ fetch('/admin/weighted-rank-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: w_colorfont
                 }
               }],
               
@@ -56,7 +68,7 @@ fetch('/admin/weighted-rank-chart')
                 ticks: {
                   min: 0,
                   max: 6,
-                  fontColor: 'rgb(221, 221, 221)'  
+                  fontColor: w_colorfont
                 },
                 gridLines: {
                   // color: 'rgb(134, 145, 148)',
@@ -67,10 +79,10 @@ fetch('/admin/weighted-rank-chart')
             legend: {
               display: false,
               labels: {
-                fontColor: 'rgb(221, 221, 221)' 
+                fontColor: w_colorfont
               }
             },
-            "defaultFontColor": 'rgb(221, 221, 221)',
+            "defaultFontColor": w_colorfont,
             "animation": {
               "duration": 1,
               "onComplete": function() {
@@ -117,16 +129,16 @@ fetch('/admin/weighted-rank-chart')
                 const { ctx, chartArea } = chart;
 
                 var gradient = ctx.createLinearGradient(0, 0, 0, 188);
-                gradient.addColorStop(0, 'rgba(30, 144, 255, 1)');
-                gradient.addColorStop(1, 'rgba(30, 144, 255, 0)');
+                gradient.addColorStop(0, w_colorstop1);
+                gradient.addColorStop(1, w_colorstop2);
 
                 if (!chartArea){
                   return gradient;
                 }
                 
                 gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom - 65);
-                gradient.addColorStop(0, 'rgba(30, 144, 255, 1)');
-                gradient.addColorStop(1, 'rgba(30, 144, 255, 0)');
+                gradient.addColorStop(0, w_colorstop1);
+                gradient.addColorStop(1, w_colorstop2);
                 return gradient;
               },
               strokeColor : "#ff6c23",
@@ -134,7 +146,7 @@ fetch('/admin/weighted-rank-chart')
               pointStrokeColor : "#ff6c23",
               pointHighlightFill: "#fff",
               pointHighlightStroke: "#ff6c23",
-              borderColor: "rgb(30, 144, 255)",
+              borderColor: w_colorborder,
               data: data.values,
               borderWidth: 1
             }],
@@ -147,7 +159,7 @@ fetch('/admin/weighted-rank-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: w_colorfont
                 }
               }],
               
@@ -155,7 +167,7 @@ fetch('/admin/weighted-rank-chart')
                 ticks: {
                   min: 0,
                   max: 6,
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: w_colorfont
                 },
                 gridLines: {
                   // color: 'rgb(134, 145, 148)',
@@ -166,10 +178,10 @@ fetch('/admin/weighted-rank-chart')
             legend: {
               display: false,
               labels: {
-                fontColor: 'rgb(221, 221, 221)' 
+                fontColor: w_colorfont
               }
             },
-            "defaultFontColor": 'rgb(221, 221, 221)',
+            "defaultFontColor": w_colorfont,
             "animation": {
               "duration": 1,
               "onComplete": function() {

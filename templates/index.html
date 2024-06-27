@@ -2,7 +2,7 @@
         <!-- Header-->
         <header class="py-3">
             <div class="container px-lg-5">
-                <div class="p-4 p-lg-2 bg-light rounded-3 text-center">
+                <div class="p-4 p-lg-2 bg-light rounded-3 text-center" style="background-color: rgba(0,0,0,.2) !important;">
                     <div class="m-4 m-lg-5">
                         <h1 class="display-5 fw-bold">Welcome to the 2024 Product Pipeline Pitch</h1>
                         <p class="fs-4">Please complete the below surveys for each concept in the event</p>
@@ -29,7 +29,7 @@
                     {% for product in products %}
                         <div class="col-lg-6 col-xxl-3 mb-4">
                             {% if product.id in completed_surveys %}
-                            <div class="card border-0 h-100" style="background-color: #ff5308b5;">
+                            <div class="card border-0 h-100" style="background-color: rgba(0,0,0,.2);">
                             {% else %}
                             <div class="card bg-light border-0 h-100" >
                             {% endif %}
@@ -46,7 +46,7 @@
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                     <div class="text-center">
                                         {% if product.id not in completed_surveys %}
-                                            <a href="{{ url_for('survey', survey_id=product.id) }}" class="btn btn-outline-dark mt-auto">Take Survey</a>
+                                            <a href="{{ url_for('survey', survey_id=product.id) }}" class="btn btn-outline-light mt-auto">Take Survey</a>
                                         {% endif %}
                                         <!-- <a class="btn btn-outline-dark mt-auto" href="#">View options</a> -->
                                     </div>

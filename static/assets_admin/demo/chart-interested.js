@@ -1,4 +1,8 @@
 // Set new default font family and font color to mimic Bootstrap's default styling
+const i_colorstop1 = 'rgba(143, 162, 162, 1)';
+const i_colorstop2 = 'rgba(143, 162, 162, 0)';
+const i_colorborder = 'rgba(143, 162, 162, 1)';
+const i_colorfont = 'rgb(173, 187, 199)';
 
 // Bar Chart Example
 fetch('/admin/interested-lanched-chart')
@@ -18,16 +22,21 @@ fetch('/admin/interested-lanched-chart')
                 const { ctx, chartArea } = chart;
 
                 var gradient = ctx.createLinearGradient(0, 0, 0, 188);
-                gradient.addColorStop(0, 'rgba(255, 255, 102, 1)');
-                gradient.addColorStop(1, 'rgba(255, 255, 102, 0)');
+                // gradient.addColorStop(0, 'rgba(255, 250, 205, 1)');
+                // gradient.addColorStop(1, 'rgba(255, 250, 205, 0)');
+                gradient.addColorStop(0, i_colorstop1);
+                gradient.addColorStop(1, i_colorstop2);
 
                 if (!chartArea){
                   return gradient;
                 }
                 
-                gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom -65);
-                gradient.addColorStop(0, 'rgba(255, 255, 102, 1)');
-                gradient.addColorStop(1, 'rgba(255, 255, 102, 0)');
+                gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                // gradient.addColorStop(0, 'rgba(255, 250, 205, 1)');
+                // gradient.addColorStop(1, 'rgba(255, 250, 205, 0)');
+                gradient.addColorStop(0, i_colorstop1);
+                gradient.addColorStop(1, i_colorstop2);
+
                 return gradient;
               },
               strokeColor : "#ff6c23",
@@ -35,7 +44,7 @@ fetch('/admin/interested-lanched-chart')
               pointStrokeColor : "#ff6c23",
               pointHighlightFill: "#fff",
               pointHighlightStroke: "#ff6c23",
-              borderColor: "rgb(255, 255, 102)",
+              borderColor: i_colorborder,
               data: data.values,
               borderWidth: 1
             }],
@@ -48,14 +57,14 @@ fetch('/admin/interested-lanched-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: i_colorfont 
                 }
               }],
               yAxes: [{
                 ticks: {
                   min: 0,
                   max: 6,
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: i_colorfont 
                 },
                 gridLines: {
                   // color: 'rgb(59,69,67)',
@@ -67,10 +76,10 @@ fetch('/admin/interested-lanched-chart')
             legend: {
               display: false,
               labels: {
-                fontColor: 'rgb(221, 221, 221)' 
+                fontColor: i_colorfont 
               }
             },
-            "defaultFontColor": 'rgb(221, 221, 221)',
+            "defaultFontColor": i_colorfont,
             "animation": {
               "duration": 1,
               "onComplete": function() {
@@ -117,16 +126,16 @@ fetch('/admin/interested-lanched-chart')
                 const { ctx, chartArea } = chart;
 
                 var gradient = ctx.createLinearGradient(0, 0, 0, 188);
-                gradient.addColorStop(0, 'rgba(255, 255, 102, 1)');
-                gradient.addColorStop(1, 'rgba(255, 255, 102, 0)');
+                gradient.addColorStop(0, i_colorstop1);
+                gradient.addColorStop(1, i_colorstop2);
 
                 if (!chartArea){
                   return gradient;
                 }
                 
                 gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom -65);
-                gradient.addColorStop(0, 'rgba(255, 255, 102, 1)');
-                gradient.addColorStop(1, 'rgba(255, 255, 102, 0)');
+                gradient.addColorStop(0, i_colorstop1);
+                gradient.addColorStop(1, i_colorstop2);
                 return gradient;
               },
               strokeColor : "#ff6c23",
@@ -134,7 +143,7 @@ fetch('/admin/interested-lanched-chart')
               pointStrokeColor : "#ff6c23",
               pointHighlightFill: "#fff",
               pointHighlightStroke: "#ff6c23",
-              borderColor: "rgb(255, 255, 102)",
+              borderColor: i_colorborder,
               data: data.values,
               borderWidth: 1
             }],
@@ -147,14 +156,14 @@ fetch('/admin/interested-lanched-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: 'rgb(221, 221, 221)' // Màu font của trục x
+                  fontColor: i_colorfont // Màu font của trục x
                 }
               }],
               yAxes: [{
                 ticks: {
                   min: 0,
                   max: 6,
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: i_colorfont 
                 },
                 gridLines: {
                   // color: 'rgb(59,69,67)',
@@ -166,10 +175,10 @@ fetch('/admin/interested-lanched-chart')
             legend: {
               display: false,
               labels: {
-                fontColor: 'rgb(221, 221, 221)' 
+                fontColor: i_colorfont 
               }
             },
-            "defaultFontColor": 'rgb(221, 221, 221)',
+            "defaultFontColor": i_colorfont,
             "animation": {
               "duration": 1,
               "onComplete": function() {

@@ -1,5 +1,8 @@
 // Set new default font family and font color to mimic Bootstrap's default styling
-
+const pu_colorstop1 = 'rgba(143, 162, 162, 1)';
+const pu_colorstop2 = 'rgba(143, 162, 162, 0)';
+const pu_colorborder = 'rgba(143, 162, 162, 1)';
+const pu_colorfont = 'rgb(173, 187, 199)';
 
 // Bar Chart Example
 fetch('/admin/pull-sales-chart')
@@ -18,16 +21,20 @@ fetch('/admin/pull-sales-chart')
                 const { ctx, chartArea } = chart;
 
                 var gradient = ctx.createLinearGradient(0, 0, 0, 188);
-                gradient.addColorStop(0, 'rgba(255, 69, 0, 1)');
-                gradient.addColorStop(1, 'rgba(255, 69, 0, 0)');
+                // gradient.addColorStop(0, 'rgba(255, 193, 37, 1)');
+                // gradient.addColorStop(1, 'rgba(255, 193, 37, 0)');
+                gradient.addColorStop(0, pu_colorstop1);
+                gradient.addColorStop(1, pu_colorstop2);
 
                 if (!chartArea){
                   return gradient;
                 }
                 
-                gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom - 65);
-                gradient.addColorStop(0, 'rgba(255, 69, 0, 1)');
-                gradient.addColorStop(1, 'rgba(255, 69, 0, 0)');
+                gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                // gradient.addColorStop(0, 'rgba(255, 193, 37, 1)');
+                // gradient.addColorStop(1, 'rgba(255, 193, 37, 0)');
+                gradient.addColorStop(0, pu_colorstop1);
+                gradient.addColorStop(1, pu_colorstop2);
                 return gradient;
               },
               strokeColor : "#ff6c23",
@@ -35,7 +42,7 @@ fetch('/admin/pull-sales-chart')
               pointStrokeColor : "#ff6c23",
               pointHighlightFill: "#fff",
               pointHighlightStroke: "#ff6c23",
-              borderColor: "rgb(255, 69, 0)",
+              borderColor: pu_colorborder,
               data: data.values,
               borderWidth: 1
             }],
@@ -48,14 +55,14 @@ fetch('/admin/pull-sales-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: pu_colorfont
                 }
               }],
               yAxes: [{
                 ticks: {
                   min: 0,
                   max: 6,
-                  fontColor: 'rgb(221, 221, 221)'
+                  fontColor: pu_colorfont
                 },
                 gridLines: {
                   // color: 'rgb(59,69,67)',
@@ -67,10 +74,10 @@ fetch('/admin/pull-sales-chart')
             legend: {
               display: false,
               labels: {
-                fontColor: 'rgb(221, 221, 221)' 
+                fontColor: pu_colorfont 
               }
             },
-            "defaultFontColor": 'rgb(221, 221, 221)',
+            "defaultFontColor": pu_colorfont,
             "animation": {
               "duration": 1,
               "onComplete": function() {
@@ -117,16 +124,16 @@ fetch('/admin/pull-sales-chart')
                 const { ctx, chartArea } = chart;
 
                 var gradient = ctx.createLinearGradient(0, 0, 0, 188);
-                gradient.addColorStop(0, 'rgba(255, 69, 0, 1)');
-                gradient.addColorStop(1, 'rgba(255, 69, 0, 0)');
+                gradient.addColorStop(0, pu_colorstop1);
+                gradient.addColorStop(1, pu_colorstop2);
 
                 if (!chartArea){
                   return gradient;
                 }
                 
                 gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom - 65);
-                gradient.addColorStop(0, 'rgba(255, 69, 0, 1)');
-                gradient.addColorStop(1, 'rgba(255, 69, 0, 0)');
+                gradient.addColorStop(0, pu_colorstop1);
+                gradient.addColorStop(1, pu_colorstop2);
                 return gradient;
               },
               strokeColor : "#ff6c23",
@@ -134,7 +141,7 @@ fetch('/admin/pull-sales-chart')
               pointStrokeColor : "#ff6c23",
               pointHighlightFill: "#fff",
               pointHighlightStroke: "#ff6c23",
-              borderColor: "rgb(255, 69, 0)",
+              borderColor: pu_colorborder,
               data: data.values,
               borderWidth: 1
             }],
@@ -147,14 +154,14 @@ fetch('/admin/pull-sales-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: pu_colorfont 
                 }
               }],
               yAxes: [{
                 ticks: {
                   min: 0,
                   max: 6,
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: pu_colorfont 
                 },
                 gridLines: {
                   // color: 'rgb(59,69,67)',
@@ -166,10 +173,10 @@ fetch('/admin/pull-sales-chart')
             legend: {
               display: false,
               labels: {
-                fontColor: 'rgb(221, 221, 221)' 
+                fontColor: pu_colorfont 
               }
             },
-            "defaultFontColor": 'rgb(221, 221, 221)',
+            "defaultFontColor": pu_colorfont,
             "animation": {
               "duration": 1,
               "onComplete": function() {

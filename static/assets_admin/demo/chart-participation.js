@@ -1,5 +1,8 @@
 // Set new default font family and font color to mimic Bootstrap's default styling
-
+const p_colorstop1 = 'rgba(143, 162, 162, 1)';
+const p_colorstop2 = 'rgba(143, 162, 162, 0)';
+const p_colorborder = 'rgba(143, 162, 162, 1)';
+const p_colorfont = 'rgb(173, 187, 199)';
 
 // Bar Chart Example
 fetch('/admin/participation-chart')
@@ -19,16 +22,26 @@ fetch('/admin/participation-chart')
                 const { ctx, chartArea } = chart;
 
                 var gradient = ctx.createLinearGradient(0, 0, 0, 188);
-                gradient.addColorStop(0, 'rgba(50, 205, 50, 1)');
-                gradient.addColorStop(1, 'rgba(50, 205, 50, 0)');
+                // gradient.addColorStop(0, 'rgba(255, 140, 0, 1)');
+                // gradient.addColorStop(1, 'rgba(255, 140, 0, 0)');
+                // gradient.addColorStop(0, 'rgba(135, 206, 250, 1)');
+                // gradient.addColorStop(1, 'rgba(135, 206, 250, 0)');
+
+                gradient.addColorStop(0, p_colorstop1);
+                gradient.addColorStop(1, p_colorstop2);
 
                 if (!chartArea){
                   return gradient;
                 }
                 
-                gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom - 50);
-                gradient.addColorStop(0, 'rgba(50, 205, 50, 1)');
-                gradient.addColorStop(1, 'rgba(50, 205, 50, 0)');
+                gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                // gradient.addColorStop(0, 'rgba(255, 140, 0, 1)');
+                // gradient.addColorStop(1, 'rgba(255, 140, 0, 0)');
+                // gradient.addColorStop(0, 'rgba(135, 206, 250, 1)');
+                // gradient.addColorStop(1, 'rgba(135, 206, 250, 0)');
+
+                gradient.addColorStop(0, p_colorstop1);
+                gradient.addColorStop(1, p_colorstop2);
                 return gradient;
               },
               strokeColor : "#ff6c23",
@@ -36,7 +49,7 @@ fetch('/admin/participation-chart')
               pointStrokeColor : "#ff6c23",
               pointHighlightFill: "#fff",
               pointHighlightStroke: "#ff6c23",
-              borderColor: "rgb(50, 205, 50)",
+              borderColor: p_colorborder,
               data: data.values,
               borderWidth: 1
             }],
@@ -49,7 +62,7 @@ fetch('/admin/participation-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: p_colorfont 
                 }
               }],
               
@@ -57,7 +70,7 @@ fetch('/admin/participation-chart')
                 ticks: {
                   min: 0,
                   max: maxValue,
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: p_colorfont 
                 },
                 gridLines: {
                   // color: 'rgb(59,69,67)',
@@ -70,10 +83,10 @@ fetch('/admin/participation-chart')
             legend: {
               display: false,
               labels: {
-                fontColor: 'rgb(221, 221, 221)' 
+                fontColor: p_colorfont 
               }
             },
-            "defaultFontColor": 'rgb(221, 221, 221)',
+            "defaultFontColor": p_colorfont,
             "animation": {
               "duration": 1,
               "onComplete": function() {
@@ -122,16 +135,16 @@ fetch('/admin/participation-chart')
                 const { ctx, chartArea } = chart;
 
                 var gradient = ctx.createLinearGradient(0, 0, 0, 188);
-                gradient.addColorStop(0, 'rgba(50, 205, 50, 1)');
-                gradient.addColorStop(1, 'rgba(50, 205, 50, 0)');
+                gradient.addColorStop(0, p_colorstop1);
+                gradient.addColorStop(1, p_colorstop2);
 
                 if (!chartArea){
                   return gradient;
                 }
                 
                 gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom - 50);
-                gradient.addColorStop(0, 'rgba(50, 205, 50, 1)');
-                gradient.addColorStop(1, 'rgba(50, 205, 50, 0)');
+                gradient.addColorStop(0, p_colorstop1);
+                gradient.addColorStop(1, p_colorstop2);
                 return gradient;
               },
               strokeColor : "#ff6c23",
@@ -139,7 +152,7 @@ fetch('/admin/participation-chart')
               pointStrokeColor : "#ff6c23",
               pointHighlightFill: "#fff",
               pointHighlightStroke: "#ff6c23",
-              borderColor: "rgb(50, 205, 50)",
+              borderColor: p_colorborder,
               data: data.values,
               borderWidth: 1
             }],
@@ -152,7 +165,7 @@ fetch('/admin/participation-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: p_colorfont 
                 }
               }],
               
@@ -160,7 +173,7 @@ fetch('/admin/participation-chart')
                 ticks: {
                   min: 0,
                   max: maxValue,
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: p_colorfont 
                 },
                 gridLines: {
                   // color: 'rgb(59,69,67)',
@@ -173,10 +186,10 @@ fetch('/admin/participation-chart')
             legend: {
               display: false,
               labels: {
-                fontColor: 'rgb(221, 221, 221)' 
+                fontColor: p_colorfont 
               }
             },
-            "defaultFontColor": 'rgb(221, 221, 221)',
+            "defaultFontColor": p_colorfont,
             "animation": {
               "duration": 1,
               "onComplete": function() {

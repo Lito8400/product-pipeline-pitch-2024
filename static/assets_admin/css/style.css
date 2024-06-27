@@ -15,7 +15,7 @@
 
 body {
   font-family: "Open Sans", sans-serif;
-  background-image: url(/static/images/Background-Admin.png);
+  background-image: linear-gradient(16deg, #202020, #20202080);
   background-size: 100% 100%;
   background-attachment: fixed;
   background-position: center;
@@ -233,7 +233,7 @@ h6 {
 .card-header,
 .card-footer {
   border-color: #ebeef4;
-  background-color: rgba(0,0,0,.2);
+  background-color: rgb(163 204 217 / 50%);
   color: #ffffff;
   padding: 15px;
 }
@@ -1273,7 +1273,7 @@ h6 {
 .fullscreen-all .card-header {
   flex: 0 1 auto;
   padding: 10px;
-  background: rgba(0,0,0,.3);
+  background: rgb(163 204 217 / 50%);
   border-bottom: 1px solid #dee2e6;
 }
 
@@ -1291,12 +1291,12 @@ h6 {
 }
 
 .datatable-table > thead > tr > th {
-  background-color: rgba(0,0,0,.3);
+  background-color: rgb(163 204 217 / 50%);
   color: #ffffff;
 }
 .datatable-table > tbody > tr > td {
   background-color: rgba(0,0,0,.3);
-  color: #ffffff;
+  color: rgb(203, 219, 233);
 }
 
 .datatable-table th button, .datatable-pagination-list button {
@@ -1317,7 +1317,7 @@ label {
 }
 
 .modal-content {
-  background-image: url(/static/images/Background-Admin.png);
+  background-image: linear-gradient(16deg, #202020, #20202080);
   color: #ffffff;
   background-size: 100% 100%;
   background-attachment: fixed;
@@ -1339,4 +1339,11 @@ label {
   color: #fff;
   background-color: rgba(255, 255, 255, .125);
   border-color: rgba(255, 255, 255, .125);
+}
+
+.table {
+  --bs-table-striped-color: #4b4c687d;
+  --bs-table-striped-bg: #667481;
+  --bs-table-hover-color: #4154f1;
+  --bs-table-hover-bg: #4154f1;
 }

@@ -108,7 +108,7 @@
 
 /* TABLE */
 .datatable-table {
-	border-width: 1px 1px;
+	/* border-width: 1px 1px; */
 	max-width: 100%;
 	width: 100%;
 	border-spacing: 0;
@@ -121,33 +121,33 @@
 .datatable-table > tfoot > tr > th,
 .datatable-table > thead > tr > td,
 .datatable-table > thead > tr > th {
-	border-width: 1px 1px;
+	/* border-width: 1px 1px; */
 	vertical-align: top;
 	padding: 8px 10px;
 }
 
 .datatable-table > thead > tr > th {
-	border-width: 1px 1px;
+	/* border-width: 1px 1px; */
 	vertical-align: bottom;
 	text-align: left;
 	border-bottom: 1px solid #d9d9d9;
 }
 
 .datatable-table > tfoot > tr > th {
-	border-width: 1px 1px;
+	/* border-width: 1px 1px; */
 	vertical-align: bottom;
 	text-align: left;
 	border-top: 1px solid #d9d9d9;
 }
 
 .datatable-table th {
-	border-width: 1px 1px;
+	/* border-width: 1px 1px; */
 	vertical-align: bottom;
 	text-align: left;
 }
 
 .datatable-table th a {
-	border-width: 1px 1px;
+	/* border-width: 1px 1px; */
 	text-decoration: none;
 	color: inherit;
 }
@@ -179,17 +179,17 @@
 	right: 4px;
 	border-left: 4px solid transparent;
 	border-right: 4px solid transparent;
-	opacity: 0.2;
+	opacity: 0.4;
 }
 
 
 .datatable-sorter::before {
-	border-top: 4px solid #000;
+	border-top: 4px solid #ffffff;
 	bottom: 0px;
 }
 
 .datatable-sorter::after {
-	border-bottom: 4px solid #000;
+	border-bottom: 4px solid #ffffff;
 	border-top: 4px solid transparent;
 	top: 0px;
 }
@@ -198,7 +198,7 @@
 .datatable-descending .datatable-sorter::before,
 .datatable-ascending .datatable-filter::after,
 .datatable-descending .datatable-filter::before {
-	opacity: 0.6;
+	opacity: 0.8;
 }
 
 .datatable-filter::before {

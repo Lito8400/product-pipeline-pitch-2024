@@ -6,6 +6,11 @@
     background-color: #f4f4f4;
 } */
 body {
+    background-image: linear-gradient(16deg, #202020, #20202080);
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
     font-family: Arial, sans-serif;
     padding: 20px;
     background-color: #f4f4f4;
@@ -16,7 +21,7 @@ body {
     padding: 0 15px;
 }
 .survey-form {
-    background-color: #ffffff;
+    background-color: rgba(0,0,0,.2);
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -28,7 +33,7 @@ body {
 }
 .question p {
     font-weight: bold;
-    color: #333;
+    color: rgb(203 219 233);
 }
 .required::after {
     content: '*';
@@ -41,6 +46,8 @@ body {
     margin-right: 15px;
 }
 .comment textarea {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
     width: 100%;
     padding: 10px;
     margin-top: 15px;
@@ -52,7 +59,7 @@ input[type="submit"] {
     width: 100%;
     padding: 10px;
     margin-top: 15px;
-    background-color: #007bff;
+    background-color: #7BDCB5;
     color: #ffffff;
     border: none;
     border-radius: 5px;
