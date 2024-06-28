@@ -1,6 +1,19 @@
 import qrcode
 from PIL import Image
 
+import base64
+
+# Đọc nội dung của tệp SVG
+with open("path/to/your/file.svg", "rb") as svg_file:
+    svg_content = svg_file.read()
+
+# Mã hóa nội dung SVG thành Base64
+encoded_svg = base64.b64encode(svg_content).decode("utf-8")
+
+# In chuỗi Base64
+print(encoded_svg)
+
+
 # Đường dẫn tới file QR code và logo
 qr_path = "qrcode.png"
 logo_path = "logo.png"

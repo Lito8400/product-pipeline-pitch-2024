@@ -413,12 +413,12 @@ socket.on('update_measure_concepts', function(data) {
     var row = `
                 <tr data-index="${index}">
                     <td>${product.product_name}</td>
-                    <td>${product.Rating}</td>
-                    <td>${product.WRating}</td>
-                    <td>${product.Participation}</td>
-                    <td class="green">${product.Average_interested_lanched}</td>
-                    <td>${product.Average_path_to_market}</td>
-                    <td>${product.Average_pull_sales}</td>
+                    <td style="text-align: center; vertical-align: middle;">${product.Rating}</td>
+                    <td style="text-align: center; vertical-align: middle;">${product.WRating}</td>
+                    <td style="text-align: center; vertical-align: middle;">${product.Participation}</td>
+                    <td style="text-align: center; vertical-align: middle;" class="green">${product.Average_interested_lanched}</td>
+                    <td style="text-align: center; vertical-align: middle;">${product.Average_path_to_market}</td>
+                    <td style="text-align: center; vertical-align: middle;">${product.Average_pull_sales}</td>
                 </tr>
             `;
       tbody.innerHTML += row;

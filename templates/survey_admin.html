@@ -23,9 +23,9 @@
                                         <tr>
                                             <th>Product Name</th>
                                             <th>User ID</th>
-                                            <th>Interested Lanched</th>
-                                            <th>Path to Market</th>
-                                            <th>Pull Sales</th>
+                                            <th style="text-align: center; vertical-align: middle;">Interested Lanched</th>
+                                            <th style="text-align: center; vertical-align: middle;">Path to Market</th>
+                                            <th style="text-align: center; vertical-align: middle;">Pull Sales</th>
                                             <th>comments</th>
                                         </tr>
                                     </thead>
@@ -34,10 +34,10 @@
                                             <tr>
                                                 <td>{{ survey.product.name }}</td>
                                                 <td>{{ survey.user.user_name }}</td>
-                                                <td>{{ survey.interested_lanched }}</td>
-                                                <td>{{ survey.path_to_market }}</td>
-                                                <td>{{ survey.pull_sales }}</td>
-                                                <td>{{ survey.comments }}</td>
+                                                <td style="text-align: center; vertical-align: middle;">{{ survey.interested_lanched }}</td>
+                                                <td style="text-align: center; vertical-align: middle;">{{ survey.path_to_market }}</td>
+                                                <td style="text-align: center; vertical-align: middle;">{{ survey.pull_sales }}</td>
+                                                <td style="text-align: center; vertical-align: middle;">{{ survey.comments }}</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
