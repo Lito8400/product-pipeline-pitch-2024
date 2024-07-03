@@ -233,7 +233,7 @@ h6 {
 .card-header,
 .card-footer {
   border-color: #ebeef4;
-  background-color: rgb(163 204 217 / 50%);
+  background-color: #b94c01;
   color: #ffffff;
   padding: 15px;
 }
@@ -1273,7 +1273,7 @@ h6 {
 .fullscreen-all .card-header {
   flex: 0 1 auto;
   padding: 10px;
-  background: rgb(163 204 217 / 50%);
+  background: #b94c01;
   border-bottom: 1px solid #dee2e6;
 }
 
@@ -1291,7 +1291,7 @@ h6 {
 }
 
 .datatable-table > thead > tr > th {
-  background-color: rgb(163 204 217 / 50%);
+  background-color: #b94c01;
   color: #ffffff;
 }
 .datatable-table > tbody > tr > td {
@@ -1343,7 +1343,7 @@ label {
 
 .table {
   --bs-table-striped-color: #4b4c687d;
-  --bs-table-striped-bg: #667481;
+  --bs-table-striped-bg: #8c8f91d1;
   --bs-table-hover-color: #4154f1;
   --bs-table-hover-bg: #4154f1;
 }

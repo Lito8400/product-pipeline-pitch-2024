@@ -34,24 +34,24 @@
                                             <thead>
                                                 <tr>
                                                     <th>Concept Name</th>
-                                                    <th>Rating</th>
-                                                    <th>Weighted Rating</th>
-                                                    <th>Participation</th>
-                                                    <th>Average Interested Lanched</th>
-                                                    <th>Average Path to Market</th>
-                                                    <th>Average Pull Sales</th>
+                                                    <th style="text-align: center; vertical-align: middle;">Rating</th>
+                                                    <th style="text-align: center; vertical-align: middle;">Weighted Rating</th>
+                                                    <th style="text-align: center; vertical-align: middle;">Participation</th>
+                                                    <th style="text-align: center; vertical-align: middle;">Average Interested Lanched</th>
+                                                    <th style="text-align: center; vertical-align: middle;">Average Path to Market</th>
+                                                    <th style="text-align: center; vertical-align: middle;">Average Pull Sales</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {% for product in measure_survey %}
                                                     <tr>
                                                         <td>{{ product.product_name }}</td>
-                                                        <td>{{ product.Rating }}</td>
-                                                        <td>{{ product.WRating}}</td>
-                                                        <td>{{ product.Participation }}</td>
-                                                        <td>{{ product.Average_interested_lanched }}</td>
-                                                        <td>{{ product.Average_path_to_market }}</td>
-                                                        <td>{{ product.Average_pull_sales }}</td>
+                                                        <td style="text-align: center; vertical-align: middle;">{{ product.Rating }}</td>
+                                                        <td style="text-align: center; vertical-align: middle;">{{ product.WRating}}</td>
+                                                        <td style="text-align: center; vertical-align: middle;">{{ product.Participation }}</td>
+                                                        <td style="text-align: center; vertical-align: middle;">{{ product.Average_interested_lanched }}</td>
+                                                        <td style="text-align: center; vertical-align: middle;">{{ product.Average_path_to_market }}</td>
+                                                        <td style="text-align: center; vertical-align: middle;">{{ product.Average_pull_sales }}</td>
                                                     </tr>
                                                 {% endfor %}
                                             </tbody>
