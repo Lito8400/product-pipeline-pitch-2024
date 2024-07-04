@@ -6,7 +6,7 @@
     background-color: #f4f4f4;
 } */
 body {
-    background-image: url(/static/images/Header_Desktop.png);
+    background-image: url(/static/images/Survey_Home_Desktop.jpg);
     background-size: 100% 100%;
     background-attachment: fixed;
     background-position: center;
@@ -15,10 +15,36 @@ body {
     padding: 20px;
     background-color: #f4f4f4;
 }
+
+@media only screen and (max-width: 1280px) {
+    body {
+        background-image: url('/static/images/Survey_Home_Tablet.jpg');
+        background-size: contain;
+        background-position: center top;
+        background-repeat: round;
+    }
+    .custom-padding {
+        padding: unset !important;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    body {
+        background-image: url('/static/images/Survey_Home_Smartphone.jpg');
+        background-size: contain;
+        background-position: center top;
+        background-repeat: round;
+    }
+    
+    .custom-padding {
+        padding: unset !important;
+    }
+}
+
 .container {
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 15px;
+    /* padding: 0 15px; */
 }
 .survey-form {
     background-color: rgba(0,0,0,.2);
