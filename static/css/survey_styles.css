@@ -11,7 +11,7 @@ body {
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
-    font-family: Arial, sans-serif;
+    font-family: Aptos;
     padding: 20px;
     background-color: #f4f4f4;
 }
@@ -98,4 +98,14 @@ input[type="submit"] {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+input[type="radio"]{
+    accent-color: #ff530891 !important;
+}
+
+.radio-label {
+    color: white; /* Default label color */
+}
+input[type="radio"]:checked ~ .radio-label {
+    color: #ff5308 !important; 
 }

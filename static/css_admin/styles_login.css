@@ -97,7 +97,7 @@ body {
   background-position: center top;
   background-size: cover;
   background-repeat: round;
-  font-family: var(--bs-body-font-family);
+  font-family: Aptos;
   font-size: var(--bs-body-font-size);
   font-weight: var(--bs-body-font-weight);
   line-height: var(--bs-body-line-height);
@@ -12023,4 +12023,8 @@ svg {
     transform: translate(0, 0);
     opacity: 0;
   }
+}
+
+input[type="text"]::placeholder {
+  color: #605858 !important;
 }
