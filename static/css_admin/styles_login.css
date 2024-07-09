@@ -12028,3 +12028,6 @@ svg {
 input[type="text"]::placeholder {
   color: #605858 !important;
 }
+input[type="password"]::placeholder {
+  color: #605858 !important;
+}
