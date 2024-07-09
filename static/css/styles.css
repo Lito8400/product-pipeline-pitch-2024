@@ -3792,7 +3792,7 @@ textarea.form-control-lg {
 .navbar > .container-xl,
 .navbar > .container-xxl {
   display: flex;
-  /* flex-wrap: inherit; */
+  flex-wrap: inherit;
   align-items: center;
   justify-content: space-between;
 }
@@ -8353,7 +8353,7 @@ textarea.form-control-lg {
 
 .bg-custom {
   --bs-bg-opacity: 1;
-  background-color: rgba(0,0,0,.2) !important;
+  background-color: rgba(0,0,0,.6) !important;
   padding: unset;
 }
 

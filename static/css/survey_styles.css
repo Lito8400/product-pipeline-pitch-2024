@@ -39,6 +39,14 @@ body {
     .custom-padding {
         padding: unset !important;
     }
+
+    .display-6{
+        font-size: x-large !important;
+    }
+
+    .img-fluid{
+        height: 70px !important;
+    }
 }
 
 .container {
@@ -85,7 +93,7 @@ input[type="submit"] {
     width: 100%;
     padding: 10px;
     margin-top: 15px;
-    background-color: #7BDCB5;
+    background-color: #ff530891;
     color: #ffffff;
     border: none;
     border-radius: 5px;

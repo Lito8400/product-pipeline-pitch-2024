@@ -674,7 +674,7 @@ def rank_chart_data():
         labels = [product['product_name'] for product in df_measure_survey]
         values = [round(product['Rating'], 1)  for product in df_measure_survey]
 
-        data = {'labels': labels[:25], 'values': values[:25]}
+        data = {'labels': labels[:10], 'values': values[:10]}
     else:
         data = {'labels': [], 'values': []}
     
@@ -689,7 +689,7 @@ def weighted_rank_chart_data():
         labels = [product['product_name'] for product in df_measure_survey]
         values = [round(product['WRating'],1) for product in df_measure_survey]
 
-        data = {'labels': labels[:25], 'values': values[:25]}
+        data = {'labels': labels[:10], 'values': values[:10]}
     else:
         data = {'labels': [], 'values': []}
     
@@ -704,7 +704,7 @@ def participation_chart_data():
         labels = [product['product_name'] for product in df_measure_survey]
         values = [round(product['Participation'],1) for product in df_measure_survey]
 
-        data = {'labels': labels[:25], 'values': values[:25]}
+        data = {'labels': labels[:10], 'values': values[:10]}
     else:
         data = {'labels': [], 'values': []}
     
@@ -719,7 +719,7 @@ def interested_chart_data():
         labels = [product['product_name'] for product in df_measure_survey]
         values = [round(product['Average_interested_lanched'],1) for product in df_measure_survey]
 
-        data = {'labels': labels[:25], 'values': values[:25]}
+        data = {'labels': labels[:10], 'values': values[:10]}
     else:
         data = {'labels': [], 'values': []}
     
@@ -734,7 +734,7 @@ def market_chart_data():
         labels = [product['product_name'] for product in df_measure_survey]
         values = [round(product['Average_path_to_market'],1) for product in df_measure_survey]
 
-        data = {'labels': labels[:25], 'values': values[:25]}
+        data = {'labels': labels[:10], 'values': values[:10]}
     else:
         data = {'labels': [], 'values': []}
     
@@ -749,7 +749,7 @@ def pull_chart_data():
         labels = [product['product_name'] for product in df_measure_survey]
         values = [round(product['Average_pull_sales'],1) for product in df_measure_survey]
 
-        data = {'labels': labels[:25], 'values': values[:25]}
+        data = {'labels': labels[:10], 'values': values[:10]}
     else:
         data = {'labels': [], 'values': []}
     
