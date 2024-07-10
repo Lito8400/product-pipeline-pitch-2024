@@ -640,9 +640,6 @@ def delete_user(username):
     
     for survey in user.surveys:
         db.session.delete(survey)
-
-    if user.is_authenticated:
-        logout_user()
     
     db.session.delete(user)
     db.session.commit()
