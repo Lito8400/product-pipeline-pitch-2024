@@ -55,14 +55,16 @@ fetch('/admin/pull-sales-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: pu_colorfont
+                  fontColor: pu_colorfont,
+                  fontFamily: 'Aptos',
                 }
               }],
               yAxes: [{
                 ticks: {
                   min: 0,
                   max: 6,
-                  fontColor: pu_colorfont
+                  fontColor: pu_colorfont,
+                  fontFamily: 'Aptos',
                 },
                 gridLines: {
                   // color: 'rgb(59,69,67)',
@@ -83,7 +85,7 @@ fetch('/admin/pull-sales-chart')
               "onComplete": function() {
                 var chartInstance = this.chart
                 ctx = chartInstance.ctx;
-                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, 'Aptos');
                 ctx.fillStyle = this.chart.config.options.defaultFontColor;
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'bottom';
@@ -154,14 +156,16 @@ fetch('/admin/pull-sales-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: pu_colorfont 
+                  fontColor: pu_colorfont,
+                  fontFamily: 'Aptos',
                 }
               }],
               yAxes: [{
                 ticks: {
                   min: 0,
                   max: 6,
-                  fontColor: pu_colorfont 
+                  fontColor: pu_colorfont,
+                  fontFamily: 'Aptos',
                 },
                 gridLines: {
                   // color: 'rgb(59,69,67)',
@@ -182,7 +186,7 @@ fetch('/admin/pull-sales-chart')
               "onComplete": function() {
                 var chartInstance = this.chart
                 ctx = chartInstance.ctx;
-                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, 'Aptos',);
                 ctx.fillStyle = this.chart.config.options.defaultFontColor;
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'bottom';

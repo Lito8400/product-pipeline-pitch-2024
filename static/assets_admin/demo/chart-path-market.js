@@ -55,14 +55,16 @@ fetch('/admin/path-to-market-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: pa_colorfont 
+                  fontColor: pa_colorfont,
+                  fontFamily: 'Aptos',
                 }
               }],
               yAxes: [{
                 ticks: {
                   min: 0,
                   max: 6,
-                  fontColor: pa_colorfont 
+                  fontColor: pa_colorfont,
+                  fontFamily: 'Aptos',
                 },
                 gridLines: {
                   // color: 'rgb(59,69,67)',
@@ -84,7 +86,7 @@ fetch('/admin/path-to-market-chart')
               "onComplete": function() {
                 var chartInstance = this.chart
                 ctx = chartInstance.ctx;
-                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, 'Aptos');
                 ctx.fillStyle = this.chart.config.options.defaultFontColor;
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'bottom';
@@ -156,14 +158,16 @@ fetch('/admin/path-to-market-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: pa_colorfont,
+                  fontFamily: 'Aptos',
                 }
               }],
               yAxes: [{
                 ticks: {
                   min: 0,
                   max: 6,
-                  fontColor: 'rgb(221, 221, 221)' 
+                  fontColor: pa_colorfont,
+                  fontFamily: 'Aptos',
                 },
                 gridLines: {
                   // color: 'rgb(59,69,67)',
@@ -175,16 +179,16 @@ fetch('/admin/path-to-market-chart')
             legend: {
               display: false,
               labels: {
-                fontColor: 'rgb(221, 221, 221)' 
+                fontColor: pa_colorfont 
               }
             },
-            "defaultFontColor": 'rgb(221, 221, 221)',
+            "defaultFontColor": pa_colorfont,
             "animation": {
               "duration": 1,
               "onComplete": function() {
                 var chartInstance = this.chart
                 ctx = chartInstance.ctx;
-                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, 'Aptos');
                 ctx.fillStyle = this.chart.config.options.defaultFontColor;
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'bottom';

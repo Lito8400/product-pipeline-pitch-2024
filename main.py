@@ -22,8 +22,10 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_name):
-    # user_get = db.session.execute(db.select(User).where(User.user_name == user_name)).scalar()
-    # if not user_get
+    user_get = db.session.execute(db.select(User).where(User.user_name == user_name)).scalar()
+    if not user_get:
+        session.pop('_user_id', None)
+        session.pop('csrf_token', None)
     return db.get_or_404(User, user_name)
 
 # CREATE DATABASE
@@ -101,11 +103,14 @@ def index():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_user_def'))
-    else:
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_user_def'))
+        else:
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
 
     query = request.args.get('query').lower()
     filtered_products = Product.query.filter(Product.name.ilike(f'%{query}%')).all()
@@ -155,18 +160,21 @@ def lock_unlock():
 
 @app.route('/login-user', methods=["GET", "POST"])
 def login_user_def():
-    if current_user.is_authenticated:
-        if check_lock_login_user:
-            if current_user.user_name == 'admin':
-                return redirect(url_for('index'))
+    try:
+        if current_user.is_authenticated:
+            if check_lock_login_user:
+                if current_user.user_name == 'admin':
+                    return redirect(url_for('index'))
+                else:
+                    return redirect(url_for('logout'))
             else:
-                return redirect(url_for('logout'))
+                return redirect(url_for('index'))
         else:
-            return redirect(url_for('index'))
-    else:
-        if check_lock_login_user:
-            return redirect(url_for('login_admin'))
-    
+            if check_lock_login_user:
+                return redirect(url_for('login_admin'))
+    except:
+        return render_template("login_user.html")
+
     if request.method == "POST":
         l_user = request.form.get('inputUser')
         # result = db.session.execute(db.select(User).where(func.lower(User.user_name) == l_user.lower()))
@@ -231,12 +239,15 @@ def logout():
 # Survey ------------------------------------------------------
 @app.route('/survey/<survey_id>', methods=['GET', 'POST'])
 def survey(survey_id):
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_user_def'))
-    else:
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
-        
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_user_def'))
+        else:
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
+    
     # user_id = session.get('user_id')
     # survey = db.session.execute(db.select(Product).where(Product.id == survey_id)).scalar()
     survey = db.session.execute(db.select(Product).where(Product.id == survey_id)).scalar()
@@ -333,13 +344,16 @@ def measure_survey():
 # Admin web ------------------------------------------
 @app.route('/admin')
 def admin():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_admin'))
-    else:
-        if current_user.user_name != 'admin':
-            return redirect(url_for('index'))
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin'))
+        else:
+            if current_user.user_name != 'admin':
+                return redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
     
     df_measure_survey = db.session.execute(db.select(Survey)).all()
     total_surveys = len(df_measure_survey)
@@ -405,14 +419,17 @@ def extract_number(product):
 
 @app.route('/admin/measure_concepts')
 def measure_concepts_table():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_admin'))
-    else:
-        if current_user.user_name != 'admin':
-            return redirect(url_for('index'))
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
-    
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin'))
+        else:
+            if current_user.user_name != 'admin':
+                return redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
+        
     df_measure_survey = measure_survey()
 
     df_measure = db.session.execute(db.select(Survey)).all()
@@ -426,14 +443,17 @@ def measure_concepts_table():
 # Product Table ------------------------------------------
 @app.route('/admin/product')
 def product_table():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_admin'))
-    else:
-        if current_user.user_name != 'admin':
-            return redirect(url_for('index'))
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
-    
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin'))
+        else:
+            if current_user.user_name != 'admin':
+                return redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
+        
     product_all = db.session.execute(db.select(Product)).scalars()
     
     product_list = list(product_all)
@@ -451,14 +471,17 @@ def product_table():
 # Add Product------------------------------------------
 @app.route('/admin/add_product', methods=['GET', 'POST'])
 def add_product():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_admin')) 
-    else:
-        if current_user.user_name != 'admin':
-            redirect(url_for('index'))
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
-    
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin')) 
+        else:
+            if current_user.user_name != 'admin':
+                redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
+        
     if request.method == 'POST':
         name = request.form.get('name')
         description = request.form.get('description')
@@ -470,14 +493,17 @@ def add_product():
 
 @app.route('/admin/edit_product', methods=['GET', 'POST'])
 def edit_product():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_admin'))
-    else:
-        if current_user.user_name != 'admin':
-            return redirect(url_for('index'))
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
-    
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin'))
+        else:
+            if current_user.user_name != 'admin':
+                return redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
+        
     if request.method == 'POST':
         product_id = request.form['id']
         product = db.session.execute(db.select(Product).where(Product.id == product_id)).scalar()
@@ -489,13 +515,16 @@ def edit_product():
 
 @app.route('/admin/delete_product/<int:id>')
 def delete_product(id):
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_admin'))
-    else:
-        if current_user.user_name != 'admin':
-            return redirect(url_for('index'))
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin'))
+        else:
+            if current_user.user_name != 'admin':
+                return redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
     
     product = db.session.execute(db.select(Product).where(Product.id == id)).scalar()
     db.session.delete(product)
@@ -504,14 +533,17 @@ def delete_product(id):
 
 @app.route('/admin/delete_all_product')
 def delete_all_product():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_admin'))
-    else:
-        if current_user.user_name != 'admin':
-            return redirect(url_for('index'))
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
-
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin'))
+        else:
+            if current_user.user_name != 'admin':
+                return redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
+    
     product = db.session.execute(db.select(Product)).scalars()
     for survey in product:
         db.session.delete(survey)
@@ -521,14 +553,17 @@ def delete_all_product():
 # survey Table ------------------------------------------
 @app.route('/admin/survey')
 def survey_table():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_admin'))
-    else:
-        if current_user.user_name != 'admin':
-            return redirect(url_for('index'))
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
-
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin'))
+        else:
+            if current_user.user_name != 'admin':
+                return redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
+    
     survey_all = db.session.execute(db.select(Survey)).scalars()
     
     df_measure_survey = db.session.execute(db.select(Survey)).all()
@@ -542,14 +577,17 @@ def survey_table():
 # survey Table ------------------------------------------
 @app.route('/admin/user-completed-survey')
 def user_completed_table():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_admin'))
-    else:
-        if current_user.user_name != 'admin':
-            return redirect(url_for('index'))
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
-
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin'))
+        else:
+            if current_user.user_name != 'admin':
+                return redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
+    
     user_completed_all = db.session.execute(db.select(User)).scalars()
 
     df_measure_survey = db.session.execute(db.select(Survey)).all()
@@ -562,13 +600,16 @@ def user_completed_table():
 
 @app.route('/admin/add_user', methods=['GET', 'POST'])
 def add_user():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_admin'))
-    else:
-        if current_user.user_name != 'admin':
-            return redirect(url_for('index'))
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin'))
+        else:
+            if current_user.user_name != 'admin':
+                return redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
     
     if request.method == "POST":
         l_user = request.form.get('userName')
@@ -585,14 +626,17 @@ def add_user():
 
 @app.route('/admin/edit_user', methods=['GET', 'POST'])
 def edit_user():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_admin'))
-    else:
-        if current_user.user_name != 'admin':
-            return redirect(url_for('index'))
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
-    
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin'))
+        else:
+            if current_user.user_name != 'admin':
+                return redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
+
     if request.method == 'POST':
         user_id = request.form['id']
         
@@ -626,15 +670,18 @@ def edit_user():
 
 @app.route('/admin/delete_user/<username>')
 def delete_user(username):
-    if username == 'admin':
-        return redirect(url_for('user_completed_table'))
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_admin'))
-    else:
-        if current_user.user_name != 'admin':
-            return redirect(url_for('index'))
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
+    try:
+        if username == 'admin':
+            return redirect(url_for('user_completed_table'))
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin'))
+        else:
+            if current_user.user_name != 'admin':
+                return redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
 
     user = db.session.execute(db.select(User).where(User.user_name == username)).scalar()
     
@@ -647,13 +694,16 @@ def delete_user(username):
 
 @app.route('/admin/delete_all_users')
 def delete_all_users():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login_admin'))
-    else:
-        if current_user.user_name != 'admin':
-            redirect(url_for('index'))
-        if check_lock_login_user and current_user.user_name != 'admin':
-            return redirect(url_for('logout'))
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin'))
+        else:
+            if current_user.user_name != 'admin':
+                redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
 
     users = db.session.execute(db.select(User).where(User.user_name != 'admin')).scalars()
     for user in users:

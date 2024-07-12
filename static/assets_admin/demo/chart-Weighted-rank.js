@@ -60,7 +60,8 @@ fetch('/admin/weighted-rank-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: w_colorfont
+                  fontColor: w_colorfont,
+                  fontFamily: 'Aptos',
                 }
               }],
               
@@ -68,7 +69,8 @@ fetch('/admin/weighted-rank-chart')
                 ticks: {
                   min: 0,
                   max: 6,
-                  fontColor: w_colorfont
+                  fontColor: w_colorfont,
+                  fontFamily: 'Aptos',
                 },
                 gridLines: {
                   // color: 'rgb(134, 145, 148)',
@@ -88,7 +90,7 @@ fetch('/admin/weighted-rank-chart')
               "onComplete": function() {
                 var chartInstance = this.chart
                 ctx = chartInstance.ctx;
-                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, 'Aptos');
                 ctx.fillStyle = this.chart.config.options.defaultFontColor;
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'bottom';
@@ -159,7 +161,8 @@ fetch('/admin/weighted-rank-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: w_colorfont
+                  fontColor: w_colorfont,
+                  fontFamily: 'Aptos',
                 }
               }],
               
@@ -167,7 +170,8 @@ fetch('/admin/weighted-rank-chart')
                 ticks: {
                   min: 0,
                   max: 6,
-                  fontColor: w_colorfont
+                  fontColor: w_colorfont,
+                  fontFamily: 'Aptos',
                 },
                 gridLines: {
                   // color: 'rgb(134, 145, 148)',
@@ -187,7 +191,7 @@ fetch('/admin/weighted-rank-chart')
               "onComplete": function() {
                 var chartInstance = this.chart
                 ctx = chartInstance.ctx;
-                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, 'Aptos');
                 ctx.fillStyle = this.chart.config.options.defaultFontColor;
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'bottom';

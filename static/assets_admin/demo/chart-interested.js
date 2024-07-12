@@ -57,14 +57,16 @@ fetch('/admin/interested-lanched-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: i_colorfont 
+                  fontColor: i_colorfont,
+                  fontFamily: 'Aptos',
                 }
               }],
               yAxes: [{
                 ticks: {
                   min: 0,
                   max: 6,
-                  fontColor: i_colorfont 
+                  fontColor: i_colorfont,
+                  fontFamily: 'Aptos',
                 },
                 gridLines: {
                   // color: 'rgb(59,69,67)',
@@ -85,7 +87,7 @@ fetch('/admin/interested-lanched-chart')
               "onComplete": function() {
                 var chartInstance = this.chart
                 ctx = chartInstance.ctx;
-                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, 'Aptos');
                 ctx.fillStyle = this.chart.config.options.defaultFontColor;
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'bottom';
@@ -156,14 +158,16 @@ fetch('/admin/interested-lanched-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: i_colorfont // Màu font của trục x
+                  fontColor: i_colorfont,
+                  fontFamily: 'Aptos',
                 }
               }],
               yAxes: [{
                 ticks: {
                   min: 0,
                   max: 6,
-                  fontColor: i_colorfont 
+                  fontColor: i_colorfont,
+                  fontFamily: 'Aptos',
                 },
                 gridLines: {
                   // color: 'rgb(59,69,67)',
@@ -184,7 +188,7 @@ fetch('/admin/interested-lanched-chart')
               "onComplete": function() {
                 var chartInstance = this.chart
                 ctx = chartInstance.ctx;
-                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, 'Aptos');
                 ctx.fillStyle = this.chart.config.options.defaultFontColor;
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'bottom';

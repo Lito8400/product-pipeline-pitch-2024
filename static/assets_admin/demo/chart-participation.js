@@ -62,7 +62,8 @@ fetch('/admin/participation-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: p_colorfont 
+                  fontColor: p_colorfont,
+                  fontFamily: 'Aptos',
                 }
               }],
               
@@ -70,7 +71,8 @@ fetch('/admin/participation-chart')
                 ticks: {
                   min: 0,
                   max: maxValue,
-                  fontColor: p_colorfont 
+                  fontColor: p_colorfont,
+                  fontFamily: 'Aptos',
                 },
                 gridLines: {
                   // color: 'rgb(59,69,67)',
@@ -92,7 +94,7 @@ fetch('/admin/participation-chart')
               "onComplete": function() {
                 var chartInstance = this.chart
                 ctx = chartInstance.ctx;
-                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, 'Aptos');
                 ctx.fillStyle = this.chart.config.options.defaultFontColor;
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'bottom';
@@ -165,7 +167,8 @@ fetch('/admin/participation-chart')
                   display: false
                 },
                 ticks: {
-                  fontColor: p_colorfont 
+                  fontColor: p_colorfont,
+                  fontFamily: 'Aptos',
                 }
               }],
               
@@ -173,7 +176,8 @@ fetch('/admin/participation-chart')
                 ticks: {
                   min: 0,
                   max: maxValue,
-                  fontColor: p_colorfont 
+                  fontColor: p_colorfont,
+                  fontFamily: 'Aptos',
                 },
                 gridLines: {
                   // color: 'rgb(59,69,67)',
@@ -195,7 +199,7 @@ fetch('/admin/participation-chart')
               "onComplete": function() {
                 var chartInstance = this.chart
                 ctx = chartInstance.ctx;
-                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, 'Aptos');
                 ctx.fillStyle = this.chart.config.options.defaultFontColor;
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'bottom';
