@@ -78,11 +78,12 @@
                                         {% for user in user_completed %}
                                             <tr>
                                                 <td>{{ user.user_name }}</td>
-                                                <td style="text-align: center; vertical-align: middle;">{{ user.surveys | length }}</td>
                                                 {% if user.user_name == 'admin' %}
                                                 <td></td>
                                                 <td></td>
+                                                <td></td>
                                                 {% else %}
+                                                <td style="text-align: center; vertical-align: middle;">{{ user.surveys | length }}</td>
                                                 <td>
                                                     <a href="#" class="shadow-sm" data-bs-toggle="modal" data-bs-target="#editUserModal" onclick="openEditUserModal('{{ user.user_name }}')">Edit</a>
                                                 </td>
