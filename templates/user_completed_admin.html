@@ -68,7 +68,8 @@
                                 <table class="table datatable table-striped table-hover" id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>User ID</th>
+                                            <th>User Name</th>
+                                            <th style="text-align: center; vertical-align: middle;">Surveys</th>
                                             <th></th>
                                             <th></th>
                                         </tr>
@@ -77,6 +78,7 @@
                                         {% for user in user_completed %}
                                             <tr>
                                                 <td>{{ user.user_name }}</td>
+                                                <td style="text-align: center; vertical-align: middle;">{{ user.surveys | length }}</td>
                                                 {% if user.user_name == 'admin' %}
                                                 <td></td>
                                                 <td></td>

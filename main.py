@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user, user_loaded_from_request
 from flask_socketio import SocketIO
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, joinedload
 from sqlalchemy import Integer, String, Float, Boolean, ForeignKey, func, asc
 from werkzeug.security import generate_password_hash, check_password_hash
 # from openai import OpenAI
@@ -382,14 +382,14 @@ def generate_report():
 
     products_df = pd.DataFrame([{
         'ID': product.id, 
-        'Name': product.name, 
+        'Concept Name': product.name, 
         'Description': product.description
     } for product in product_all])
 
     surveys_df = pd.DataFrame([{
         'ID': survey.id, 
         'Concept Name': survey.product.name, 
-        'User ID': survey.user_id, 
+        'User Name': survey.user_id, 
         'Interested Lanched': survey.interested_lanched, 
         'Path to Market': survey.path_to_market, 
         'Pull Sales': survey.pull_sales, 
@@ -397,7 +397,8 @@ def generate_report():
     } for survey in survey_all])
 
     users_df = pd.DataFrame([{
-        'User ID': user.user_name,
+        'User Name': user.user_name,
+        'Surveys': len(user.surveys),
     } for user in user_surveys])
     
     # Create an Excel file in memory with three sheets
@@ -588,8 +589,8 @@ def user_completed_table():
     except:
         return render_template("login_user.html")
     
-    user_completed_all = db.session.execute(db.select(User)).scalars()
-
+    user_completed_all = db.session.query(User).options(joinedload(User.surveys)).all()
+    
     df_measure_survey = db.session.execute(db.select(Survey)).all()
     total_surveys = len(df_measure_survey)
     total_user = 0
