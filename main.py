@@ -32,6 +32,12 @@ def load_user(user_name):
 class Base(DeclarativeBase):
     pass
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI", "sqlite:///serveys.db")
+# app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+#     'pool_size': 50,
+#     'pool_recycle': 1800,
+#     'pool_timeout': 60,
+#     'max_overflow': 100,
+# }
 
 # Create the extension
 db = SQLAlchemy(model_class=Base)
@@ -89,7 +95,7 @@ def index():
         return render_template("login_user.html")
 
     # user_completed_survey = db.session.execute(db.select(UserCompletedSurvey).where(UserCompletedSurvey.user_id == current_user.user_name)).scalars()
-    user_get = db.session.execute(db.select(User).where(User.user_name == current_user.user_name)).scalar()
+    user_get =  db.session.query(User).options(joinedload(User.surveys)).filter_by(user_name=current_user.user_name).first()
     user_completed_survey = [survey.product_id for survey in user_get.surveys]
     surveyed_count = len(user_completed_survey)
     
@@ -119,7 +125,7 @@ def search():
 
     product_list.sort(key=extract_number)
 
-    user_get = db.session.execute(db.select(User).where(User.user_name == current_user.user_name)).scalar()
+    user_get = db.session.query(User).options(joinedload(User.surveys)).filter_by(user_name=current_user.user_name).first()
     user_completed_survey = [survey.product_id for survey in user_get.surveys]
     surveyed_count = len(user_completed_survey)
 
@@ -250,12 +256,12 @@ def survey(survey_id):
     
     # user_id = session.get('user_id')
     # survey = db.session.execute(db.select(Product).where(Product.id == survey_id)).scalar()
-    survey = db.session.execute(db.select(Product).where(Product.id == survey_id)).scalar()
+    survey = db.session.query(Product).filter_by(id=survey_id).first()
     # survey = surveys.get(survey_id)
     if not survey:
         return redirect(url_for('index'))
     
-    user_get = db.session.execute(db.select(User).where(User.user_name == current_user.user_name)).scalar()
+    user_get = db.session.query(User).options(joinedload(User.surveys)).filter_by(user_name=current_user.user_name).first()
     user_completed_survey = [survey.product_id for survey in user_get.surveys]
     surveyed_count = len(user_completed_survey)
 
@@ -266,26 +272,22 @@ def survey(survey_id):
         pull_sale = int(request.form['pullsales'])
         comment = request.form['comment']
 
-        new_survey = Survey(product_id=survey_id, user_id=current_user.user_name, interested_lanched=interested_lanch, path_to_market=path_to_mar, pull_sales=pull_sale, comments=comment)
+        new_survey = Survey(product_id = survey_id, 
+                            user_id = current_user.user_name, 
+                            interested_lanched = interested_lanch, 
+                            path_to_market = path_to_mar, 
+                            pull_sales = pull_sale, 
+                            comments = comment)
         db.session.add(new_survey)
         db.session.commit()
 
-        socketio.emit('update_interested_lanched_chart')
-        socketio.emit('update_participation_chart')
-        socketio.emit('update_path_to_market_chart')
-        socketio.emit('update_pull_sales_chart')
-        socketio.emit('update_rank_chart')
-        socketio.emit('update_weighted_rank_chart')
+        socketio.emit('update_dashboard_charts')
         
         df_measure_survey = measure_survey()
-
         socketio.emit('update_measure_concepts', df_measure_survey)
 
-        df_measure_survey = db.session.execute(db.select(Survey)).all()
-        total_surveys = len(df_measure_survey)
-        total_user = 0
-        user_surveys = db.session.execute(db.select(User)).all()
-        total_user = len(user_surveys)
+        total_surveys = db.session.query(Survey).count()
+        total_user = db.session.query(User).count()
 
         socketio.emit('update_total_user', total_user)
         socketio.emit('update_total_survey', total_surveys)
@@ -355,11 +357,8 @@ def admin():
     except:
         return render_template("login_user.html")
     
-    df_measure_survey = db.session.execute(db.select(Survey)).all()
-    total_surveys = len(df_measure_survey)
-    total_user = 0
-    user_surveys = db.session.execute(db.select(User)).all()
-    total_user = len(user_surveys)
+    total_surveys = db.session.query(Survey).count()
+    total_user = db.session.query(User).count()
     
     # print(df_measure_survey)
     return render_template('index_admin.html', total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
@@ -433,11 +432,8 @@ def measure_concepts_table():
         
     df_measure_survey = measure_survey()
 
-    df_measure = db.session.execute(db.select(Survey)).all()
-    total_surveys = len(df_measure)
-    total_user = 0
-    user_surveys = db.session.execute(db.select(User)).all()
-    total_user = len(user_surveys)
+    total_surveys = db.session.query(Survey).count()
+    total_user = db.session.query(User).count()
 
     return render_template('measure_concepts_admin.html', measure_survey = df_measure_survey, total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
 
@@ -461,11 +457,8 @@ def product_table():
 
     product_list.sort(key=extract_number)
 
-    df_measure_survey = db.session.execute(db.select(Survey)).all()
-    total_surveys = len(df_measure_survey)
-    total_user = 0
-    user_surveys = db.session.execute(db.select(User)).all()
-    total_user = len(user_surveys)
+    total_surveys = db.session.query(Survey).count()
+    total_user = db.session.query(User).count()
 
     return render_template('product_admin.html', products = product_list, total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
 
@@ -567,11 +560,8 @@ def survey_table():
     
     survey_all = db.session.execute(db.select(Survey)).scalars()
     
-    df_measure_survey = db.session.execute(db.select(Survey)).all()
-    total_surveys = len(df_measure_survey)
-    total_user = 0
-    user_surveys = db.session.execute(db.select(User)).all()
-    total_user = len(user_surveys)
+    total_surveys = db.session.query(Survey).count()
+    total_user = db.session.query(User).count()
 
     return render_template('survey_admin.html', surveys = survey_all, total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
 
@@ -591,11 +581,8 @@ def user_completed_table():
     
     user_completed_all = db.session.query(User).options(joinedload(User.surveys)).all()
     
-    df_measure_survey = db.session.execute(db.select(Survey)).all()
-    total_surveys = len(df_measure_survey)
-    total_user = 0
-    user_surveys = db.session.execute(db.select(User)).all()
-    total_user = len(user_surveys)
+    total_surveys = db.session.query(Survey).count()
+    total_user = db.session.query(User).count()
 
     return render_template('user_completed_admin.html', user_completed = user_completed_all,  total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
 
@@ -713,6 +700,59 @@ def delete_all_users():
     return redirect(url_for('user_completed_table'))
 
 # Product Bizarre 2024 Rank Chart ------------------------------------------
+@app.route('/admin/dashboard-charts')
+def dashboard_chart_data():
+    df_measure_survey = measure_survey()
+    if len(df_measure_survey) > 0:
+        #---------------------------
+        df_rank_chart = sorted(df_measure_survey, key=lambda entry: entry['Rating'], reverse=True)
+        # labels = df_measure_survey['product_name'].tolist()
+        rank_chart_labels = [product['product_name'] for product in df_rank_chart]
+        rank_chart_values = [round(product['Rating'], 2)  for product in df_rank_chart]
+
+        #---------------------------
+        df_weighted_rank_chart = sorted(df_measure_survey, key=lambda entry: entry['WRating'], reverse=True)
+        weighted_rank_chart_labels = [product['product_name'] for product in df_weighted_rank_chart]
+        weighted_rank_chart_values = [round(product['WRating'],2) for product in df_weighted_rank_chart]
+
+        #---------------------------
+        df_participation_chart = sorted(df_measure_survey, key=lambda entry: entry['Participation'], reverse=True)
+        participation_chart_labels = [product['product_name'] for product in df_participation_chart]
+        participation_chart_values = [round(product['Participation'],0) for product in df_participation_chart]
+
+        #---------------------------
+        df_interested_chart = sorted(df_measure_survey, key=lambda entry: entry['Average_interested_lanched'], reverse=True)
+        interested_chart_labels = [product['product_name'] for product in df_interested_chart]
+        interested_chart_values = [round(product['Average_interested_lanched'],2) for product in df_interested_chart]
+        
+        #---------------------------
+        df_market_chart = sorted(df_measure_survey, key=lambda entry: entry['Average_path_to_market'], reverse=True)
+        market_chart_labels = [product['product_name'] for product in df_market_chart]
+        market_chart_values = [round(product['Average_path_to_market'],2) for product in df_market_chart]
+
+        #---------------------------
+        df_pull_chart = sorted(df_measure_survey, key=lambda entry: entry['Average_pull_sales'], reverse=True)
+        pull_chart_labels = [product['product_name'] for product in df_pull_chart]
+        pull_chart_values = [round(product['Average_pull_sales'],2) for product in df_pull_chart]
+
+        data = {'rankchartlabels': rank_chart_labels[:10], 'rankchartvalues': rank_chart_values[:10],
+                'weightedrankchartlabels': weighted_rank_chart_labels[:10], 'weightedrankchartvalues': weighted_rank_chart_values[:10],
+                'participationchartlabels': participation_chart_labels[:10], 'participationchartvalues': participation_chart_values[:10],
+                'interestedchartlabels': interested_chart_labels[:10], 'interestedchartvalues': interested_chart_values[:10],
+                'marketchartlabels': market_chart_labels[:10], 'marketchartvalues': market_chart_values[:10],
+                'pullchartlabels': pull_chart_labels[:10], 'pullchartvalues': pull_chart_values[:10],
+                }
+    else:
+       data = {'rankchartlabels': [], 'rankchartvalues': [],
+                'weightedrankchartlabels': [], 'weightedrankchartvalues': [],
+                'participationchartlabels': [], 'participationchartvalues': [],
+                'interestedchartlabels': [], 'interestedchartvalues': [],
+                'marketchartlabels': [], 'marketchartvalues': [],
+                'pullchartlabels': [], 'pullchartvalues': [],
+                }
+    
+    return jsonify(data)
+
 @app.route('/admin/rank-chart')
 def rank_chart_data():
     df_measure_survey = measure_survey()
@@ -720,8 +760,8 @@ def rank_chart_data():
         df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Rating'], reverse=True)
         # labels = df_measure_survey['product_name'].tolist()
         labels = [product['product_name'] for product in df_measure_survey]
-        values = [round(product['Rating'], 1)  for product in df_measure_survey]
-
+        values = [round(product['Rating'], 2)  for product in df_measure_survey]
+    
         data = {'labels': labels[:10], 'values': values[:10]}
     else:
         data = {'labels': [], 'values': []}
@@ -735,7 +775,7 @@ def weighted_rank_chart_data():
         df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['WRating'], reverse=True)
         # labels = df_measure_survey['product_name'].tolist()
         labels = [product['product_name'] for product in df_measure_survey]
-        values = [round(product['WRating'],1) for product in df_measure_survey]
+        values = [round(product['WRating'],2) for product in df_measure_survey]
 
         data = {'labels': labels[:10], 'values': values[:10]}
     else:
@@ -750,7 +790,7 @@ def participation_chart_data():
     if len(df_measure_survey) > 0:
         df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Participation'], reverse=True)
         labels = [product['product_name'] for product in df_measure_survey]
-        values = [round(product['Participation'],1) for product in df_measure_survey]
+        values = [round(product['Participation'],0) for product in df_measure_survey]
 
         data = {'labels': labels[:10], 'values': values[:10]}
     else:
@@ -765,7 +805,7 @@ def interested_chart_data():
     if len(df_measure_survey) > 0:
         df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Average_interested_lanched'], reverse=True)
         labels = [product['product_name'] for product in df_measure_survey]
-        values = [round(product['Average_interested_lanched'],1) for product in df_measure_survey]
+        values = [round(product['Average_interested_lanched'],2) for product in df_measure_survey]
 
         data = {'labels': labels[:10], 'values': values[:10]}
     else:
@@ -780,7 +820,7 @@ def market_chart_data():
     if len(df_measure_survey) > 0:
         df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Average_path_to_market'], reverse=True)
         labels = [product['product_name'] for product in df_measure_survey]
-        values = [round(product['Average_path_to_market'],1) for product in df_measure_survey]
+        values = [round(product['Average_path_to_market'],2) for product in df_measure_survey]
 
         data = {'labels': labels[:10], 'values': values[:10]}
     else:
@@ -795,7 +835,7 @@ def pull_chart_data():
     if len(df_measure_survey) > 0:
         df_measure_survey = sorted(df_measure_survey, key=lambda entry: entry['Average_pull_sales'], reverse=True)
         labels = [product['product_name'] for product in df_measure_survey]
-        values = [round(product['Average_pull_sales'],1) for product in df_measure_survey]
+        values = [round(product['Average_pull_sales'],2) for product in df_measure_survey]
 
         data = {'labels': labels[:10], 'values': values[:10]}
     else:

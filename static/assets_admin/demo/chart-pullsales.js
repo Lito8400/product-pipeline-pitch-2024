@@ -79,6 +79,9 @@ fetch('/admin/pull-sales-chart')
                 fontColor: pu_colorfont 
               }
             },
+            tooltips: {
+              enabled: false
+            },
             "defaultFontColor": pu_colorfont,
             "animation": {
               "duration": 1,
@@ -179,6 +182,9 @@ fetch('/admin/pull-sales-chart')
               labels: {
                 fontColor: pu_colorfont 
               }
+            },
+            tooltips: {
+              enabled: false
             },
             "defaultFontColor": pu_colorfont,
             "animation": {

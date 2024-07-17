@@ -1347,3 +1347,13 @@ label {
   --bs-table-hover-color: #4154f1;
   --bs-table-hover-bg: #ff530873;
 }
+
+.loc-img {
+  width: 100px;
+}
+
+@media only screen and (max-width: 480px) {
+  .loc-img {
+    width: 50px;
+  }
+}

@@ -81,6 +81,9 @@ fetch('/admin/interested-lanched-chart')
                 fontColor: i_colorfont 
               }
             },
+            tooltips: {
+              enabled: false
+            },
             "defaultFontColor": i_colorfont,
             "animation": {
               "duration": 1,
@@ -181,6 +184,9 @@ fetch('/admin/interested-lanched-chart')
               labels: {
                 fontColor: i_colorfont 
               }
+            },
+            tooltips: {
+              enabled: false
             },
             "defaultFontColor": i_colorfont,
             "animation": {

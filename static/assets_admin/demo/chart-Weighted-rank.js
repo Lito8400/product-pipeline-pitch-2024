@@ -84,6 +84,9 @@ fetch('/admin/weighted-rank-chart')
                 fontColor: w_colorfont
               }
             },
+            tooltips: {
+              enabled: false
+            },
             "defaultFontColor": w_colorfont,
             "animation": {
               "duration": 1,
@@ -184,6 +187,9 @@ fetch('/admin/weighted-rank-chart')
               labels: {
                 fontColor: w_colorfont
               }
+            },
+            tooltips: {
+              enabled: false
             },
             "defaultFontColor": w_colorfont,
             "animation": {

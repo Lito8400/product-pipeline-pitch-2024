@@ -80,6 +80,9 @@ fetch('/admin/path-to-market-chart')
                 fontColor: pa_colorfont 
               }
             },
+            tooltips: {
+              enabled: false
+            },
             "defaultFontColor": pa_colorfont,
             "animation": {
               "duration": 1,
@@ -181,6 +184,9 @@ fetch('/admin/path-to-market-chart')
               labels: {
                 fontColor: pa_colorfont 
               }
+            },
+            tooltips: {
+              enabled: false
             },
             "defaultFontColor": pa_colorfont,
             "animation": {

@@ -11,7 +11,26 @@ fetch('/admin/participation-chart')
         var canvases = document.querySelectorAll(".ParticipationChart");
         canvases.forEach(canvas => {
         var ctx = canvas.getContext("2d");
-        let maxValue = parseInt(Math.max(...data.values)) + 1;
+        let maxValue = Math.max(...data.values);
+        let stepSize;
+
+        // Xác định stepSize dựa trên maxValue
+        if (maxValue < 10) {
+            stepSize = 1;
+        } else if (maxValue >= 10 && maxValue < 20) {
+            stepSize = 2;
+        } else if (maxValue >= 20 && maxValue < 50) {
+            stepSize = 5;
+        } else if (maxValue >= 50 && maxValue < 100) {
+            stepSize = 10;
+        } else if (maxValue >= 100 && maxValue < 200) {
+            stepSize = 20;
+        } else {
+            stepSize = 50;
+        }
+
+        // Điều chỉnh maxValue để nó là bội số của stepSize và lớn hơn giá trị lớn nhất
+        maxValue = Math.ceil(maxValue / stepSize) * stepSize + stepSize;
         var myLineChart_Participation = new Chart(ctx, {
           type: 'bar',
           data: {
@@ -88,6 +107,9 @@ fetch('/admin/participation-chart')
                 fontColor: p_colorfont 
               }
             },
+            tooltips: {
+              enabled: false 
+            },
             "defaultFontColor": p_colorfont,
             "animation": {
               "duration": 1,
@@ -126,7 +148,26 @@ fetch('/admin/participation-chart')
         //   window.myLineChart_Participation.destroy();
         // }
 
-        let maxValue = parseInt(Math.max(...data.values)) + 1;
+        let maxValue = Math.max(...data.values);
+        let stepSize;
+
+        // Xác định stepSize dựa trên maxValue
+        if (maxValue < 10) {
+            stepSize = 1;
+        } else if (maxValue >= 10 && maxValue < 20) {
+            stepSize = 2;
+        } else if (maxValue >= 20 && maxValue < 50) {
+            stepSize = 5;
+        } else if (maxValue >= 50 && maxValue < 100) {
+            stepSize = 10;
+        } else if (maxValue >= 100 && maxValue < 200) {
+            stepSize = 20;
+        } else {
+            stepSize = 50;
+        }
+
+        // Điều chỉnh maxValue để nó là bội số của stepSize và lớn hơn giá trị lớn nhất
+        maxValue = Math.ceil(maxValue / stepSize) * stepSize + stepSize;
         window.myLineChart_Participation = new Chart(ctx, {
           type: 'bar',
           data: {
@@ -192,6 +233,9 @@ fetch('/admin/participation-chart')
               labels: {
                 fontColor: p_colorfont 
               }
+            },
+            tooltips: {
+              enabled: false
             },
             "defaultFontColor": p_colorfont,
             "animation": {

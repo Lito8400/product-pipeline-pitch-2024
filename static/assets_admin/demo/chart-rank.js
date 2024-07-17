@@ -84,6 +84,9 @@ fetch('/admin/rank-chart')
                 fontColor: colorfont 
               }
             },
+            tooltips: {
+              enabled: false
+            },
             "defaultFontColor": colorfont,
             "animation": {
               "duration": 1,
@@ -184,6 +187,9 @@ fetch('/admin/rank-chart')
               labels: {
                 fontColor: colorfont 
               }
+            },
+            tooltips: {
+              enabled: false
             },
             "defaultFontColor": colorfont,
             "animation": {
