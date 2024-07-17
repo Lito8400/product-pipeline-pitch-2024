@@ -81,7 +81,9 @@
                                                 {% if user.user_name == 'admin' %}
                                                 <td></td>
                                                 <td></td>
-                                                <td></td>
+                                                <td>
+                                                    <a href="#" class="shadow-sm" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" onclick="openDeleteUserModal('{{ user.user_name }}')">Delete Surveys</a>
+                                                </td>
                                                 {% else %}
                                                 <td style="text-align: center; vertical-align: middle;">{{ user.surveys | length }}</td>
                                                 <td>

@@ -660,6 +660,10 @@ def edit_user():
 def delete_user(username):
     try:
         if username == 'admin':
+            user = db.session.execute(db.select(User).where(User.user_name == username)).scalar()
+            for survey in user.surveys:
+                db.session.delete(survey)
+            db.session.commit()
             return redirect(url_for('user_completed_table'))
         if not current_user.is_authenticated:
             return redirect(url_for('login_admin'))
