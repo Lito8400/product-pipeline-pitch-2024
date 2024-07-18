@@ -285,14 +285,7 @@
   datatables.forEach(datatable => {
     new simpleDatatables.DataTable(datatable, {
       perPageSelect: [150, 200, 300, ["All", -1]],
-      columns: [{
-          select: 2,
-          sortSequence: ["desc", "asc"]
-        },
-        {
-          select: 3,
-          sortSequence: ["desc"]
-        },
+      columns: [
         {
           select: 4,
           cellClass: "green",
@@ -402,30 +395,64 @@ function openDeleteAllUserModal() {
 };
 
 var socket = io();
+
 socket.on('update_measure_concepts', function(data) {
   var tableBody = document.getElementById("measureconceptstable");
   var tableBodymodel = document.getElementById("measureconceptstablemodel");
   var tbody = tableBody.querySelector('tbody');
   var tbodymodel = tableBodymodel.querySelector('tbody');
-  tbody.innerHTML = '';
-  tbodymodel.innerHTML ='';
+
+  // Xóa các hàng cũ
+  while (tbody.firstChild) {
+    tbody.removeChild(tbody.firstChild);
+  }
+  while (tbodymodel.firstChild) {
+      tbodymodel.removeChild(tbodymodel.firstChild);
+  }
+
   data.forEach(function(product, index) {
-    var row = `
-                <tr data-index="${index}">
-                    <td>${product.product_name}</td>
-                    <td style="text-align: center; vertical-align: middle;">${product.Rating}</td>
-                    <td style="text-align: center; vertical-align: middle;">${product.WRating}</td>
-                    <td style="text-align: center; vertical-align: middle;">${product.Participation}</td>
-                    <td style="text-align: center; vertical-align: middle;" class="green">${product.Average_interested_lanched}</td>
-                    <td style="text-align: center; vertical-align: middle;">${product.Average_path_to_market}</td>
-                    <td style="text-align: center; vertical-align: middle;">${product.Average_pull_sales}</td>
-                </tr>
-            `;
-      tbody.innerHTML += row;
-      tbodymodel.innerHTML += row;
+    var row = tbody.insertRow();
+    row.dataset.index = index;
+
+    var cell1 = row.insertCell(0);
+    cell1.innerText = product.product_name;
+
+    var cell2 = row.insertCell(1);
+    cell2.style.textAlign = "center";
+    cell2.style.verticalAlign = "middle";
+    cell2.innerText = product.Rating;
+
+    var cell3 = row.insertCell(2);
+    cell3.style.textAlign = "center";
+    cell3.style.verticalAlign = "middle";
+    cell3.innerText = product.WRating;
+
+    var cell4 = row.insertCell(3);
+    cell4.style.textAlign = "center";
+    cell4.style.verticalAlign = "middle";
+    cell4.innerText = product.Participation;
+
+    var cell5 = row.insertCell(4);
+    cell5.style.textAlign = "center";
+    cell5.style.verticalAlign = "middle";
+    cell5.className = "green";
+    cell5.innerText = product.Average_interested_lanched;
+
+    var cell6 = row.insertCell(5);
+    cell6.style.textAlign = "center";
+    cell6.style.verticalAlign = "middle";
+    cell6.innerText = product.Average_path_to_market;
+
+    var cell7 = row.insertCell(6);
+    cell7.style.textAlign = "center";
+    cell7.style.verticalAlign = "middle";
+    cell7.innerText = product.Average_pull_sales;
+
+    // Thêm dòng vào tbodymodel tương tự
+    var rowModel = tbodymodel.insertRow();
+    rowModel.innerHTML = row.innerHTML; // Sao chép nội dung
+    rowModel.dataset.index = index;
   });
-  tableBody.ontimeupdate()
-  tableBodymodel.ontimeupdate()
 });
 
 socket.on('update_total_user', function(data) {

@@ -637,13 +637,15 @@ def edit_user():
         user = db.session.execute(db.select(User).where(User.user_name == user_id)).scalar()
 
         if new_user:
-            survey_ids = [{sur.id for sur in new_user.surveys}]
+            concept_ids = [sur.product_id for sur in user.surveys]
 
-            for survey in user.surveys:
-                if survey.id in survey_ids:
+            for survey in new_user.surveys:
+                if survey.product_id in concept_ids:
                     db.session.delete(survey)
-                else:
-                    survey.user_id = new_user_name
+                    
+            for sur in user.surveys:
+                sur.user_id = new_user_name
+
             db.session.commit()
             db.session.delete(user)
         else:

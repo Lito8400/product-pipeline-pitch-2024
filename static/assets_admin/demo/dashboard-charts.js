@@ -4,30 +4,35 @@ const colorstop2 = 'rgba(143, 162, 162, 0)';
 const colorborder = 'rgba(143, 162, 162, 1)';
 const colorfont = 'rgb(173, 187, 199)';
 
+let rankCharts = [];
+let weightedRankCharts = [];
+let participationCharts = [];
+let interestedLanchedCharts = [];
+let pathMarketCharts = [];
+let pullSalesCharts = [];
+
+function destroyCharts(chartArray) {
+  chartArray.forEach(chart => {
+      if (chart) {
+          chart.destroy();
+      }
+  });
+  chartArray.length = 0;
+}
+
+let gradient;
 function createChart(ctx, datalabel, datavalues, maxValue) {
+    if (!gradient) {
+      gradient = ctx.createLinearGradient(0, 0, 0, 188);
+      gradient.addColorStop(0, colorstop1);
+      gradient.addColorStop(1, colorstop2);
+    }
     return new Chart(ctx, {
         type: 'bar',
         data: {
             labels: datalabel,
             datasets: [{
-              backgroundColor: function(context){
-                const chart = context.chart;
-                const { ctx, chartArea } = chart;
-
-                var gradient = ctx.createLinearGradient(0, 0, 0, 188);
-                gradient.addColorStop(0, colorstop1);
-                gradient.addColorStop(1, colorstop2);
-
-                if (!chartArea){
-                  return gradient;
-                }
-                
-                gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-                gradient.addColorStop(0, colorstop1);
-                gradient.addColorStop(1, colorstop2);
-
-                return gradient;
-              },
+              backgroundColor: gradient,
               strokeColor : "#ff6c23",
               pointColor : "#fff",
               pointStrokeColor : "#ff6c23",
@@ -100,14 +105,14 @@ fetch('/admin/dashboard-charts').then(response => response.json()).then(data => 
     var canvases = document.querySelectorAll(".RankChart");
     canvases.forEach(canvas => {
         var ctx = canvas.getContext("2d");
-        createChart(ctx, data.rankchartlabels, data.rankchartvalues, 6)
+        rankCharts.push(createChart(ctx, data.rankchartlabels, data.rankchartvalues, 6));
     });
 
     //Weighted Rank Chart
     canvases = document.querySelectorAll(".WeightedRankChart");
     canvases.forEach(canvas => {
         var ctx = canvas.getContext("2d");
-        createChart(ctx, data.weightedrankchartlabels, data.weightedrankchartvalues, 6)
+        weightedRankCharts.push(createChart(ctx, data.weightedrankchartlabels, data.weightedrankchartvalues, 6));
     });
 
     //Participation Chart
@@ -133,28 +138,28 @@ fetch('/admin/dashboard-charts').then(response => response.json()).then(data => 
         }
 
         maxValue = Math.ceil(maxValue / stepSize) * stepSize + stepSize;
-        createChart(ctx, data.participationchartlabels, data.participationchartvalues, maxValue)
+        participationCharts.push(createChart(ctx, data.participationchartlabels, data.participationchartvalues, maxValue));
     });
 
     //Interested Lanched Chart
     canvases = document.querySelectorAll(".InterestedLanchedChart");
     canvases.forEach(canvas => {
         var ctx = canvas.getContext("2d");
-        createChart(ctx, data.interestedchartlabels, data.interestedchartvalues, 6)
+        interestedLanchedCharts.push(createChart(ctx, data.interestedchartlabels, data.interestedchartvalues, 6));
     });
 
     //Path Market Chart
     canvases = document.querySelectorAll(".PathMarketChart");
     canvases.forEach(canvas => {
         var ctx = canvas.getContext("2d");
-        createChart(ctx, data.marketchartlabels, data.marketchartvalues, 6)
+        pathMarketCharts.push(createChart(ctx, data.marketchartlabels, data.marketchartvalues, 6));
     });
 
     //Pull Chart
     canvases = document.querySelectorAll(".PullSalesChart");
     canvases.forEach(canvas => {
         var ctx = canvas.getContext("2d");
-        createChart(ctx, data.pullchartlabels, data.pullchartvalues, 6)
+        pullSalesCharts.push(createChart(ctx, data.pullchartlabels, data.pullchartvalues, 6));
     });
 });
 
@@ -162,18 +167,26 @@ var socket = io();
 
 socket.on('update_dashboard_charts', function() {
     fetch('/admin/dashboard-charts').then(response => response.json()).then(data => {
+        
+        destroyCharts(rankCharts);
+        destroyCharts(weightedRankCharts);
+        destroyCharts(participationCharts);
+        destroyCharts(interestedLanchedCharts);
+        destroyCharts(pathMarketCharts);
+        destroyCharts(pullSalesCharts);
+      
         // Rank Chart
         var canvases = document.querySelectorAll(".RankChart");
         canvases.forEach(canvas => {
             var ctx = canvas.getContext("2d");
-            createChart(ctx, data.rankchartlabels, data.rankchartvalues, 6)
+            rankCharts.push(createChart(ctx, data.rankchartlabels, data.rankchartvalues, 6));
         });
     
         //Weighted Rank Chart
         canvases = document.querySelectorAll(".WeightedRankChart");
         canvases.forEach(canvas => {
             var ctx = canvas.getContext("2d");
-            createChart(ctx, data.weightedrankchartlabels, data.weightedrankchartvalues, 6)
+            weightedRankCharts.push(createChart(ctx, data.weightedrankchartlabels, data.weightedrankchartvalues, 6));
         });
     
         //Participation Chart
@@ -199,28 +212,28 @@ socket.on('update_dashboard_charts', function() {
             }
 
             maxValue = Math.ceil(maxValue / stepSize) * stepSize + stepSize;
-            createChart(ctx, data.participationchartlabels, data.participationchartvalues, maxValue)
+            participationCharts.push(createChart(ctx, data.participationchartlabels, data.participationchartvalues, maxValue));
         });
     
         //Interested Lanched Chart
         canvases = document.querySelectorAll(".InterestedLanchedChart");
         canvases.forEach(canvas => {
             var ctx = canvas.getContext("2d");
-            createChart(ctx, data.interestedchartlabels, data.interestedchartvalues, 6)
+            interestedLanchedCharts.push(createChart(ctx, data.interestedchartlabels, data.interestedchartvalues, 6));
         });
     
         //Path Market Chart
         canvases = document.querySelectorAll(".PathMarketChart");
         canvases.forEach(canvas => {
             var ctx = canvas.getContext("2d");
-            createChart(ctx, data.marketchartlabels, data.marketchartvalues, 6)
+            pathMarketCharts.push(createChart(ctx, data.marketchartlabels, data.marketchartvalues, 6));
         });
     
         //Pull Chart
         canvases = document.querySelectorAll(".PullSalesChart");
         canvases.forEach(canvas => {
             var ctx = canvas.getContext("2d");
-            createChart(ctx, data.pullchartlabels, data.pullchartvalues, 6)
+            pullSalesCharts.push(createChart(ctx, data.pullchartlabels, data.pullchartvalues, 6));
         });
     });
 });
