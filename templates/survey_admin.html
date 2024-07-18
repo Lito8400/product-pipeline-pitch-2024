@@ -26,7 +26,7 @@
                                             <th style="text-align: center; vertical-align: middle;">Interested Lanched</th>
                                             <th style="text-align: center; vertical-align: middle;">Path to Market</th>
                                             <th style="text-align: center; vertical-align: middle;">Pull Sales</th>
-                                            <th style="max-width: 10%;">Comments</th>
+                                            <th style="max-width: 20%;">Comments</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -34,10 +34,10 @@
                                             <tr>
                                                 <td>{{ survey.product.name }}</td>
                                                 <td>{{ survey.user.user_name }}</td>
-                                                <td style="text-align: center; vertical-align: middle;">{{ survey.interested_lanched }}</td>
-                                                <td style="text-align: center; vertical-align: middle;">{{ survey.path_to_market }}</td>
-                                                <td style="text-align: center; vertical-align: middle;">{{ survey.pull_sales }}</td>
-                                                <td style="text-align: center; vertical-align: middle;">{{ survey.comments }}</td>
+                                                <td style="text-align: center;">{{ survey.interested_lanched }}</td>
+                                                <td style="text-align: center;">{{ survey.path_to_market }}</td>
+                                                <td style="text-align: center;">{{ survey.pull_sales }}</td>
+                                                <td style="max-width: 400px;">{{ survey.comments }}</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>

@@ -129,7 +129,7 @@ def search():
     user_completed_survey = [survey.product_id for survey in user_get.surveys]
     surveyed_count = len(user_completed_survey)
 
-    return render_template('search_results.html', user_id=current_user.user_name, surveyed=surveyed_count, products=product_list, query=query)
+    return render_template('search_results.html', user_id=current_user.user_name, surveyed=surveyed_count, products=product_list, completed_surveys=user_completed_survey, query=query)
 
 @app.route('/login-admin', methods=['GET', 'POST'])
 def login_admin():
