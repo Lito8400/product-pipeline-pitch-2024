@@ -1344,7 +1344,7 @@ label {
 .table {
   --bs-table-striped-color: #4b4c687d;
   --bs-table-striped-bg: #8c8f91d1;
-  --bs-table-hover-color: #4154f1;
+  --bs-table-hover-color: rgb(203, 219, 233);
   --bs-table-hover-bg: #ff530873;
 }
 
@@ -1356,4 +1356,9 @@ label {
   .loc-img {
     width: 50px;
   }
+}
+
+.table>:not(caption)>*>*{
+  color: #ffffff;
+  background-color: unset;
 }
