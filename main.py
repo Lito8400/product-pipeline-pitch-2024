@@ -265,8 +265,11 @@ def survey(survey_id):
     user_completed_survey = [survey.product_id for survey in user_get.surveys]
     surveyed_count = len(user_completed_survey)
 
+    if int(survey_id) in user_completed_survey:
+        return redirect(url_for('index'))
+
     if request.method == 'POST':
-        comment_ai = None
+        
         interested_lanch = int(request.form['launched'])
         path_to_mar = int(request.form['pathmarket'])
         pull_sale = int(request.form['pullsales'])
@@ -564,6 +567,53 @@ def survey_table():
     total_user = db.session.query(User).count()
 
     return render_template('survey_admin.html', surveys = survey_all, total_surveys=total_surveys, total_user=total_user, check_lock = check_lock_login_user)
+
+@app.route('/admin/delete_survey_user/<username>')
+def delete_survey_user(username):
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin'))
+        else:
+            if current_user.user_name != 'admin':
+                return redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
+    
+    user = db.session.execute(db.select(User).where(func.lower(User.user_name) == username.lower())).scalar()
+    
+    if user:
+        seen_product_ids = set()    
+
+        for survey in user.surveys:
+            if survey.product_id in seen_product_ids:
+                db.session.delete(survey)
+            else:
+                seen_product_ids.add(survey.product_id)
+    
+    db.session.commit()
+    return redirect(url_for('survey_table'))
+
+@app.route('/admin/delete_survey_id/<survey_id>')
+def delete_survey_id(survey_id):
+    try:
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_admin'))
+        else:
+            if current_user.user_name != 'admin':
+                return redirect(url_for('index'))
+            if check_lock_login_user and current_user.user_name != 'admin':
+                return redirect(url_for('logout'))
+    except:
+        return render_template("login_user.html")
+    
+    survey = db.session.execute(db.select(Survey).where(Survey.id == survey_id)).scalar()
+    if survey:
+        db.session.delete(survey)
+        db.session.commit()
+
+    return redirect(url_for('survey_table'))
 
 # survey Table ------------------------------------------
 @app.route('/admin/user-completed-survey')

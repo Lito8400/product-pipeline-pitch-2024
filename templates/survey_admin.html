@@ -32,7 +32,7 @@
                                     <tbody>
                                         {% for survey in surveys %}
                                             <tr>
-                                                <td>{{ survey.product.name }}</td>
+                                                <td data-id="{{ survey.id }}">{{ survey.product.name }}</td>
                                                 <td>{{ survey.user.user_name }}</td>
                                                 <td style="text-align: center;">{{ survey.interested_lanched }}</td>
                                                 <td style="text-align: center;">{{ survey.path_to_market }}</td>
