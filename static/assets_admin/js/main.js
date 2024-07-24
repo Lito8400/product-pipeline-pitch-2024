@@ -285,13 +285,6 @@
   datatables.forEach(datatable => {
     new simpleDatatables.DataTable(datatable, {
       perPageSelect: [150, 200, 300, ["All", -1]],
-      columns: [
-        {
-          select: 4,
-          cellClass: "green",
-          headerClass: "red"
-        }
-      ]
     });
   })
 
